@@ -2,10 +2,10 @@
   "name": "web-games",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/app.js",
   "scripts": {
-    "start": "node index",
-    "dev": "nodemon index"
+    "start": "node src/app",
+    "dev": "nodemon src/app"
   },
   "repository": {
     "type": "git",

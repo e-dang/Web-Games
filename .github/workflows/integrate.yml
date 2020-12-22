@@ -34,10 +34,10 @@ jobs:
       - name: Install dependencies
         run: make install
 
-      # - name: Functional tests
-      #   run: |
-      #     npm run start &
-      #     make test-ft
+      - name: Functional tests
+        run: |
+          npm run start &
+          make test-ft
 
       - name: Get source branch name on pull request
         run: echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV

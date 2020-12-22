@@ -6,4 +6,4 @@ install:
 	npm install
 
 test-ft:
-	pytest $(HEADLESS) functional_tests
+	pytest $(HEADLESS) tests/functional_tests

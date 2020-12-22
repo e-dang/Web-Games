@@ -1,0 +1,27 @@
+{
+  "name": "web-games",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app",
+    "dev": "nodemon src/app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/e-dang/Web-Games.git"
+  },
+  "author": "e-dang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/e-dang/Web-Games/issues"
+  },
+  "homepage": "https://github.com/e-dang/Web-Games#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.6"
+  }
+}

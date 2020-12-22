@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: nelonoel/branch-name@v1.0.1
@@ -34,7 +34,14 @@ jobs:
       - name: Install dependencies
         run: make install
 
-      - name: Functional tests
-        run: |
-          npm run start &
-          make test-ft
+      # - name: Functional tests
+      #   run: |
+      #     npm run start &
+      #     make test-ft
+
+      # Deploy to heroku
+      - uses: akhileshns/heroku-deploy@v3.7.8
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: e-dang-web-games
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}

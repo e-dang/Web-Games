@@ -5,6 +5,9 @@ install:
 	pip3 install -r requirements.txt
 	npm install
 
+build:
+	npm run build
+
 test-unit:
 	cd $(PROJECT_DIR) && \
 	npm run test

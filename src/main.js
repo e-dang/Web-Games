@@ -1,5 +1,4 @@
-const Board = require('./board');
+const BoardController = require('./board_controller');
 const Node = require('./node');
 
-const board = new Board(10, Node);
-board.draw();
+const controller = new BoardController(10, Node);

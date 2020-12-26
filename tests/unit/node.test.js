@@ -29,4 +29,27 @@ describe('Test Node', () => {
     test('constructor adds a new cell to the boardRow html element', () => {
         expect(boardRow.children.length).toBe(1);
     });
+
+    test('constructor sets html element id to `n${idx}`', () => {
+        expect(node.element.id).toBe(`n${node.idx}`);
+    });
+
+    test('constructor calls setAsEmptyNode', () => {
+        const orig = Node.prototype.setAsEmptyNode;
+        const mock = jest.fn();
+        Node.prototype.setAsEmptyNode = mock;
+
+        node = new Node(row, col, idx, boardRow);
+
+        Node.prototype.setAsEmptyNode = orig;
+        expect(mock).toHaveBeenCalledTimes(1);
+    });
+
+    test('setAsEmptyNode calls _setAsNodeType with parameter empty', () => {
+        node._setAsNodeType = jest.fn();
+
+        node.setAsEmptyNode();
+
+        expect(node._setAsNodeType).toHaveBeenCalledWith('empty');
+    });
 });

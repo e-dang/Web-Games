@@ -37,7 +37,7 @@ describe('Board', () => {
 
             board.draw();
 
-            gameBoard = document.getElementById('board');
+            gameBoard = document.getElementById('gameBoard');
         });
 
         test('draw adds tbody element with id=board to gameBoardWrapper element', () => {

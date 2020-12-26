@@ -22,7 +22,13 @@ class BasePage:
         return self._get_navbar().is_displayed()
 
     def has_board(self):
-        return self.driver.find_element_by_id('gameBoard').is_displayed()
+        return self._get_board().is_displayed()
+
+    def board_cells_are_square(self):
+        node = self._get_board().find_elements_by_class_name('node')[0]
+        width, height = self._extract_pixel_dimensions(node)
+        tl, tr, bl, br = self._extract_border_radius(node)
+        return width == height and tl == tr == bl == br == '0%'
 
     def can_select_games(self):
         element = self._get_navbar().find_element_by_id('gameSelection')
@@ -30,3 +36,15 @@ class BasePage:
 
     def _get_navbar(self):
         return self.driver.find_element_by_id('navBar')
+
+    def _get_board(self):
+        return self.driver.find_element_by_id('gameBoard')
+
+    def _extract_pixel_dimensions(self, element):
+        return element.size['width'], element.size['height']
+
+    def _extract_border_radius(self, element):
+        return (element.value_of_css_property('border-top-left-radius'),
+                element.value_of_css_property('border-top-right-radius'),
+                element.value_of_css_property('border-bottom-left-radius'),
+                element.value_of_css_property('border-bottom-right-radius'))

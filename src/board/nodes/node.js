@@ -15,8 +15,11 @@ class Node {
     }
 
     _setAsNodeType(type) {
+        if (!Array.isArray(type)) {
+            type = [type];
+        }
         this.element.className = '';
-        this.element.classList.add('node', this.shape, type);
+        this.element.classList.add('node', this.shape, ...type);
     }
 }
 

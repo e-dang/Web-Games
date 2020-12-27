@@ -1,3 +1,4 @@
+const {types} = require('@babel/core');
 const Node = require('../../../../src/board/nodes/node');
 
 describe('Test Node', () => {
@@ -63,5 +64,17 @@ describe('Test Node', () => {
         expect(node.element.classList.contains('node')).toBe(true);
         expect(node.element.classList.contains(shape)).toBe(true);
         expect(node.element.classList.contains(type)).toBe(true);
+    });
+
+    test('_setAsNodeType can accept multiple types as list', () => {
+        const types = ['random-type', 'blah'];
+
+        node._setAsNodeType(types);
+
+        expect(node.element.classList.contains('node')).toBe(true);
+        expect(node.element.classList.contains(shape)).toBe(true);
+        types.forEach((val) => {
+            expect(node.element.classList.contains(val)).toBe(true);
+        });
     });
 });

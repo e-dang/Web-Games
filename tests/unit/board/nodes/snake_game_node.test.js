@@ -23,4 +23,20 @@ describe('Test SnakeGameNode', () => {
     test('constructor calls Node constructor with parameters and shape == square', () => {
         expect(Node).toHaveBeenLastCalledWith(row, col, idx, boardRow, 'square');
     });
+
+    test('setAsSnakeNode calls _setAsNodeType with "snake"', () => {
+        node._setAsNodeType = jest.fn();
+
+        node.setAsSnakeNode();
+
+        expect(node._setAsNodeType).toHaveBeenCalledWith('snake');
+    });
+
+    test('setAsHeadNode calls _setAsNodeType with ["snake", "head"]', () => {
+        node._setAsNodeType = jest.fn();
+
+        node.setAsHeadNode();
+
+        expect(node._setAsNodeType).toHaveBeenCalledWith(['snake', 'head']);
+    });
 });

@@ -1,11 +1,11 @@
 const Board = require('../../../src/board/board');
 const fs = require('fs');
 const path = require('path');
-const SnakeNode = require('../../../src/board/nodes/snake_node');
+const SnakeGameNode = require('../../../src/board/nodes/snake_game_node');
 
 const html = fs.readFileSync(path.resolve(__dirname, '../../../public/index.html'), 'utf8');
 
-jest.mock('../../../src/board/nodes/snake_node');
+jest.mock('../../../src/board/nodes/snake_game_node');
 
 describe('Board', () => {
     let board;
@@ -15,7 +15,7 @@ describe('Board', () => {
     beforeEach(() => {
         document.documentElement.innerHTML = html.toString();
         dims = 10;
-        nodeType = SnakeNode;
+        nodeType = SnakeGameNode;
         board = new Board(dims, nodeType);
     });
 
@@ -74,7 +74,7 @@ describe('Board', () => {
         const row = 3;
         const col = 4;
         for (let i = 0; i < dims; i++) {
-            const newNode = new SnakeNode();
+            const newNode = new SnakeGameNode();
             board.nodes.push(newNode);
             if (i == row * dims + col) {
                 node = newNode;

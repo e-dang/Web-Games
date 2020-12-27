@@ -12,6 +12,10 @@ class SnakeGameNode extends Node {
     setAsHeadNode() {
         this._setAsNodeType(['snake', 'head']);
     }
+
+    setAsFoodNode() {
+        this._setAsNodeType('food');
+    }
 }
 
 module.exports = SnakeGameNode;

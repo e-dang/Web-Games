@@ -1,5 +1,11 @@
+:root {
+    --node-border-color: black;
+    --snake-node-color: black;
+    --food-node-color: green;
+}
+
 .node {
-    border: 1px solid black;
+    border: 1px solid var(--node-border-color);
     width: 25px;
     height: 25px;
 }
@@ -9,5 +15,9 @@
 }
 
 .node.snake {
-    background-color: black;
+    background-color: var(--snake-node-color);
+}
+
+.node.food {
+    background-color: var(--food-node-color);
 }

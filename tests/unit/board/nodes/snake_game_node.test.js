@@ -39,4 +39,12 @@ describe('Test SnakeGameNode', () => {
 
         expect(node._setAsNodeType).toHaveBeenCalledWith(['snake', 'head']);
     });
+
+    test('setAsFoodNode calls _setAsNodeType with "food"', () => {
+        node._setAsNodeType = jest.fn();
+
+        node.setAsFoodNode();
+
+        expect(node._setAsNodeType).toHaveBeenCalledWith('food');
+    });
 });

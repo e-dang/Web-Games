@@ -1,11 +1,11 @@
 const PageController = require('../../../src/board/page_controller');
 const fs = require('fs');
 const path = require('path');
-const {SnakeGame} = require('../../../src/board/snake');
+const {SnakeGame} = require('../../../src/board/snake_game');
 
 const html = fs.readFileSync(path.resolve(__dirname, '../../../public/index.html'), 'utf8');
 
-jest.mock('../../../src/board/snake');
+jest.mock('../../../src/board/snake_game');
 
 describe('Test PageController', () => {
     let controller;

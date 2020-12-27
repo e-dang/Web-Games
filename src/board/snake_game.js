@@ -1,11 +1,11 @@
 const Board = require('./board');
-const SnakeNode = require('./nodes/snake_node');
+const SnakeGameNode = require('./nodes/snake_game_node');
 
 DIMENSIONS = 20;
 
 class SnakeGame {
     constructor() {
-        this.board = new Board(DIMENSIONS, SnakeNode);
+        this.board = new Board(DIMENSIONS, SnakeGameNode);
 
         this.board.draw();
     }

@@ -65,6 +65,17 @@ describe('Test PageController', () => {
         expect(element).not.toBeEnabled();
     });
 
+    test('_handleClickStartBtn calls start on game prop', () => {
+        const element = document.getElementById('startBtn');
+        const event = {
+            target: element,
+        };
+
+        controller._handleClickStartBtn(event);
+
+        expect(controller.game.start).toHaveBeenCalledTimes(1);
+    });
+
     test('_gameFromString returns a new SnakeGame object when parameter is snake', () => {
         const type = 'snake';
 

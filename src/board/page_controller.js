@@ -17,6 +17,7 @@ class PageController {
 
     _handleClickStartBtn(event) {
         event.target.disabled = true;
+        this.game.start();
     }
 
     _gameFromString(strNodeType) {

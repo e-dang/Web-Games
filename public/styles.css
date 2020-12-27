@@ -7,3 +7,7 @@
 .node.square {
     border-radius: 0%;
 }
+
+.node.snake {
+    background-color: black;
+}

@@ -1,11 +1,9 @@
-const Board = require('./board');
-const SnakeNode = require('./nodes/snake_node');
+const {SnakeGame} = require('./snake');
 
-class BoardController {
-    constructor(dims, nodeType) {
-        this.board = new Board(dims, this._nodeTypeFromString(nodeType));
+class PageController {
+    constructor(gameType) {
+        this.game = this._gameFromString(gameType);
 
-        this.board.draw();
         this.addEventListeners();
     }
 
@@ -21,13 +19,13 @@ class BoardController {
         event.target.disabled = true;
     }
 
-    _nodeTypeFromString(strNodeType) {
+    _gameFromString(strNodeType) {
         if (strNodeType === 'snake') {
-            return SnakeNode;
+            return new SnakeGame();
         } else {
             return null;
         }
     }
 }
 
-module.exports = BoardController;
+module.exports = PageController;

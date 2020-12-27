@@ -1,4 +1,4 @@
-const BoardController = require('./board/board_controller');
+const PageController = require('./board/page_controller');
 
-const nodeType = document.currentScript.getAttribute('node-type');
-const controller = new BoardController(20, nodeType);
+const gameType = document.currentScript.getAttribute('game-type');
+const controller = new PageController(gameType);

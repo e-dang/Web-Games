@@ -1,4 +1,4 @@
-const BoardController = require('./board_controller');
-const Node = require('./node');
+const BoardController = require('./board/board_controller');
+const Node = require('./board/nodes/node');
 
-const controller = new BoardController(10, Node);
+const controller = new BoardController(20, Node);

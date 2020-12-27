@@ -1,4 +1,4 @@
-const Node = require('../../src/node');
+const Node = require('../../../../src/board/nodes/node');
 
 describe('Test Node', () => {
     let node;

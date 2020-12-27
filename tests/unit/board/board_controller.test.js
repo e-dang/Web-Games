@@ -1,13 +1,13 @@
-const Board = require('../../src/board');
-const BoardController = require('../../src/board_controller');
-const Node = require('../../src/node');
+const Board = require('../../../src/board/board');
+const BoardController = require('../../../src/board/board_controller');
+const Node = require('../../../src/board/nodes/node');
 const fs = require('fs');
 const path = require('path');
 
-const html = fs.readFileSync(path.resolve(__dirname, '../../public/index.html'), 'utf8');
+const html = fs.readFileSync(path.resolve(__dirname, '../../../public/index.html'), 'utf8');
 
-jest.mock('../../src/board');
-jest.mock('../../src/node');
+jest.mock('../../../src/board/board');
+jest.mock('../../../src/board/nodes/node');
 
 describe('Test BoardController', () => {
     let controller;

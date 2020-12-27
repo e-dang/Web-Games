@@ -1,5 +1,6 @@
 :root {
     --node-border-color: black;
+    --empty-node-color: white;
     --snake-node-color: black;
     --food-node-color: green;
 }
@@ -12,6 +13,10 @@
 
 .node.square {
     border-radius: 0%;
+}
+
+.node.empty {
+    background-color: var(--empty-node-color);
 }
 
 .node.snake {

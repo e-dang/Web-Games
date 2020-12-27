@@ -1,7 +1,4 @@
-const Node = require('../../../../src/board/nodes/node');
 const SnakeGameNode = require('../../../../src/board/nodes/snake_game_node');
-
-jest.mock('../../../../src/board/nodes/node');
 
 describe('Test SnakeGameNode', () => {
     let node;
@@ -21,7 +18,14 @@ describe('Test SnakeGameNode', () => {
     });
 
     test('constructor calls Node constructor with parameters and shape == square', () => {
-        expect(Node).toHaveBeenLastCalledWith(row, col, idx, boardRow, 'square');
+        const orig = Object.getPrototypeOf(SnakeGameNode);
+        const mock = jest.fn();
+        Object.setPrototypeOf(SnakeGameNode, mock);
+
+        node = new SnakeGameNode(row, col, idx, boardRow);
+
+        Object.setPrototypeOf(SnakeGameNode, orig);
+        expect(mock).toHaveBeenLastCalledWith(row, col, idx, boardRow, 'square');
     });
 
     test('setAsSnakeNode calls _setAsNodeType with "snake"', () => {
@@ -46,5 +50,21 @@ describe('Test SnakeGameNode', () => {
         node.setAsFoodNode();
 
         expect(node._setAsNodeType).toHaveBeenCalledWith('food');
+    });
+
+    test('isSnakeNode returns true when classList contains "snake"', () => {
+        node.element.classList.add('snake');
+
+        const retVal = node.isSnakeNode();
+
+        expect(retVal).toBe(true);
+    });
+
+    test('isSnakeNode returns false when classList doesnt contain "snake"', () => {
+        node.element.className = 'node square';
+
+        const retVal = node.isSnakeNode();
+
+        expect(retVal).toBe(false);
     });
 });

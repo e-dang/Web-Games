@@ -16,6 +16,10 @@ class SnakeGameNode extends Node {
     setAsFoodNode() {
         this._setAsNodeType('food');
     }
+
+    isSnakeNode() {
+        return this.element.classList.contains('snake');
+    }
 }
 
 module.exports = SnakeGameNode;

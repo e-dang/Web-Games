@@ -1,8 +1,11 @@
 const Board = require('../../../src/board/board');
 const fs = require('fs');
 const path = require('path');
+const SnakeNode = require('../../../src/board/nodes/snake_node');
 
 const html = fs.readFileSync(path.resolve(__dirname, '../../../public/index.html'), 'utf8');
+
+jest.mock('../../../src/board/nodes/snake_node');
 
 describe('Board', () => {
     let board;
@@ -12,7 +15,7 @@ describe('Board', () => {
     beforeEach(() => {
         document.documentElement.innerHTML = html.toString();
         dims = 10;
-        nodeType = jest.fn();
+        nodeType = SnakeNode;
         board = new Board(dims, nodeType);
     });
 
@@ -64,5 +67,22 @@ describe('Board', () => {
         test('draw fills nodes prop with dims * dims elements', () => {
             expect(board.nodes.length).toBe(board.dims * board.dims);
         });
+    });
+
+    test('getNode returns the node at the correct index', () => {
+        let node;
+        const row = 3;
+        const col = 4;
+        for (let i = 0; i < dims; i++) {
+            const newNode = new SnakeNode();
+            board.nodes.push(newNode);
+            if (i == row * dims + col) {
+                node = newNode;
+            }
+        }
+
+        const retVal = board.getNode(row, col);
+
+        expect(retVal).toBe(node);
     });
 });

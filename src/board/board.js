@@ -20,6 +20,10 @@ class Board {
 
         document.getElementById('gameBoardWrapper').appendChild(board);
     }
+
+    getNode(row, col) {
+        return this.nodes[row * this.dims + col];
+    }
 }
 
 module.exports = Board;

@@ -5,13 +5,14 @@ describe('Test Node', () => {
     const row = 8;
     const col = 6;
     const idx = 68;
+    const shape = 'square';
     let boardRow;
 
     beforeEach(() => {
         boardRow = document.createElement('tr');
         boardRow.id = 'boardRow';
         document.body.appendChild(boardRow);
-        node = new Node(row, col, idx, boardRow);
+        node = new Node(row, col, idx, boardRow, shape);
     });
 
     afterEach(() => {
@@ -22,6 +23,7 @@ describe('Test Node', () => {
         ['row', row],
         ['col', col],
         ['idx', idx],
+        ['shape', shape],
     ])('constructor sets %s property using the given parameter', (prop, value) => {
         expect(node[prop]).toBe(value);
     });
@@ -51,5 +53,15 @@ describe('Test Node', () => {
         node.setAsEmptyNode();
 
         expect(node._setAsNodeType).toHaveBeenCalledWith('empty');
+    });
+
+    test('_setAsNodeType sets element classList to contain "node", this.shape, and the type parameter', () => {
+        const type = 'random-type';
+
+        node._setAsNodeType(type);
+
+        expect(node.element.classList.contains('node')).toBe(true);
+        expect(node.element.classList.contains(shape)).toBe(true);
+        expect(node.element.classList.contains(type)).toBe(true);
     });
 });

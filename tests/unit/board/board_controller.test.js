@@ -1,13 +1,12 @@
 const Board = require('../../../src/board/board');
 const BoardController = require('../../../src/board/board_controller');
-const Node = require('../../../src/board/nodes/node');
 const fs = require('fs');
 const path = require('path');
+const SnakeNode = require('../../../src/board/nodes/snake_node');
 
 const html = fs.readFileSync(path.resolve(__dirname, '../../../public/index.html'), 'utf8');
 
 jest.mock('../../../src/board/board');
-jest.mock('../../../src/board/nodes/node');
 
 describe('Test BoardController', () => {
     let controller;
@@ -17,16 +16,26 @@ describe('Test BoardController', () => {
     beforeEach(() => {
         document.documentElement.innerHTML = html.toString();
         dims = 10;
-        nodeType = Node;
+        nodeType = 'snake';
         controller = new BoardController(dims, nodeType);
+
+        Board.mockClear();
     });
 
     afterEach(() => {
         document.documentElement.innerHTML = '';
     });
 
-    test('constructor creates a new Board object with dims and nodeType parameter', () => {
-        expect(Board).toHaveBeenCalledWith(dims, nodeType);
+    test('constructor creates a new Board object with dims param and return val of _nodeTypeFromString', () => {
+        const retVal = SnakeNode;
+        const orig = BoardController.prototype._nodeTypeFromString;
+        const mock = jest.fn((x) => retVal);
+        BoardController.prototype._nodeTypeFromString = mock;
+
+        controller = new BoardController(dims, nodeType);
+
+        BoardController.prototype._nodeTypeFromString = orig;
+        expect(Board).toHaveBeenCalledWith(dims, retVal);
     });
 
     test('constructor calls draw on board prop', () => {
@@ -61,5 +70,21 @@ describe('Test BoardController', () => {
         controller._handleClickStartBtn(event);
 
         expect(element).not.toBeEnabled();
+    });
+
+    test('_nodeTypeFromString returns SnakeNode when parameter is snake', () => {
+        const type = 'snake';
+
+        const retVal = controller._nodeTypeFromString(type);
+
+        expect(retVal).toBe(SnakeNode);
+    });
+
+    test('_nodeTypeFromString returns null when parameter doesnt match a type', () => {
+        const type = 'acnawndajnwdfgrfgrg';
+
+        const retVal = controller._nodeTypeFromString(type);
+
+        expect(retVal).toBeNull();
     });
 });

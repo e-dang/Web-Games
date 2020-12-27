@@ -85,4 +85,49 @@ describe('Board', () => {
 
         expect(retVal).toBe(node);
     });
+
+    test('isInvalidSpace returns true when row < 0', () => {
+        const row = -1;
+        const col = 1;
+
+        const retVal = board.isInvalidSpace(row, col);
+
+        expect(retVal).toBe(true);
+    });
+
+    test('isInvalidSpace returns true when row >= dims', () => {
+        const row = dims;
+        const col = 1;
+
+        const retVal = board.isInvalidSpace(row, col);
+
+        expect(retVal).toBe(true);
+    });
+
+    test('isInvalidSpace returns true when col < 0', () => {
+        const row = 1;
+        const col = -1;
+
+        const retVal = board.isInvalidSpace(row, col);
+
+        expect(retVal).toBe(true);
+    });
+
+    test('isInvalidSpace returns true when row >= dims', () => {
+        const row = 1;
+        const col = dims;
+
+        const retVal = board.isInvalidSpace(row, col);
+
+        expect(retVal).toBe(true);
+    });
+
+    test('isInvalidSpace returns false when row and col are both > 0 and < dims', () => {
+        const row = 1;
+        const col = 1;
+
+        const retVal = board.isInvalidSpace(row, col);
+
+        expect(retVal).toBe(false);
+    });
 });

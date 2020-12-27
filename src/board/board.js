@@ -24,6 +24,14 @@ class Board {
     getNode(row, col) {
         return this.nodes[row * this.dims + col];
     }
+
+    isInvalidSpace(row, col) {
+        if (row < 0 || col < 0 || row >= this.dims || col >= this.dims) {
+            return true;
+        }
+
+        return false;
+    }
 }
 
 module.exports = Board;

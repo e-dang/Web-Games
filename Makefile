@@ -6,7 +6,10 @@ install:
 	npm install
 
 build:
-	npm run build
+	npm run build-dev
+
+build-prod:
+	npm run build-prod
 
 test-unit:
 	cd $(PROJECT_DIR) && \

@@ -7,7 +7,8 @@
     "start": "node src/server",
     "dev": "nodemon src/server",
     "test": "jest",
-    "build": "webpack --entry ./src/main.js --output-filename=bundle.js --output-path=public/dist"
+    "build-dev": "webpack --entry ./src/main.js --output-filename=bundle.js --output-path=public/dist --mode=development",
+    "build-prod": "webpack --entry ./src/main.js --output-filename=bundle.js --output-path=public/dist --mode=production"
   },
   "repository": {
     "type": "git",

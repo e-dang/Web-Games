@@ -35,6 +35,7 @@ class SnakeGame {
         while (true) {
             let {row, col} = this.snake.getNextMove();
             if (this._isInvalidSpace(row, col)) {
+                this._handleFailure();
                 break;
             }
 
@@ -50,6 +51,10 @@ class SnakeGame {
 
             await utils.sleep(TIME_STEP);
         }
+    }
+
+    _handleFailure() {
+        document.getElementById('gameOverMessage').hidden = false;
     }
 
     _isInvalidSpace(row, col) {

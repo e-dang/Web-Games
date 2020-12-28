@@ -25,7 +25,7 @@ class SnakePage(BasePage):
         self.driver.find_element_by_id('startBtn').click()
 
     def has_snake(self):
-        return len(self._get_board().find_elements_by_class_name('snake')) != 0
+        return self.get_snake_length() != 0
 
     def has_food(self):
         return len(self._get_board().find_elements_by_class_name('food')) != 0
@@ -75,3 +75,6 @@ class SnakePage(BasePage):
 
     def is_game_over(self):
         return self.driver.find_element_by_id('gameOverMessage').is_displayed()
+
+    def get_snake_length(self):
+        return len(self._get_board().find_elements_by_class_name('snake'))

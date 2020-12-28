@@ -16,6 +16,28 @@ class Snake {
         this._initSnake();
     }
 
+    getNextMove() {
+        const [dr, dc] = this.direction;
+        const head = this.getHead();
+        return {row: head.row + dr, col: head.col + dc};
+    }
+
+    move() {
+        const {row, col} = this.getNextMove();
+        const node = this.board.getNode(row, col);
+        if (!node.isFoodNode()) {
+            this.body.popBack().setAsEmptyNode();
+        }
+
+        this.getHead().setAsSnakeNode();
+        node.setAsHeadNode();
+        this.body.pushFront(node);
+    }
+
+    getHead() {
+        return this.body.peekFront();
+    }
+
     _initSnake() {
         const row = this.board.dims / 2 - 1;
         for (let i = 0; i < INITIAL_LENGTH; i++) {
@@ -25,10 +47,6 @@ class Snake {
         }
 
         this.getHead().setAsHeadNode();
-    }
-
-    getHead() {
-        return this.body.peekFront();
     }
 }
 

@@ -59,4 +59,12 @@ describe('Test SnakeGameNode', () => {
 
         expect(node._isNodeOfType).toHaveBeenCalledWith('snake');
     });
+
+    test('isFoodNode calls _isNodeOfType with parameter "food"', () => {
+        node._isNodeOfType = jest.fn();
+
+        node.isFoodNode();
+
+        expect(node._isNodeOfType).toHaveBeenCalledWith('food');
+    });
 });

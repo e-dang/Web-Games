@@ -20,6 +20,10 @@ class SnakeGameNode extends Node {
     isSnakeNode() {
         return this._isNodeOfType('snake');
     }
+
+    isFoodNode() {
+        return this._isNodeOfType('food');
+    }
 }
 
 module.exports = SnakeGameNode;

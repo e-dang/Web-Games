@@ -9,7 +9,7 @@ from .base_page import BasePage, TIMEOUT
 class SnakePage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
-        self.body = self.driver.find_elements_by_tag_name('body')
+        self.body = self.driver.find_elements_by_tag_name('body')[0]
 
     def has_correct_title(self):
         return super().has_correct_title('Snake')

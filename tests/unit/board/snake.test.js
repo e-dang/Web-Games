@@ -47,4 +47,13 @@ describe('Test Snake', () => {
     test('_initSnake sets front of body to be head node', () => {
         expect(snake.body.peekFront().setAsHeadNode).toHaveBeenCalledTimes(1);
     });
+
+    test('getHead returns the return value of body.peekFront', () => {
+        const mockNode = new SnakeGameNode();
+        snake.body.peekFront = jest.fn().mockReturnValueOnce(mockNode);
+
+        const retVal = snake.getHead();
+
+        expect(retVal).toBe(mockNode);
+    });
 });

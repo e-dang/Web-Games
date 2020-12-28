@@ -24,7 +24,11 @@ class Snake {
             this.body.pushFront(node);
         }
 
-        this.body.peekFront().setAsHeadNode();
+        this.getHead().setAsHeadNode();
+    }
+
+    getHead() {
+        return this.body.peekFront();
     }
 }
 

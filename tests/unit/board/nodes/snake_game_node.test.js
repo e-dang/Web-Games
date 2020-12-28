@@ -52,19 +52,11 @@ describe('Test SnakeGameNode', () => {
         expect(node._setAsNodeType).toHaveBeenCalledWith('food');
     });
 
-    test('isSnakeNode returns true when classList contains "snake"', () => {
-        node.element.classList.add('snake');
+    test('isSnakeNode calls _isNodeOfType with parameter "snake"', () => {
+        node._isNodeOfType = jest.fn();
 
-        const retVal = node.isSnakeNode();
+        node.isSnakeNode();
 
-        expect(retVal).toBe(true);
-    });
-
-    test('isSnakeNode returns false when classList doesnt contain "snake"', () => {
-        node.element.className = 'node square';
-
-        const retVal = node.isSnakeNode();
-
-        expect(retVal).toBe(false);
+        expect(node._isNodeOfType).toHaveBeenCalledWith('snake');
     });
 });

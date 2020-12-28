@@ -18,7 +18,7 @@ class SnakeGameNode extends Node {
     }
 
     isSnakeNode() {
-        return this.element.classList.contains('snake');
+        return this._isNodeOfType('snake');
     }
 }
 

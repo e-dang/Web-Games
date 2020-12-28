@@ -56,6 +56,14 @@ describe('Test Node', () => {
         expect(node._setAsNodeType).toHaveBeenCalledWith('empty');
     });
 
+    test('isEmptyNode calls _isNodeOfType with parameter "empty"', () => {
+        node._isNodeOfType = jest.fn();
+
+        node.isEmptyNode();
+
+        expect(node._isNodeOfType).toHaveBeenCalledWith('empty');
+    });
+
     test('_setAsNodeType sets element classList to contain "node", this.shape, and the type parameter', () => {
         const type = 'random-type';
 
@@ -76,5 +84,23 @@ describe('Test Node', () => {
         types.forEach((val) => {
             expect(node.element.classList.contains(val)).toBe(true);
         });
+    });
+
+    test('_isNodeOfType returns true when classList contains the type parameter', () => {
+        const type = 'random-type';
+        node.element.classList.add(type);
+
+        const retVal = node._isNodeOfType(type);
+
+        expect(retVal).toBe(true);
+    });
+
+    test('_isNodeOfType returns false when classList doesnt contain the type parameter', () => {
+        const type = 'random-type';
+        node.element.className = '';
+
+        const retVal = node._isNodeOfType(type);
+
+        expect(retVal).toBe(false);
     });
 });

@@ -14,6 +14,14 @@ class Node {
         this._setAsNodeType('empty');
     }
 
+    isEmptyNode() {
+        return this._isNodeOfType('empty');
+    }
+
+    _isNodeOfType(type) {
+        return this.element.classList.contains(type);
+    }
+
     _setAsNodeType(type) {
         if (!Array.isArray(type)) {
             type = [type];

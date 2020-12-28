@@ -1,6 +1,6 @@
 const Board = require('../../../src/board/board');
 const SnakeGameNode = require('../../../src/board/nodes/snake_game_node');
-const {Snake, INITIAL_LENGTH} = require('../../../src/board/snake');
+const {Snake, INITIAL_LENGTH, UP, DOWN, LEFT, RIGHT} = require('../../../src/board/snake');
 
 jest.mock('../../../src/board/board');
 jest.mock('../../../src/board/nodes/snake_game_node');
@@ -105,5 +105,69 @@ describe('Test Snake', () => {
         snake.move();
 
         expect(mockNode.setAsHeadNode).toHaveBeenCalledTimes(1);
+    });
+
+    test('setDirectionUp sets direction to UP if direction is not DOWN', () => {
+        snake.direction = LEFT;
+
+        snake.setDirectionUp();
+
+        expect(snake.direction).toBe(UP);
+    });
+
+    test('setDirectionUp doesnt set direction to UP if direction is DOWN', () => {
+        snake.direction = DOWN;
+
+        snake.setDirectionUp();
+
+        expect(snake.direction).toBe(DOWN);
+    });
+
+    test('setDirectionDown sets direction to DOWN if direction is not UP', () => {
+        snake.direction = LEFT;
+
+        snake.setDirectionDown();
+
+        expect(snake.direction).toBe(DOWN);
+    });
+
+    test('setDirectionDown doesnt set direction to DOWN if direction is UP', () => {
+        snake.direction = UP;
+
+        snake.setDirectionDown();
+
+        expect(snake.direction).toBe(UP);
+    });
+
+    test('setDirectionLeft sets direction to LEFT if direction is not RIGHT', () => {
+        snake.direction = UP;
+
+        snake.setDirectionLeft();
+
+        expect(snake.direction).toBe(LEFT);
+    });
+
+    test('setDirectionLeft doesnt set direction to LEFT if direction is RIGHT', () => {
+        snake.direction = RIGHT;
+
+        snake.setDirectionLeft();
+
+        expect(snake.direction).toBe(RIGHT);
+    });
+
+    test('setDirectionRight sets direction to RIGHT if direction is not LEFT', () => {
+        snake.direction = UP;
+
+        snake.setDirectionRight();
+
+        expect(snake.direction).toBe(RIGHT);
+    });
+
+    test('setDirectionRight doesnt set direction to RIGHT if direction is LEFT', () => {
+        snake.direction = LEFT;
+
+        snake.setDirectionRight();
+
+        expect(snake.direction).toBe(LEFT);
     });
 });

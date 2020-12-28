@@ -16,12 +16,6 @@ class Snake {
         this._initSnake();
     }
 
-    getNextMove() {
-        const [dr, dc] = this.direction;
-        const head = this.getHead();
-        return {row: head.row + dr, col: head.col + dc};
-    }
-
     move() {
         const {row, col} = this.getNextMove();
         const node = this.board.getNode(row, col);
@@ -34,8 +28,38 @@ class Snake {
         this.body.pushFront(node);
     }
 
+    getNextMove() {
+        const [dr, dc] = this.direction;
+        const head = this.getHead();
+        return {row: head.row + dr, col: head.col + dc};
+    }
+
     getHead() {
         return this.body.peekFront();
+    }
+
+    setDirectionUp() {
+        if (this.direction !== DOWN) {
+            this.direction = UP;
+        }
+    }
+
+    setDirectionDown() {
+        if (this.direction !== UP) {
+            this.direction = DOWN;
+        }
+    }
+
+    setDirectionLeft() {
+        if (this.direction !== RIGHT) {
+            this.direction = LEFT;
+        }
+    }
+
+    setDirectionRight() {
+        if (this.direction !== LEFT) {
+            this.direction = RIGHT;
+        }
     }
 
     _initSnake() {
@@ -51,6 +75,10 @@ class Snake {
 }
 
 module.exports = {
-    INITIAL_LENGTH,
     Snake,
+    INITIAL_LENGTH,
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
 };

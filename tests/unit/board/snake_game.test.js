@@ -34,27 +34,43 @@ describe('Test SnakeGame', () => {
         expect(game.board.draw).toHaveBeenCalledTimes(1);
     });
 
-    test('start constructs a new snake object with board prop', async (done) => {
-        const mockNode = new SnakeGameNode();
-        mockNode.row = 3;
-        Snake.prototype.getHead = jest.fn().mockReturnValueOnce(mockNode);
-
-        game.start();
-
-        expect(Snake).toHaveBeenCalledWith(game.board);
-        done();
+    test('constructor sets snake property to null', () => {
+        expect(game.snake).toBe(null);
     });
 
-    test('start calls _placeFood', async (done) => {
-        const mockNode = new SnakeGameNode();
-        mockNode.row = 3;
-        Snake.prototype.getHead = jest.fn().mockReturnValueOnce(mockNode);
-        game._placeFood = jest.fn();
+    describe('test start', () => {
+        let mockNode;
 
-        game.start();
+        beforeEach(() => {
+            mockNode = new SnakeGameNode();
+            mockNode.row = 3;
+            Snake.prototype.getHead = jest.fn(() => mockNode);
+            Snake.prototype.move = jest.fn(() => false);
+            game._gameLoop = jest.fn();
+            game._placeFood = jest.fn();
+        });
 
-        expect(game._placeFood).toHaveBeenCalled();
-        done();
+        test('start constructs a new snake object with board prop and sets it to snake prop', async (done) => {
+            game.start();
+
+            expect(Snake).toHaveBeenCalledWith(game.board);
+            expect(game.snake).toBeInstanceOf(Snake);
+            done();
+        });
+
+        test('start calls _placeFood', async (done) => {
+            game.start();
+
+            expect(game._placeFood).toHaveBeenCalled();
+            done();
+        });
+
+        test('start calls _gameLoop', async (done) => {
+            game.start();
+
+            expect(game._gameLoop).toHaveBeenCalledTimes(1);
+            done();
+        });
     });
 
     test('_placeFood sets node at given row, col as a food node', () => {
@@ -99,4 +115,23 @@ describe('Test SnakeGame', () => {
 
         expect(retVal).toBe(mockRetVal);
     });
+
+    test.each([
+        [true, true, true],
+        [true, true, false],
+        [true, false, true],
+        [false, false, false],
+    ])(
+        '_isInvalidSpace returns %s when board.isInvalidSpace is %s and node.isSnakeNode is %s',
+        (expected, isInvalid, isSnake) => {
+            game.board.isInvalidSpace = jest.fn().mockReturnValueOnce(isInvalid);
+            const mockNode = new SnakeGameNode();
+            mockNode.isSnakeNode = jest.fn().mockReturnValueOnce(isSnake);
+            game.board.getNode = jest.fn((row, col) => mockNode);
+
+            const retVal = game._isInvalidSpace();
+
+            expect(retVal).toBe(expected);
+        },
+    );
 });

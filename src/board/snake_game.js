@@ -4,17 +4,45 @@ const {Snake} = require('./snake');
 const utils = require('../utils/utils');
 
 DIMENSIONS = 20;
-
+TIME_STEP = 250;
 class SnakeGame {
     constructor() {
         this.board = new Board(DIMENSIONS, SnakeGameNode);
+        this.snake = null;
 
         this.board.draw();
     }
 
     async start() {
-        const snake = new Snake(this.board);
-        this._placeFood(snake.getHead().row, this.board.dims - 5);
+        this.snake = new Snake(this.board);
+        this._placeFood(this.snake.getHead().row, this.board.dims - 5);
+
+        this._gameLoop();
+    }
+
+    async _gameLoop() {
+        while (true) {
+            let {row, col} = this.snake.getNextMove();
+            if (this._isInvalidSpace(row, col)) {
+                break;
+            }
+
+            if (this.board.getNode(row, col).isFoodNode()) {
+                this._placeFood();
+            }
+
+            this.snake.move();
+
+            if (this.snake.length === this.board.nodes.length) {
+                break;
+            }
+
+            await utils.sleep(TIME_STEP);
+        }
+    }
+
+    _isInvalidSpace(row, col) {
+        return this.board.isInvalidSpace(row, col) || this.board.getNode(row, col).isSnakeNode();
     }
 
     _placeFood(row = null, col = null) {

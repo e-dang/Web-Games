@@ -1,6 +1,17 @@
 const Board = require('../../../src/board/board');
 const SnakeGameNode = require('../../../src/board/nodes/snake_game_node');
-const {SnakeGame, DIMENSIONS} = require('../../../src/board/snake_game');
+const {
+    SnakeGame,
+    DIMENSIONS,
+    UP_ARROW,
+    DOWN_ARROW,
+    LEFT_ARROW,
+    RIGHT_ARROW,
+    W,
+    A,
+    S,
+    D,
+} = require('../../../src/board/snake_game');
 const {Snake} = require('../../../src/board/snake');
 const utils = require('../../../src/utils/utils');
 
@@ -134,4 +145,132 @@ describe('Test SnakeGame', () => {
             expect(retVal).toBe(expected);
         },
     );
+
+    test('_handleKeyDown is called when a key is pressed and snake is not null', () => {
+        game.snake = new Snake();
+        game._handleKeyDown = jest.fn();
+
+        document.dispatchEvent(new Event('keydown'));
+
+        expect(game._handleKeyDown).toHaveBeenCalledTimes(1);
+    });
+
+    test('_handleKeyDown is not called when a key is pressed and snake is null', () => {
+        game.snake = null;
+        game._handleKeyDown = jest.fn();
+
+        document.dispatchEvent(new Event('keydown'));
+
+        expect(game._handleKeyDown).not.toHaveBeenCalled();
+    });
+
+    test('_handleKeyDown calls setDirectionUp on snake prop when up arrow key is pressed', async () => {
+        game.snake = new Snake();
+        const event = {
+            keyCode: 38,
+        };
+
+        await game._handleKeyDown(event);
+
+        expect(game.snake.setDirectionUp).toHaveBeenCalledTimes(1);
+    });
+
+    test('_handleKeyDown calls setDirectionUp on snake prop when "w" key is pressed', async () => {
+        game.snake = new Snake();
+        const event = {
+            keyCode: 87,
+        };
+
+        await game._handleKeyDown(event);
+
+        expect(game.snake.setDirectionUp).toHaveBeenCalledTimes(1);
+    });
+
+    test('_handleKeyDown calls setDirectionUp on snake prop when up arrow key is pressed', async () => {
+        game.snake = new Snake();
+        const event = {
+            keyCode: UP_ARROW,
+        };
+
+        await game._handleKeyDown(event);
+
+        expect(game.snake.setDirectionUp).toHaveBeenCalledTimes(1);
+    });
+
+    test('_handleKeyDown calls setDirectionUp on snake prop when "w" key is pressed', async () => {
+        game.snake = new Snake();
+        const event = {
+            keyCode: W,
+        };
+
+        await game._handleKeyDown(event);
+
+        expect(game.snake.setDirectionUp).toHaveBeenCalledTimes(1);
+    });
+
+    test('_handleKeyDown calls setDirectionDown on snake prop when down arrow key is pressed', async () => {
+        game.snake = new Snake();
+        const event = {
+            keyCode: DOWN_ARROW,
+        };
+
+        await game._handleKeyDown(event);
+
+        expect(game.snake.setDirectionDown).toHaveBeenCalledTimes(1);
+    });
+
+    test('_handleKeyDown calls setDirectionDown on snake prop when "s" key is pressed', async () => {
+        game.snake = new Snake();
+        const event = {
+            keyCode: S,
+        };
+
+        await game._handleKeyDown(event);
+
+        expect(game.snake.setDirectionDown).toHaveBeenCalledTimes(1);
+    });
+
+    test('_handleKeyDown calls setDirectionLeft on snake prop when left arrow key is pressed', async () => {
+        game.snake = new Snake();
+        const event = {
+            keyCode: LEFT_ARROW,
+        };
+
+        await game._handleKeyDown(event);
+
+        expect(game.snake.setDirectionLeft).toHaveBeenCalledTimes(1);
+    });
+
+    test('_handleKeyDown calls setDirectionLeft on snake prop when "a" key is pressed', async () => {
+        game.snake = new Snake();
+        const event = {
+            keyCode: A,
+        };
+
+        await game._handleKeyDown(event);
+
+        expect(game.snake.setDirectionLeft).toHaveBeenCalledTimes(1);
+    });
+
+    test('_handleKeyDown calls setDirectionRight on snake prop when right arrow key is pressed', async () => {
+        game.snake = new Snake();
+        const event = {
+            keyCode: RIGHT_ARROW,
+        };
+
+        await game._handleKeyDown(event);
+
+        expect(game.snake.setDirectionRight).toHaveBeenCalledTimes(1);
+    });
+
+    test('_handleKeyDown calls setDirectionRight on snake prop when "d" key is pressed', async () => {
+        game.snake = new Snake();
+        const event = {
+            keyCode: D,
+        };
+
+        await game._handleKeyDown(event);
+
+        expect(game.snake.setDirectionRight).toHaveBeenCalledTimes(1);
+    });
 });

@@ -36,12 +36,12 @@ describe('Test SnakeGameNode', () => {
         expect(node._setAsNodeType).toHaveBeenCalledWith('snake');
     });
 
-    test('setAsHeadNode calls _setAsNodeType with ["snake", "head"]', () => {
+    test('setAsHeadNode calls _setAsNodeType with ["snake", "snake-head"]', () => {
         node._setAsNodeType = jest.fn();
 
         node.setAsHeadNode();
 
-        expect(node._setAsNodeType).toHaveBeenCalledWith(['snake', 'head']);
+        expect(node._setAsNodeType).toHaveBeenCalledWith(['snake', 'snake-head']);
     });
 
     test('setAsFoodNode calls _setAsNodeType with "food"', () => {

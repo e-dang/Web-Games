@@ -10,7 +10,7 @@ class SnakeGameNode extends Node {
     }
 
     setAsHeadNode() {
-        this._setAsNodeType(['snake', 'head']);
+        this._setAsNodeType(['snake', 'snake-head']);
     }
 
     setAsFoodNode() {

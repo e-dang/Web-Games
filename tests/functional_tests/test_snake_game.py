@@ -3,7 +3,7 @@ from .pages.snake_page import SnakePage
 
 
 @pytest.mark.usefixtures('driver_init')
-class TestNav:
+class TestSnakeGame:
     @pytest.fixture(autouse=True)
     def url(self):
         return 'http://localhost:5000/'

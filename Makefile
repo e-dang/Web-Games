@@ -9,7 +9,7 @@ build:
 	npm run build-dev
 
 build-prod:
-	npm run build-prod
+	npm run build
 
 test-unit:
 	cd $(PROJECT_DIR) && \

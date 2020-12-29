@@ -1,4 +1,5 @@
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -12,7 +13,7 @@ class BasePage:
         self.num_cols = None
 
     def wait_to_find_by_id(self, id_):
-        WebDriverWait(self.driver, TIMEOUT).until(EC.visibility_of_element_located(self.driver.find_element_by_id(id_)))
+        WebDriverWait(self.driver, TIMEOUT).until(EC.visibility_of_element_located((By.ID, id_)))
         return self.driver.find_element_by_id(id_)
 
     def has_correct_title(self, title):

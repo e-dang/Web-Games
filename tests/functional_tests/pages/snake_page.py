@@ -74,7 +74,7 @@ class SnakePage(BasePage):
         WebDriverWait(self.driver, TIMEOUT).until(lambda x: self.get_snake_position_delta() == (0, 0))
 
     def is_game_over(self):
-        return self.driver.find_element_by_id('gameOverMessage').is_displayed()
+        return self.wait_to_find_by_id('gameOverMessage').is_displayed()
 
     def get_snake_length(self):
         return len(self._get_board().find_elements_by_class_name('snake'))
@@ -89,7 +89,7 @@ class SnakePage(BasePage):
             up.key = '{1}';\n
             document.dispatchEvent(up);\n
         }};\n
-        setTimeout(performUp, 20);\n
+        setTimeout(performUp, 60);\n
         '''.format(key, key)
         self.driver.execute_script(command)
         sleep(timeout)

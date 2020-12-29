@@ -1,9 +1,8 @@
 const Board = require('../../../src/board/board');
-const fs = require('fs');
-const path = require('path');
 const SnakeGameNode = require('../../../src/board/nodes/snake_game_node');
+const {cacheHTML, clearHTML} = require('../utils');
 
-const html = fs.readFileSync(path.resolve(__dirname, '../../../public/index.html'), 'utf8');
+const loadHTML = cacheHTML('index.html');
 
 jest.mock('../../../src/board/nodes/snake_game_node');
 
@@ -13,14 +12,14 @@ describe('Board', () => {
     let nodeType;
 
     beforeEach(() => {
-        document.documentElement.innerHTML = html.toString();
+        loadHTML();
         dims = 10;
         nodeType = SnakeGameNode;
         board = new Board(dims, nodeType);
     });
 
     afterEach(() => {
-        document.documentElement.innerHTML = '';
+        clearHTML();
     });
 
     test('constructor sets dims prop to dims parameter', () => {

@@ -178,4 +178,10 @@ describe('Test Snake', () => {
 
         expect(snake.nextDirection).toBe(LEFT);
     });
+
+    test('getLength returns the length of the body', () => {
+        const retVal = snake.getLength();
+
+        expect(retVal).toBe(snake.body.length);
+    });
 });

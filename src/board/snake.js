@@ -41,6 +41,10 @@ class Snake {
         return this.body.peekFront();
     }
 
+    getLength() {
+        return this.body.length;
+    }
+
     setDirectionUp() {
         if (this.direction !== DOWN) {
             this.nextDirection = UP;

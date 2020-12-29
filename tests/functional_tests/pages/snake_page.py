@@ -1,12 +1,10 @@
 from time import sleep
 
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 
 from .base_page import TIMEOUT, BasePage
 
-TIME_STEP = 0.12
+TIME_STEP = 0.15
 
 
 class SnakePage(BasePage):
@@ -45,16 +43,16 @@ class SnakePage(BasePage):
         return f_row - i_row, f_col - i_col
 
     def press_up_key(self):
-        self._press_and_hold_key(Keys.UP)
+        self._press_and_hold_key('ArrowUp')
 
     def press_left_key(self):
-        self._press_and_hold_key(Keys.LEFT)
+        self._press_and_hold_key('ArrowLeft')
 
     def press_down_key(self):
-        self._press_and_hold_key(Keys.DOWN)
+        self._press_and_hold_key('ArrowDown')
 
     def press_right_key(self):
-        self._press_and_hold_key(Keys.RIGHT)
+        self._press_and_hold_key('ArrowRight')
 
     def press_W_key(self):
         self._press_and_hold_key('w')
@@ -82,6 +80,16 @@ class SnakePage(BasePage):
         return len(self._get_board().find_elements_by_class_name('snake'))
 
     def _press_and_hold_key(self, key, timeout=TIME_STEP):
-        action = ActionChains(self.driver).key_down(key).pause(timeout).key_up(key)
-        action.perform()
-        action.reset_actions()
+        command = '''
+        const down = new Event('keydown');\n
+        down.key = '{0}';\n
+        document.dispatchEvent(down);\n
+        const performUp = () => {{\n
+            const up = new Event('keyup');\n
+            up.key = '{1}';\n
+            document.dispatchEvent(up);\n
+        }};\n
+        setTimeout(performUp, 20);\n
+        '''.format(key, key)
+        self.driver.execute_script(command)
+        sleep(timeout)

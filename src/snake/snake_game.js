@@ -5,7 +5,7 @@ const utils = require('../utils/utils');
 
 const DIMENSIONS = 16;
 const TIME_STEP = 20;
-const MOVE_TIME_STEP = 120;
+const MOVE_TIME_STEP = TIME_STEP * 6;
 
 const UP_ARROW = 'ArrowUp';
 const DOWN_ARROW = 'ArrowDown';

@@ -35,7 +35,7 @@ jobs:
         run: make install
 
       - name: Build bundle
-        run: make build
+        run: make build-prod
 
       - name: Unit Tests
         run: make test-unit
@@ -44,6 +44,13 @@ jobs:
         run: |
           npm run start &
           make test-ft
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: Collect debug screenshot
+          path: ./snake_screenshot.png
+          if-no-files-found: ignore
 
       - name: Get source branch name on pull request
         run: echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV

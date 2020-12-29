@@ -34,7 +34,13 @@ jobs:
       - name: Install dependencies
         run: make install
 
-      - name: Functional tests
+      - name: Build bundle
+        run: make build
+
+      - name: Unit Tests
+        run: make test-unit
+
+      - name: Functional Tests
         run: |
           npm run start &
           make test-ft

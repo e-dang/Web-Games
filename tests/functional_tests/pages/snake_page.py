@@ -1,15 +1,17 @@
 from time import sleep
 
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 
-from .base_page import BasePage, TIMEOUT
+from .base_page import TIMEOUT, BasePage
+
+TIME_STEP = 0.15
 
 
 class SnakePage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
-        self.body = self.driver.find_elements_by_tag_name('body')[0]
 
     def has_correct_title(self):
         return super().has_correct_title('Snake')
@@ -36,35 +38,35 @@ class SnakePage(BasePage):
     def get_food_position(self):
         return self._get_position_of_unique_node_type('food')
 
-    def get_snake_position_delta(self, timeout=1):
+    def get_snake_position_delta(self, timeout=TIME_STEP):
         i_row, i_col = self.get_snake_position()
         sleep(timeout)
         f_row, f_col = self.get_snake_position()
         return f_row - i_row, f_col - i_col
 
     def press_up_key(self):
-        self.body.send_keys(Keys.UP)
+        self._press_and_hold_key(Keys.UP)
 
     def press_left_key(self):
-        self.body.send_keys(Keys.LEFT)
+        self._press_and_hold_key(Keys.LEFT)
 
     def press_down_key(self):
-        self.body.send_keys(Keys.DOWN)
+        self._press_and_hold_key(Keys.DOWN)
 
     def press_right_key(self):
-        self.body.send_keys(Keys.RIGHT)
+        self._press_and_hold_key(Keys.RIGHT)
 
     def press_W_key(self):
-        self.body.send_keys('w')
+        self._press_and_hold_key('w')
 
     def press_A_key(self):
-        self.body.send_keys('a')
+        self._press_and_hold_key('a')
 
     def press_S_key(self):
-        self.body.send_keys('s')
+        self._press_and_hold_key('s')
 
     def press_D_key(self):
-        self.body.send_keys('d')
+        self._press_and_hold_key('d')
 
     def wait_for_snake_to_eat_food(self):
         i_pos = self.get_food_position()
@@ -78,3 +80,8 @@ class SnakePage(BasePage):
 
     def get_snake_length(self):
         return len(self._get_board().find_elements_by_class_name('snake'))
+
+    def _press_and_hold_key(self, key, timeout=TIME_STEP):
+        action = ActionChains(self.driver).key_down(key).pause(timeout).key_up(key)
+        action.perform()
+        action.reset_actions()

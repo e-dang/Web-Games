@@ -146,130 +146,118 @@ describe('Test SnakeGame', () => {
         },
     );
 
-    test('_handleKeyDown is called when a key is pressed and snake is not null', () => {
+    test('keydown event caches the event.key property in this.keys when snake is not null', () => {
         game.snake = new Snake();
-        game._handleKeyDown = jest.fn();
+        game.keys[UP_ARROW] = false;
+        const event = new Event('keydown');
+        event.key = UP_ARROW;
 
-        document.dispatchEvent(new Event('keydown'));
+        document.dispatchEvent(event);
 
-        expect(game._handleKeyDown).toHaveBeenCalledTimes(1);
+        expect(game.keys[UP_ARROW]).toBe(true);
     });
 
-    test('_handleKeyDown is not called when a key is pressed and snake is null', () => {
+    test('keydown event doesnt cache the event.key property in this.keys when snake is null', () => {
         game.snake = null;
-        game._handleKeyDown = jest.fn();
+        game.keys[UP_ARROW] = false;
+        const event = new Event('keydown');
+        event.key = UP_ARROW;
 
-        document.dispatchEvent(new Event('keydown'));
+        document.dispatchEvent(event);
 
-        expect(game._handleKeyDown).not.toHaveBeenCalled();
+        expect(game.keys[UP_ARROW]).toBe(false);
     });
 
-    test('_handleKeyDown calls setDirectionUp on snake prop when up arrow key is pressed', async () => {
+    test('keyup event removes the cached event.key property in this.keys when snake is not null', () => {
         game.snake = new Snake();
-        const event = {
-            keyCode: 38,
-        };
+        game.keys[UP_ARROW] = true;
+        const event = new Event('keyup');
+        event.key = UP_ARROW;
 
-        await game._handleKeyDown(event);
+        document.dispatchEvent(event);
+
+        expect(game.keys[UP_ARROW]).toBe(false);
+    });
+
+    test('keyup event doesnt remove the cached event.key property in this.keys when snake is null', () => {
+        game.snake = null;
+        game.keys[UP_ARROW] = true;
+        const event = new Event('keyup');
+        event.key = UP_ARROW;
+
+        document.dispatchEvent(event);
+
+        expect(game.keys[UP_ARROW]).toBe(true);
+    });
+
+    test('_changeDirections calls setDirectionUp on snake prop when up arrow key is cached', () => {
+        game.snake = new Snake();
+        game.keys[UP_ARROW] = true;
+
+        game._changeDirections();
 
         expect(game.snake.setDirectionUp).toHaveBeenCalledTimes(1);
     });
 
-    test('_handleKeyDown calls setDirectionUp on snake prop when "w" key is pressed', async () => {
+    test('_changeDirections calls setDirectionUp on snake prop when "w" key is cached', () => {
         game.snake = new Snake();
-        const event = {
-            keyCode: 87,
-        };
+        game.keys[W] = true;
 
-        await game._handleKeyDown(event);
+        game._changeDirections();
 
         expect(game.snake.setDirectionUp).toHaveBeenCalledTimes(1);
     });
 
-    test('_handleKeyDown calls setDirectionUp on snake prop when up arrow key is pressed', async () => {
+    test('_changeDirections calls setDirectionDown on snake prop when down arrow key is cached', () => {
         game.snake = new Snake();
-        const event = {
-            keyCode: UP_ARROW,
-        };
+        game.keys[DOWN_ARROW] = true;
 
-        await game._handleKeyDown(event);
-
-        expect(game.snake.setDirectionUp).toHaveBeenCalledTimes(1);
-    });
-
-    test('_handleKeyDown calls setDirectionUp on snake prop when "w" key is pressed', async () => {
-        game.snake = new Snake();
-        const event = {
-            keyCode: W,
-        };
-
-        await game._handleKeyDown(event);
-
-        expect(game.snake.setDirectionUp).toHaveBeenCalledTimes(1);
-    });
-
-    test('_handleKeyDown calls setDirectionDown on snake prop when down arrow key is pressed', async () => {
-        game.snake = new Snake();
-        const event = {
-            keyCode: DOWN_ARROW,
-        };
-
-        await game._handleKeyDown(event);
+        game._changeDirections();
 
         expect(game.snake.setDirectionDown).toHaveBeenCalledTimes(1);
     });
 
-    test('_handleKeyDown calls setDirectionDown on snake prop when "s" key is pressed', async () => {
+    test('_changeDirections calls setDirectionDown on snake prop when "s" key is cached', () => {
         game.snake = new Snake();
-        const event = {
-            keyCode: S,
-        };
+        game.keys[S] = true;
 
-        await game._handleKeyDown(event);
+        game._changeDirections();
 
         expect(game.snake.setDirectionDown).toHaveBeenCalledTimes(1);
     });
 
-    test('_handleKeyDown calls setDirectionLeft on snake prop when left arrow key is pressed', async () => {
+    test('_changeDirections calls setDirectionLeft on snake prop when left arrow key is cached', () => {
         game.snake = new Snake();
-        const event = {
-            keyCode: LEFT_ARROW,
-        };
+        game.keys[LEFT_ARROW] = true;
 
-        await game._handleKeyDown(event);
+        game._changeDirections();
 
         expect(game.snake.setDirectionLeft).toHaveBeenCalledTimes(1);
     });
 
-    test('_handleKeyDown calls setDirectionLeft on snake prop when "a" key is pressed', async () => {
+    test('_changeDirections calls setDirectionLeft on snake prop when "a" key is cached', () => {
         game.snake = new Snake();
-        const event = {
-            keyCode: A,
-        };
+        game.keys[A] = true;
 
-        await game._handleKeyDown(event);
+        game._changeDirections();
 
         expect(game.snake.setDirectionLeft).toHaveBeenCalledTimes(1);
     });
 
-    test('_handleKeyDown calls setDirectionRight on snake prop when right arrow key is pressed', async () => {
+    test('_changeDirections calls setDirectionRight on snake prop when right arrow key is cached', () => {
         game.snake = new Snake();
-        const event = {
-            keyCode: RIGHT_ARROW,
-        };
+        game.keys[RIGHT_ARROW] = true;
 
-        await game._handleKeyDown(event);
+        game._changeDirections();
 
         expect(game.snake.setDirectionRight).toHaveBeenCalledTimes(1);
     });
 
-    test('_handleKeyDown calls setDirectionRight on snake prop when "d" key is pressed', async () => {
+    test('_changeDirections calls setDirectionRight on snake prop when "d" key is cached', () => {
         game.snake = new Snake();
-        const event = {
-            keyCode: D,
-        };
+        game.keys[D] = true;
 
-        await game._handleKeyDown(event);
+        game._changeDirections();
 
         expect(game.snake.setDirectionRight).toHaveBeenCalledTimes(1);
     });

@@ -3,25 +3,44 @@ const SnakeGameNode = require('./nodes/snake_game_node');
 const {Snake} = require('./snake');
 const utils = require('../utils/utils');
 
-const DIMENSIONS = 20;
-const TIME_STEP = 250;
+const DIMENSIONS = 16;
+const TIME_STEP = 20;
+const MOVE_TIME_STEP = 120;
 
-const UP_ARROW = 38;
-const DOWN_ARROW = 40;
-const LEFT_ARROW = 37;
-const RIGHT_ARROW = 39;
-const W = 87;
-const A = 65;
-const S = 83;
-const D = 68;
+const UP_ARROW = 'ArrowUp';
+const DOWN_ARROW = 'ArrowDown';
+const LEFT_ARROW = 'ArrowLeft';
+const RIGHT_ARROW = 'ArrowRight';
+const W = 'w';
+const A = 'a';
+const S = 's';
+const D = 'd';
 
 class SnakeGame {
     constructor() {
         this.board = new Board(DIMENSIONS, SnakeGameNode);
         this.snake = null;
+        this.keys = {};
 
         this.board.draw();
         this.addKeyDownEventListener();
+        this.addKeyUpEventListener();
+    }
+
+    addKeyDownEventListener() {
+        document.addEventListener('keydown', (event) => {
+            if (this.snake !== null) {
+                this.keys[event.key] = true;
+            }
+        });
+    }
+
+    addKeyUpEventListener() {
+        document.addEventListener('keyup', (event) => {
+            if (this.snake !== null) {
+                this.keys[event.key] = false;
+            }
+        });
     }
 
     async start() {
@@ -32,23 +51,28 @@ class SnakeGame {
     }
 
     async _gameLoop() {
+        let i = 0;
         while (true) {
+            this._changeDirections();
+
             let {row, col} = this.snake.getNextMove();
             if (this._isInvalidSpace(row, col)) {
                 this._handleFailure();
-                break;
+                return;
             }
 
-            if (this.board.getNode(row, col).isFoodNode()) {
-                this._placeFood();
+            if (i % (MOVE_TIME_STEP / TIME_STEP) === 0) {
+                if (this.board.getNode(row, col).isFoodNode()) {
+                    this._placeFood();
+                }
+                this.snake.move();
             }
-
-            this.snake.move();
 
             if (this.snake.length === this.board.nodes.length) {
-                break;
+                return;
             }
 
+            i++;
             await utils.sleep(TIME_STEP);
         }
     }
@@ -84,22 +108,14 @@ class SnakeGame {
         return utils.selectRandom(emptyNodes);
     }
 
-    addKeyDownEventListener() {
-        document.addEventListener('keydown', (event) => {
-            if (this.snake !== null) {
-                this._handleKeyDown(event);
-            }
-        });
-    }
-
-    async _handleKeyDown(event) {
-        if (event.keyCode === UP_ARROW || event.keyCode === W) {
+    _changeDirections() {
+        if (this.keys[UP_ARROW] || this.keys[W]) {
             this.snake.setDirectionUp();
-        } else if (event.keyCode === DOWN_ARROW || event.keyCode === S) {
+        } else if (this.keys[DOWN_ARROW] || this.keys[S]) {
             this.snake.setDirectionDown();
-        } else if (event.keyCode === LEFT_ARROW || event.keyCode === A) {
+        } else if (this.keys[LEFT_ARROW] || this.keys[A]) {
             this.snake.setDirectionLeft();
-        } else if (event.keyCode === RIGHT_ARROW || event.keyCode === D) {
+        } else if (this.keys[RIGHT_ARROW] || this.keys[D]) {
             this.snake.setDirectionRight();
         }
     }

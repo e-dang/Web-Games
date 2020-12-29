@@ -3,7 +3,7 @@ const SnakeGameNode = require('./snake_game_node');
 const {Snake, INITIAL_LENGTH} = require('./snake');
 const utils = require('../utils/utils');
 
-const DIMENSIONS = 16;
+const DIMENSIONS = 17;
 const TIME_STEP = 20;
 const MOVE_TIME_STEP = TIME_STEP * 6;
 
@@ -46,7 +46,7 @@ class SnakeGame {
     async start(callback) {
         this.board.clear();
         this.snake = new Snake(this.board);
-        this._placeFood(this.snake.getHead().row, this.board.dims - 5);
+        this._placeFood(this.snake.getHead().row, this.board.dims - 6);
 
         await this._gameLoop();
         callback();

@@ -35,7 +35,7 @@ def test_failed_check(request):  # check if a test has failed
 
 
 def take_screenshot(driver, nodeid):  # make a screenshot with a name of the test, date and time
-    file_name = f'{nodeid}_{datetime.today().strftime("%Y-%m-%d_%H:%M")}.png'.replace("/", "_").replace("::", "__")
+    file_name = f'{nodeid}_{datetime.today().strftime("%Y-%m-%d_%H-%M")}.png'.replace("/", "_").replace("::", "__")
     screenshot_dir = os.path.join(os.path.dirname(__file__), 'screenshots')
     if not os.path.exists(screenshot_dir):
         os.mkdir(screenshot_dir)

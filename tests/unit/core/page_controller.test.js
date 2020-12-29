@@ -1,4 +1,4 @@
-const PageController = require('../../../src/board/page_controller');
+const PageController = require('../../../src/core/page_controller');
 const {SnakeGame} = require('../../../src/board/snake_game');
 const {cacheHTML, clearHTML} = require('../utils');
 

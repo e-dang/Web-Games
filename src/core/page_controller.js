@@ -1,4 +1,4 @@
-const {SnakeGame} = require('./snake_game');
+const {SnakeGame} = require('../board/snake_game');
 
 class PageController {
     constructor(gameType) {

@@ -1,4 +1,4 @@
-const SnakeGameNode = require('../../../../src/board/nodes/snake_game_node');
+const SnakeGameNode = require('../../../src/snake/snake_game_node');
 
 describe('Test SnakeGameNode', () => {
     let node;

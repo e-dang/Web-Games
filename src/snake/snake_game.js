@@ -1,5 +1,5 @@
 const Board = require('../core/board');
-const SnakeGameNode = require('../board/nodes/snake_game_node');
+const SnakeGameNode = require('./snake_game_node');
 const {Snake, INITIAL_LENGTH} = require('./snake');
 const utils = require('../utils/utils');
 

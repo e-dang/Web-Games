@@ -1,5 +1,5 @@
 const Board = require('../../../src/core/board');
-const SnakeGameNode = require('../../../src/board/nodes/snake_game_node');
+const SnakeGameNode = require('../../../src/snake/snake_game_node');
 const {
     SnakeGame,
     DIMENSIONS,
@@ -20,7 +20,7 @@ loadHTML = cacheHTML('index.html');
 
 jest.mock('../../../src/core/board');
 jest.mock('../../../src/snake/snake');
-jest.mock('../../../src/board/nodes/snake_game_node');
+jest.mock('../../../src/snake/snake_game_node');
 
 describe('Test SnakeGame', () => {
     let game;

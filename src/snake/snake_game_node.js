@@ -1,4 +1,4 @@
-const Node = require('../../core/node');
+const Node = require('../core/node');
 
 class SnakeGameNode extends Node {
     constructor(row, col, idx, boardRow) {

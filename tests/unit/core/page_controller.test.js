@@ -1,8 +1,6 @@
 const PageController = require('../../../src/core/page_controller');
 const {SnakeGame} = require('../../../src/snake/snake_game');
-const {cacheHTML, clearHTML} = require('../utils');
-
-const loadHTML = cacheHTML('index.html');
+const {loadHTML, clearHTML} = require('../utils');
 
 jest.mock('../../../src/snake/snake_game');
 
@@ -10,12 +8,13 @@ describe('Test PageController', () => {
     let controller;
     let gameType;
 
-    beforeEach(() => {
-        loadHTML();
-        gameType = 'snake';
+    beforeEach(async (done) => {
+        await loadHTML('/');
+        gameType = 'Snake';
         controller = new PageController(gameType);
 
         SnakeGame.mockClear();
+        done();
     });
 
     afterEach(() => {
@@ -75,8 +74,8 @@ describe('Test PageController', () => {
         expect(controller.game.start).toHaveBeenCalledTimes(1);
     });
 
-    test('_gameFromString returns a new SnakeGame object when parameter is snake', () => {
-        const type = 'snake';
+    test('_gameFromString returns a new SnakeGame object when parameter is Snake', () => {
+        const type = 'Snake';
 
         const retVal = controller._gameFromString(type);
 

@@ -21,7 +21,7 @@ class PageController {
     }
 
     _gameFromString(strNodeType) {
-        if (strNodeType === 'snake') {
+        if (strNodeType === 'Snake') {
             return new SnakeGame();
         } else {
             return null;

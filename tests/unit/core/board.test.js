@@ -1,8 +1,6 @@
 const Board = require('../../../src/core/board');
 const SnakeGameNode = require('../../../src/snake/snake_game_node');
-const {cacheHTML, clearHTML} = require('../utils');
-
-const loadHTML = cacheHTML('index.html');
+const {loadHTML, clearHTML} = require('../utils');
 
 jest.mock('../../../src/snake/snake_game_node');
 
@@ -11,11 +9,12 @@ describe('Board', () => {
     let dims;
     let nodeType;
 
-    beforeEach(() => {
-        loadHTML();
+    beforeEach(async (done) => {
+        await loadHTML('/');
         dims = 10;
         nodeType = SnakeGameNode;
         board = new Board(dims, nodeType);
+        done();
     });
 
     afterEach(() => {

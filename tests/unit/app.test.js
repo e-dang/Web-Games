@@ -1,7 +1,7 @@
 const request = require('supertest');
 const app = require('../../src/app');
-const fs = require('fs');
 const path = require('path');
+const ejs = require('ejs');
 
 describe('test the path "/"', () => {
     it('should respond with a 200 status code', async () => {
@@ -11,7 +11,9 @@ describe('test the path "/"', () => {
     });
 
     it('should respond with index.html on GET', async () => {
-        const html = fs.readFileSync(path.resolve(__dirname, '../../public/index.html'), 'utf8');
+        const html = await ejs.renderFile(path.resolve(global.PROJECT_DIR, 'views', 'index.ejs'), {
+            pageName: 'Snake',
+        });
 
         const response = await request(app).get('/');
 

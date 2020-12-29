@@ -1,10 +1,10 @@
 const PageController = require('../../../src/core/page_controller');
-const {SnakeGame} = require('../../../src/board/snake_game');
+const {SnakeGame} = require('../../../src/snake/snake_game');
 const {cacheHTML, clearHTML} = require('../utils');
 
 const loadHTML = cacheHTML('index.html');
 
-jest.mock('../../../src/board/snake_game');
+jest.mock('../../../src/snake/snake_game');
 
 describe('Test PageController', () => {
     let controller;

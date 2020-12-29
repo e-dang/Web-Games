@@ -11,7 +11,7 @@ const {
     A,
     S,
     D,
-} = require('../../../src/board/snake_game');
+} = require('../../../src/snake/snake_game');
 const {Snake} = require('../../../src/snake/snake');
 const utils = require('../../../src/utils/utils');
 const {cacheHTML, clearHTML} = require('../utils');

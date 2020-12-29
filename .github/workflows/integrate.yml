@@ -49,7 +49,7 @@ jobs:
         if: failure()
         with:
           name: Collect debug screenshot
-          path: ./snake_screenshot.png
+          path: ./tests/functional_tests/screenshots
           if-no-files-found: ignore
 
       - name: Get source branch name on pull request

@@ -53,7 +53,7 @@ class TestNav:
         # The snake then eats the food and the user sees that the snake grows by one unit of length
         i_length = page.get_snake_length()
         page.wait_for_snake_to_eat_food()
-        assert page.get_snake_length() == i_length + 1
+        assert page.get_snake_length() > i_length
 
         # The user can control the snake with arrow keys
         page.press_up_key()

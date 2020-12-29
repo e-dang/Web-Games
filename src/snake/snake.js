@@ -70,7 +70,7 @@ class Snake {
     }
 
     _initSnake() {
-        const row = this.board.dims / 2 - 1;
+        const row = Math.floor(this.board.dims / 2) - 1;
         for (let i = 0; i < INITIAL_LENGTH; i++) {
             const node = this.board.getNode(row, i);
             node.setAsSnakeNode();

@@ -32,6 +32,12 @@ class Board {
 
         return false;
     }
+
+    clear() {
+        this.nodes.forEach((node) => {
+            node.setAsEmptyNode();
+        });
+    }
 }
 
 module.exports = Board;

@@ -129,4 +129,16 @@ describe('Board', () => {
 
         expect(retVal).toBe(false);
     });
+
+    test('clear calls setAsEmptyNode on all nodes', () => {
+        for (let i = 0; i < dims; i++) {
+            board.nodes.push(new SnakeGameNode());
+        }
+
+        board.clear();
+
+        board.nodes.forEach((node) => {
+            expect(node.setAsEmptyNode).toHaveBeenCalledTimes(1);
+        });
+    });
 });

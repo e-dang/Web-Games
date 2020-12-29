@@ -69,6 +69,7 @@ class SnakeGame {
             }
 
             if (this.snake.getLength() === this.board.nodes.length) {
+                this._handleSuccess();
                 return;
             }
 
@@ -80,6 +81,12 @@ class SnakeGame {
     _handleFailure() {
         document.getElementById('gameOverTitle').innerText = 'Game Over!';
         document.getElementById('gameOverMessage').innerText = `Your score is ${this.snake.getLength()}`;
+        $('#gameOverModal').modal();
+    }
+
+    _handleSuccess() {
+        document.getElementById('gameOverTitle').innerText = 'Congratulations, You Won!';
+        document.getElementById('gameOverMessage').innerText = `Your score is ${this.board.nodes.length}`;
         $('#gameOverModal').modal();
     }
 

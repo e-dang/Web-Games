@@ -267,12 +267,24 @@ describe('Test SnakeGame', () => {
         expect(game.snake.setDirectionRight).toHaveBeenCalledTimes(1);
     });
 
-    test('_handleFailure displays gameOverModal', () => {
+    test('_handleFailure displays gameOverModal', async (done) => {
         game.snake = new Snake();
-        const element = document.getElementById('gameOverModal');
+
+        $('#gameOverModal').on('shown.bs.modal', (event) => {
+            expect(event.target).toHaveClass('show');
+            done();
+        });
 
         game._handleFailure();
+    });
 
-        expect(element).toBeVisible();
+    test('_handleSuccess displays gameOverModal', async (done) => {
+        game.board.nodes = [];
+        $('#gameOverModal').on('shown.bs.modal', (event) => {
+            expect(event.target).toHaveClass('show');
+            done();
+        });
+
+        game._handleSuccess();
     });
 });

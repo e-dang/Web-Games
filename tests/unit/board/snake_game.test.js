@@ -56,6 +56,7 @@ describe('Test SnakeGame', () => {
 
     describe('test start', () => {
         let mockNode;
+        let callback;
 
         beforeEach(() => {
             mockNode = new SnakeGameNode();
@@ -64,10 +65,11 @@ describe('Test SnakeGame', () => {
             Snake.prototype.move = jest.fn(() => false);
             game._gameLoop = jest.fn();
             game._placeFood = jest.fn();
+            callback = jest.fn();
         });
 
         test('start constructs a new snake object with board prop and sets it to snake prop', async (done) => {
-            game.start();
+            game.start(callback);
 
             expect(Snake).toHaveBeenCalledWith(game.board);
             expect(game.snake).toBeInstanceOf(Snake);
@@ -75,17 +77,23 @@ describe('Test SnakeGame', () => {
         });
 
         test('start calls _placeFood', async (done) => {
-            game.start();
+            game.start(callback);
 
             expect(game._placeFood).toHaveBeenCalled();
             done();
         });
 
         test('start calls _gameLoop', async (done) => {
-            game.start();
+            game.start(callback);
 
             expect(game._gameLoop).toHaveBeenCalledTimes(1);
             done();
+        });
+
+        test('start calls callback function', async () => {
+            await game.start(callback);
+
+            expect(callback).toHaveBeenCalledTimes(1);
         });
     });
 

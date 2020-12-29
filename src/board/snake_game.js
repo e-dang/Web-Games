@@ -1,6 +1,6 @@
 const Board = require('./board');
 const SnakeGameNode = require('./nodes/snake_game_node');
-const {Snake} = require('./snake');
+const {Snake, INITIAL_LENGTH} = require('./snake');
 const utils = require('../utils/utils');
 
 const DIMENSIONS = 16;
@@ -43,11 +43,13 @@ class SnakeGame {
         });
     }
 
-    async start() {
+    async start(callback) {
+        this.board.clear();
         this.snake = new Snake(this.board);
         this._placeFood(this.snake.getHead().row, this.board.dims - 5);
 
-        this._gameLoop();
+        await this._gameLoop();
+        callback();
     }
 
     async _gameLoop() {
@@ -80,13 +82,17 @@ class SnakeGame {
 
     _handleFailure() {
         document.getElementById('gameOverTitle').innerText = 'Game Over!';
-        document.getElementById('gameOverMessage').innerText = `Your score is ${this.snake.getLength()}`;
+        document.getElementById('gameOverMessage').innerText = `Your score is ${
+            this.snake.getLength() - INITIAL_LENGTH
+        }`;
         $('#gameOverModal').modal();
     }
 
     _handleSuccess() {
         document.getElementById('gameOverTitle').innerText = 'Congratulations, You Won!';
-        document.getElementById('gameOverMessage').innerText = `Your score is ${this.board.nodes.length}`;
+        document.getElementById('gameOverMessage').innerText = `Your score is ${
+            this.board.nodes.length - INITIAL_LENGTH
+        }`;
         $('#gameOverModal').modal();
     }
 

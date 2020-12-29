@@ -12,14 +12,14 @@ const {
     S,
     D,
 } = require('../../../src/board/snake_game');
-const {Snake} = require('../../../src/board/snake');
+const {Snake} = require('../../../src/snake/snake');
 const utils = require('../../../src/utils/utils');
 const {cacheHTML, clearHTML} = require('../utils');
 
 loadHTML = cacheHTML('index.html');
 
 jest.mock('../../../src/core/board');
-jest.mock('../../../src/board/snake');
+jest.mock('../../../src/snake/snake');
 jest.mock('../../../src/board/nodes/snake_game_node');
 
 describe('Test SnakeGame', () => {

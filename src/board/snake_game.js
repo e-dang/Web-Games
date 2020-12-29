@@ -1,6 +1,6 @@
 const Board = require('../core/board');
 const SnakeGameNode = require('./nodes/snake_game_node');
-const {Snake, INITIAL_LENGTH} = require('./snake');
+const {Snake, INITIAL_LENGTH} = require('../snake/snake');
 const utils = require('../utils/utils');
 
 const DIMENSIONS = 16;

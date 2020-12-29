@@ -1,5 +1,4 @@
-const {types} = require('@babel/core');
-const Node = require('../../../../src/board/nodes/node');
+const Node = require('../../../src/core/node');
 
 describe('Test Node', () => {
     let node;

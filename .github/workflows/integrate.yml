@@ -2,9 +2,9 @@ name: Integrate
 
 on:
   pull_request:
-    branches: [master]
+    branches: [main]
   push:
-    branches: [master]
+    branches: [main]
 
   workflow_dispatch:
 
@@ -34,10 +34,23 @@ jobs:
       - name: Install dependencies
         run: make install
 
-      - name: Functional tests
+      - name: Build bundle
+        run: make build-prod
+
+      - name: Unit Tests
+        run: make test-unit
+
+      - name: Functional Tests
         run: |
           npm run start &
           make test-ft
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: Collect debug screenshot
+          path: ./snake_screenshot.png
+          if-no-files-found: ignore
 
       - name: Get source branch name on pull request
         run: echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV

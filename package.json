@@ -2,10 +2,13 @@
   "name": "web-games",
   "version": "1.0.0",
   "description": "",
-  "main": "src/app.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node src/app",
-    "dev": "nodemon src/app"
+    "start": "node src/server",
+    "dev": "nodemon src/server",
+    "test": "jest",
+    "build-dev": "webpack --entry ./src/main.js --output-filename=bundle.js --output-path=public/dist --mode=development",
+    "build-prod": "webpack --entry ./src/main.js --output-filename=bundle.js --output-path=public/dist --mode=production"
   },
   "repository": {
     "type": "git",
@@ -21,7 +24,18 @@
     "express": "^4.17.1"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.6",
+    "bootstrap": "^4.5.3",
     "jest": "^26.6.3",
-    "nodemon": "^2.0.6"
+    "jquery": "^3.5.1",
+    "nodemon": "^2.0.6",
+    "supertest": "^6.0.1",
+    "webpack": "^5.11.0",
+    "webpack-cli": "^4.3.0"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "./jest.setup.js"
+    ]
   }
 }

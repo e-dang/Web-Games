@@ -1,0 +1,28 @@
+:root {
+    --node-border-color: black;
+    --empty-node-color: white;
+    --snake-node-color: black;
+    --food-node-color: green;
+}
+
+.node {
+    border: 1px solid var(--node-border-color);
+    width: 25px;
+    height: 25px;
+}
+
+.node.square {
+    border-radius: 0%;
+}
+
+.node.empty {
+    background-color: var(--empty-node-color);
+}
+
+.node.snake {
+    background-color: var(--snake-node-color);
+}
+
+.node.food {
+    background-color: var(--food-node-color);
+}

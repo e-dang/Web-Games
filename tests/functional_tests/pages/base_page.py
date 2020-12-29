@@ -19,7 +19,7 @@ class BasePage:
         return self.driver.title == f'Web Games - {title}'
 
     def has_correct_header(self, header):
-        return self.driver.find_element_by_id('currentGame').text == header
+        return self.driver.find_element_by_id('currentGame').text == f'- {header}'
 
     def has_navigation_bar(self):
         return self._get_navbar().is_displayed()

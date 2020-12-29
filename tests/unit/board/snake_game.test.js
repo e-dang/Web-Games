@@ -14,6 +14,9 @@ const {
 } = require('../../../src/board/snake_game');
 const {Snake} = require('../../../src/board/snake');
 const utils = require('../../../src/utils/utils');
+const {cacheHTML, clearHTML} = require('../utils');
+
+loadHTML = cacheHTML('index.html');
 
 jest.mock('../../../src/board/board');
 jest.mock('../../../src/board/snake');
@@ -24,6 +27,7 @@ describe('Test SnakeGame', () => {
     let node;
 
     beforeEach(() => {
+        loadHTML();
         node = new SnakeGameNode();
         Board.prototype.getNode = jest.fn((row, col) => node);
         game = new SnakeGame();
@@ -34,6 +38,7 @@ describe('Test SnakeGame', () => {
         Board.mockClear();
         Snake.mockClear();
         SnakeGameNode.mockClear();
+        clearHTML();
     });
 
     test('constructor sets board prop to new Board instance with SnakeGameNode', () => {
@@ -260,5 +265,14 @@ describe('Test SnakeGame', () => {
         game._changeDirections();
 
         expect(game.snake.setDirectionRight).toHaveBeenCalledTimes(1);
+    });
+
+    test('_handleFailure displays gameOverModal', () => {
+        game.snake = new Snake();
+        const element = document.getElementById('gameOverModal');
+
+        game._handleFailure();
+
+        expect(element).toBeVisible();
     });
 });

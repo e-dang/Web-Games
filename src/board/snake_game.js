@@ -68,7 +68,7 @@ class SnakeGame {
                 this.snake.move();
             }
 
-            if (this.snake.length === this.board.nodes.length) {
+            if (this.snake.getLength() === this.board.nodes.length) {
                 return;
             }
 
@@ -78,7 +78,9 @@ class SnakeGame {
     }
 
     _handleFailure() {
-        document.getElementById('gameOverMessage').hidden = false;
+        document.getElementById('gameOverTitle').innerText = 'Game Over!';
+        document.getElementById('gameOverMessage').innerText = `Your score is ${this.snake.getLength()}`;
+        $('#gameOverModal').modal();
     }
 
     _isInvalidSpace(row, col) {

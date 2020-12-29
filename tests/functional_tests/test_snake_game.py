@@ -92,3 +92,6 @@ class TestNav:
         # The user then runs the snake off the board and sees that the game is over
         page.wait_for_snake_to_run_off_grid()
         assert page.is_game_over()
+
+        # The user has the option to play again
+        assert page.can_click_start()

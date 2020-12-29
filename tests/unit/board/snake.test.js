@@ -1,8 +1,8 @@
-const Board = require('../../../src/board/board');
+const Board = require('../../../src/core/board');
 const SnakeGameNode = require('../../../src/board/nodes/snake_game_node');
 const {Snake, INITIAL_LENGTH, UP, DOWN, LEFT, RIGHT} = require('../../../src/board/snake');
 
-jest.mock('../../../src/board/board');
+jest.mock('../../../src/core/board');
 jest.mock('../../../src/board/nodes/snake_game_node');
 
 describe('Test Snake', () => {

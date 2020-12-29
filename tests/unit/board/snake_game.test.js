@@ -1,4 +1,4 @@
-const Board = require('../../../src/board/board');
+const Board = require('../../../src/core/board');
 const SnakeGameNode = require('../../../src/board/nodes/snake_game_node');
 const {
     SnakeGame,
@@ -18,7 +18,7 @@ const {cacheHTML, clearHTML} = require('../utils');
 
 loadHTML = cacheHTML('index.html');
 
-jest.mock('../../../src/board/board');
+jest.mock('../../../src/core/board');
 jest.mock('../../../src/board/snake');
 jest.mock('../../../src/board/nodes/snake_game_node');
 

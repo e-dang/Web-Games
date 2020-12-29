@@ -1,4 +1,4 @@
-const Board = require('../../../src/board/board');
+const Board = require('../../../src/core/board');
 const SnakeGameNode = require('../../../src/board/nodes/snake_game_node');
 const {cacheHTML, clearHTML} = require('../utils');
 

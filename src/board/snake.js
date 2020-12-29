@@ -11,6 +11,7 @@ class Snake {
     constructor(board) {
         this.body = new Dequeue();
         this.direction = RIGHT;
+        this.nextDirection = RIGHT;
         this.board = board;
 
         this._initSnake();
@@ -26,6 +27,8 @@ class Snake {
         this.getHead().setAsSnakeNode();
         node.setAsHeadNode();
         this.body.pushFront(node);
+
+        this.direction = this.nextDirection;
     }
 
     getNextMove() {
@@ -40,25 +43,25 @@ class Snake {
 
     setDirectionUp() {
         if (this.direction !== DOWN) {
-            this.direction = UP;
+            this.nextDirection = UP;
         }
     }
 
     setDirectionDown() {
         if (this.direction !== UP) {
-            this.direction = DOWN;
+            this.nextDirection = DOWN;
         }
     }
 
     setDirectionLeft() {
         if (this.direction !== RIGHT) {
-            this.direction = LEFT;
+            this.nextDirection = LEFT;
         }
     }
 
     setDirectionRight() {
         if (this.direction !== LEFT) {
-            this.direction = RIGHT;
+            this.nextDirection = RIGHT;
         }
     }
 

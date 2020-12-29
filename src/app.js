@@ -9,4 +9,8 @@ app.get('/', (req, res) => {
     res.render('index', {pageName: 'Snake'});
 });
 
+app.get('/sudoku', (req, res) => {
+    res.render('index', {pageName: 'Sudoku'});
+});
+
 module.exports = app;

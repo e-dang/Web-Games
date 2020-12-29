@@ -4,7 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from .base_page import TIMEOUT, BasePage
 
-TIME_STEP = 0.12
+TIME_STEP = 0.13
 
 
 class SnakePage(BasePage):

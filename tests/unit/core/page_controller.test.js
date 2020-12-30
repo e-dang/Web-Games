@@ -1,5 +1,6 @@
 const PageController = require('../../../src/core/page_controller');
 const {SnakeGame} = require('../../../src/snake/snake_game');
+const {SudokuGame} = require('../../../src/sudoku/sudoku_game');
 const {loadHTML, clearHTML} = require('../utils');
 
 jest.mock('../../../src/snake/snake_game');
@@ -88,5 +89,13 @@ describe('Test PageController', () => {
         const retVal = controller._gameFromString(type);
 
         expect(retVal).toBeNull();
+    });
+
+    test('_gameFromString returns a new SudokuGame object when parameter is Sudoku', () => {
+        const type = 'Sudoku';
+
+        const retVal = controller._gameFromString(type);
+
+        expect(retVal).toBeInstanceOf(SudokuGame);
     });
 });

@@ -1,4 +1,5 @@
 const {SnakeGame} = require('../snake/snake_game');
+const {SudokuGame} = require('../sudoku/sudoku_game');
 
 class PageController {
     constructor(gameType) {
@@ -23,6 +24,8 @@ class PageController {
     _gameFromString(strNodeType) {
         if (strNodeType === 'Snake') {
             return new SnakeGame();
+        } else if (strNodeType === 'Sudoku') {
+            return new SudokuGame();
         } else {
             return null;
         }

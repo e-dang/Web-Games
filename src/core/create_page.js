@@ -1,11 +1,11 @@
 const SnakePage = require('../snake/snake_page');
-const {SudokuGame} = require('../sudoku/sudoku_game');
+const SudokuPage = require('../sudoku/sudoku_page');
 
 function createPage(pageType) {
     if (pageType === 'Snake') {
         return new SnakePage();
     } else if (pageType === 'Sudoku') {
-        return new SudokuGame();
+        return new SudokuPage();
     } else {
         return null;
     }

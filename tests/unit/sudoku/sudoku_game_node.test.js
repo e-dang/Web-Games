@@ -27,4 +27,12 @@ describe('Test SudokuGameNode', () => {
         Object.setPrototypeOf(SudokuGameNode, orig);
         expect(mock).toHaveBeenLastCalledWith(row, col, idx, boardRow, 'square');
     });
+
+    test("setValue sets element's innerText property to value parameter", () => {
+        const value = 10;
+
+        node.setValue(value);
+
+        expect(node.element.innerText).toBe(value);
+    });
 });

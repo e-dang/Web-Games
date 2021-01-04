@@ -7,8 +7,9 @@
 
 .node {
     border: 1px solid var(--node-border-color);
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
 }
 
 .node.square {

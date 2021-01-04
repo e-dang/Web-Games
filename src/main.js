@@ -1,4 +1,4 @@
-const PageController = require('./core/page_controller');
+const createPage = require('./core/create_page');
 
 const gameType = document.currentScript.getAttribute('game-type');
-const controller = new PageController(gameType);
+const page = createPage(gameType);

@@ -10,7 +10,7 @@ describe('Board', () => {
     let nodeType;
 
     beforeEach(async (done) => {
-        await loadHTML('/');
+        await loadHTML('/snake');
         dims = 10;
         nodeType = SnakeGameNode;
         board = new Board(dims, nodeType);

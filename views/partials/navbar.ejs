@@ -13,12 +13,12 @@
                     Select Game...
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Snake</a>
+                    <a class="dropdown-item" href="snake">Snake</a>
+                    <a class="dropdown-item" href="sudoku">Sudoku</a>
                 </div>
             </li>
-            <li class="nav-item">
-                <button id="startBtn" class="btn">Start!</button>
-            </li>
+            <% var path=`${pageName.toLowerCase()}_buttons`; %>
+                <%- include(path); %>
         </ul>
     </div>
 </nav>

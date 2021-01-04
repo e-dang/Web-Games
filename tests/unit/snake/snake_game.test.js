@@ -25,7 +25,7 @@ describe('Test SnakeGame', () => {
     let node;
 
     beforeEach(async (done) => {
-        await loadHTML('/');
+        await loadHTML('/snake');
         node = new SnakeGameNode();
         Board.prototype.getNode = jest.fn((row, col) => node);
         game = new SnakeGame();

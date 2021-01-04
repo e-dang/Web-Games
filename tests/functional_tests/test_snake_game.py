@@ -6,7 +6,7 @@ from .pages.snake_page import SnakePage
 class TestSnakeGame:
     @pytest.fixture(autouse=True)
     def url(self):
-        return 'http://localhost:5000/'
+        return 'http://localhost:5000/snake'
 
     def test_user_is_presented_with_correct_elements_and_options(self, url):
         # The user goes to the webpage

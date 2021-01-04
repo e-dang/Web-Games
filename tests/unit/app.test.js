@@ -3,9 +3,9 @@ const app = require('../../src/app');
 const path = require('path');
 const ejs = require('ejs');
 
-describe('test the path "/"', () => {
+describe('test the path "/snake"', () => {
     it('should respond with a 200 status code', async () => {
-        const response = await request(app).get('/');
+        const response = await request(app).get('/snake');
 
         expect(response.statusCode).toBe(200);
     });
@@ -15,7 +15,7 @@ describe('test the path "/"', () => {
             pageName: 'Snake',
         });
 
-        const response = await request(app).get('/');
+        const response = await request(app).get('/snake');
 
         expect(response.text).toBe(html);
     });

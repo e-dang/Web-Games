@@ -8,7 +8,7 @@ describe('Test SnakePage', () => {
     let page;
 
     beforeEach(async (done) => {
-        await loadHTML('/');
+        await loadHTML('/snake');
         page = new SnakePage();
         SnakeGame.mockClear();
         done();

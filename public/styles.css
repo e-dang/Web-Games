@@ -12,6 +12,13 @@
     text-align: center;
 }
 
+td > input {
+    display: table-cell;
+    width: 100%;
+    border: none;
+    text-align: center;
+}
+
 .node.square {
     border-radius: 0%;
 }

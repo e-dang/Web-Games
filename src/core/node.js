@@ -4,10 +4,8 @@ class Node {
         this.col = col;
         this.idx = idx;
         this.shape = shape;
-        this.element = document.createElement('td');
-        this.element.id = `n${idx}`;
+        this._createElement(boardRow);
         this.setAsEmptyNode();
-        boardRow.appendChild(this.element);
     }
 
     setAsEmptyNode() {
@@ -28,6 +26,12 @@ class Node {
         }
         this.element.className = '';
         this.element.classList.add('node', this.shape, ...type);
+    }
+
+    _createElement(boardRow) {
+        this.element = document.createElement('td');
+        this.element.id = `n${this.idx}`;
+        boardRow.appendChild(this.element);
     }
 }
 

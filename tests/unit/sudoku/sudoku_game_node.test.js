@@ -1,3 +1,4 @@
+const Node = require('../../../src/core/node');
 const SudokuGameNode = require('../../../src/sudoku/sudoku_game_node');
 
 describe('Test SudokuGameNode', () => {
@@ -26,6 +27,15 @@ describe('Test SudokuGameNode', () => {
 
         Object.setPrototypeOf(SudokuGameNode, orig);
         expect(mock).toHaveBeenLastCalledWith(row, col, idx, boardRow, 'square');
+    });
+
+    test('constructor adds a new input element to the html element', () => {
+        expect(node.element.children.length).toBe(1);
+        expect(node.element.children[0].nodeName).toBe('INPUT');
+    });
+
+    test('constructor sets input html element id to `i${this.idx}`', () => {
+        expect(node.input.id).toBe(`i${node.idx}`);
     });
 
     test("setValue sets element's innerText property to value parameter", () => {

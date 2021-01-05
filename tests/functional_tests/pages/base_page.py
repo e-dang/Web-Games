@@ -38,6 +38,9 @@ class BasePage:
         element = self._get_navbar().find_element_by_id('gameSelection')
         return element.is_displayed() and element.is_enabled()
 
+    def game_is_over(self):
+        return self.wait_to_find_by_id('gameOverMessage').is_displayed()
+
     def _get_navbar(self):
         return self.driver.find_element_by_id('navBar')
 

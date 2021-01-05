@@ -38,6 +38,19 @@ class SudokuPage(BasePage):
     def get_node_input_value(self, row, col):
         return self._get_node_input(row, col).get_attribute('value')
 
+    def get_board_as_array(self):
+        if self.num_rows is None or self.num_cols is None:
+            self.num_rows, self.num_cols = self._get_board_dimensions()
+
+        board_arr = []
+        board = self._get_board()
+        for i in range(self.num_rows):
+            board_arr.append([])
+            for j in range(self.num_cols):
+                board_arr[i].append(board.find_element_by_id(self._create_node_id(i, j)).get_attribute('innerText'))
+
+        return board_arr
+
     def _create_input_id(self, row, col):
         if self.num_rows is None or self.num_cols is None:
             self.num_rows, self.num_cols = self._get_board_dimensions()

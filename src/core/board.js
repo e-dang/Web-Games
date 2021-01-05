@@ -5,7 +5,7 @@ class Board {
         this.nodes = [];
     }
 
-    draw() {
+    draw(customizeNodeFn = () => {}) {
         const board = document.createElement('tbody');
         board.id = 'gameBoard';
 
@@ -15,7 +15,7 @@ class Board {
             for (let j = 0; j < this.dims; j++) {
                 const idx = i * this.dims + j;
                 const node = new this.nodeType(i, j, idx, row);
-                this._customizeNode(node);
+                customizeNodeFn(node);
                 this.nodes.push(node);
             }
         }
@@ -40,8 +40,6 @@ class Board {
             node.setAsEmptyNode();
         });
     }
-
-    _customizeNode(node) {}
 }
 
 module.exports = Board;

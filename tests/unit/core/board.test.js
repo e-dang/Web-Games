@@ -64,12 +64,12 @@ describe('Board', () => {
         expect(board.nodes.length).toBe(board.dims * board.dims);
     });
 
-    test('draw calls _customizeNode with each node created', () => {
-        board._customizeNode = jest.fn();
+    test('draw calls function parameter with each node created', () => {
+        const func = jest.fn();
 
-        board.draw();
+        board.draw(func);
 
-        board.nodes.forEach((node, idx) => expect(board._customizeNode).toHaveBeenNthCalledWith(idx + 1, node));
+        board.nodes.forEach((node, idx) => expect(func).toHaveBeenNthCalledWith(idx + 1, node));
     });
 
     test('getNode returns the node at the correct index', () => {
@@ -144,17 +144,5 @@ describe('Board', () => {
         board.nodes.forEach((node) => {
             expect(node.setAsEmptyNode).toHaveBeenCalledTimes(1);
         });
-    });
-
-    test('_customizeNode calls nothing on node parameter', () => {
-        const node = new SnakeGameNode();
-
-        board._customizeNode(node);
-
-        for (let mock in node) {
-            if (mock !== 'constructor') {
-                expect(node[mock]).not.toHaveBeenCalled();
-            }
-        }
     });
 });

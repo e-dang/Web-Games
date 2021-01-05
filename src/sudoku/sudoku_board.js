@@ -10,17 +10,6 @@ class SudokuBoard extends Board {
         this.clear();
         this.getNode(0, 0).setValue(1);
     }
-
-    _customizeNode(node) {
-        node.addInputEventListener('input', (event) => this._handleInputNodeValue(event));
-    }
-
-    _handleInputNodeValue(event) {
-        const value = parseInt(event.target.value);
-        if (isNaN(value) || value === 0) {
-            event.target.value = '';
-        }
-    }
 }
 
 module.exports = SudokuBoard;

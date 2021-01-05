@@ -35,36 +35,4 @@ describe('Test SudokuBoard', () => {
 
         expect(board.clear).toHaveBeenCalledTimes(1);
     });
-
-    test('_customizeNode calls addInputEventListener on node parameter', () => {
-        const node = new SudokuGameNode();
-
-        board._customizeNode(node);
-
-        expect(node.addInputEventListener).toHaveBeenCalledTimes(1);
-    });
-
-    test('_handleInputNodeValue sets event.target.value to empty string if event.target.value is NaN', () => {
-        const event = {
-            target: {
-                value: 'a',
-            },
-        };
-
-        board._handleInputNodeValue(event);
-
-        expect(event.target.value).toBe('');
-    });
-
-    test('_handleInputNodeValue sets event.target.value to empty string if event.target.value is 0', () => {
-        const event = {
-            target: {
-                value: 0,
-            },
-        };
-
-        board._handleInputNodeValue(event);
-
-        expect(event.target.value).toBe('');
-    });
 });

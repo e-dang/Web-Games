@@ -55,4 +55,28 @@ describe('Test SudokuGameNode', () => {
 
         expect(node.input.addEventListener).toHaveBeenCalledWith(type, fn);
     });
+
+    test('_handleInputEvent sets node.input.value to empty string if node.input.value is NaN', () => {
+        node.input.value = 'a';
+
+        node._handleInputEvent();
+
+        expect(node.input.value).toBe('');
+    });
+
+    test('_handleInputEvent sets node.input.value to empty string if node.input.value is 0', () => {
+        node.input.value = 0;
+
+        node._handleInputEvent();
+
+        expect(node.input.value).toBe('');
+    });
+
+    test('_handleInputEvent is called on input event', () => {
+        node._handleInputEvent = jest.fn();
+
+        node.input.dispatchEvent(new Event('input'));
+
+        expect(node._handleInputEvent).toHaveBeenCalledTimes(1);
+    });
 });

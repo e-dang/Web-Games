@@ -18,7 +18,15 @@ class SudokuGameNode extends Node {
         this.input = document.createElement('input');
         this.input.id = `i${this.idx}`;
         this.input.maxLength = 1;
+        this.input.addEventListener('input', () => this._handleInputEvent());
         this.element.appendChild(this.input);
+    }
+
+    _handleInputEvent() {
+        const value = parseInt(this.input.value);
+        if (isNaN(value) || value === 0) {
+            this.input.value = '';
+        }
     }
 }
 

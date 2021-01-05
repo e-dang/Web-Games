@@ -35,4 +35,32 @@ describe('Test SudokuBoard', () => {
 
         expect(board.clear).toHaveBeenCalledTimes(1);
     });
+
+    test('isComplete returns true when all nodes have correct user values', () => {
+        for (let i = 0; i < dims; i++) {
+            const node = new SudokuGameNode();
+            node.userValueIsCorrect.mockReturnValueOnce(true);
+            board.nodes.push(node);
+        }
+
+        const retVal = board.isComplete();
+
+        expect(retVal).toBe(true);
+    });
+
+    test('isComplete returns false when at least one node doesnt have correct user value', () => {
+        for (let i = 0; i < dims; i++) {
+            const node = new SudokuGameNode();
+            if (i != 0) {
+                node.userValueIsCorrect.mockReturnValueOnce(true);
+            } else {
+                node.userValueIsCorrect.mockReturnValueOnce(false);
+            }
+            board.nodes.push(node);
+        }
+
+        const retVal = board.isComplete();
+
+        expect(retVal).toBe(false);
+    });
 });

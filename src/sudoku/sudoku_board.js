@@ -8,7 +8,13 @@ class SudokuBoard extends Board {
 
     reset() {
         this.clear();
-        this.getNode(0, 0).setValue(1);
+        const node = this.getNode(0, 0);
+        node.trueValue = 1;
+        node.renderTrueValue();
+    }
+
+    isComplete() {
+        return this.nodes.reduce((accum, node) => accum + node.userValueIsCorrect(), 0) == this.nodes.length;
     }
 }
 

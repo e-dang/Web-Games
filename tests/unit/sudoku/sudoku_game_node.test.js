@@ -45,4 +45,14 @@ describe('Test SudokuGameNode', () => {
 
         expect(node.element.innerText).toBe(value);
     });
+
+    test('addInputEventListener calls addEventListener on input prop with type and fn params', () => {
+        const type = 'change';
+        const fn = jest.fn();
+        node.input.addEventListener = jest.fn();
+
+        node.addInputEventListener(type, fn);
+
+        expect(node.input.addEventListener).toHaveBeenCalledWith(type, fn);
+    });
 });

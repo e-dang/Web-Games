@@ -19,6 +19,7 @@ describe('Board', () => {
 
     afterEach(() => {
         clearHTML();
+        SnakeGameNode.mockReset();
     });
 
     test('constructor sets dims prop to dims parameter', () => {
@@ -29,42 +30,46 @@ describe('Board', () => {
         expect(board.nodeType).toBe(nodeType);
     });
 
-    describe('test draw', () => {
-        let wrapper;
-        let gameBoard;
+    test('draw adds tbody element with id=board to gameBoardWrapper element', () => {
+        board.draw();
 
-        beforeEach(() => {
-            wrapper = document.getElementById('gameBoardWrapper');
+        const wrapper = document.getElementById('gameBoardWrapper');
+        const gameBoard = document.getElementById('gameBoard');
+        expect(gameBoard.parentElement).toBe(wrapper);
+    });
 
-            board.draw();
+    test('draw adds dim number of rows to board', () => {
+        const rows = document.getElementsByTagName('tr');
 
-            gameBoard = document.getElementById('gameBoard');
-        });
+        board.draw();
 
-        test('draw adds tbody element with id=board to gameBoardWrapper element', () => {
-            expect(gameBoard.parentElement).toBe(wrapper);
-        });
+        const gameBoard = document.getElementById('gameBoard');
+        expect(rows.length).toBe(board.dims);
+        for (let row of rows) {
+            expect(row.parentElement).toBe(gameBoard);
+        }
+    });
 
-        test('draw adds dim number of rows to board', () => {
-            const rows = document.getElementsByTagName('tr');
+    test('draw calls constructs dims * dims number of nodeTypes', () => {
+        board.nodeType = jest.fn();
 
-            expect(rows.length).toBe(board.dims);
-            for (let row of rows) {
-                expect(row.parentElement).toBe(gameBoard);
-            }
-        });
+        board.draw();
 
-        test('draw calls constructs dims * dims number of nodeTypes', () => {
-            board.nodeType = jest.fn();
+        expect(board.nodeType).toHaveBeenCalledTimes(board.dims * board.dims);
+    });
 
-            board.draw();
+    test('draw fills nodes prop with dims * dims elements', () => {
+        board.draw();
 
-            expect(board.nodeType).toHaveBeenCalledTimes(board.dims * board.dims);
-        });
+        expect(board.nodes.length).toBe(board.dims * board.dims);
+    });
 
-        test('draw fills nodes prop with dims * dims elements', () => {
-            expect(board.nodes.length).toBe(board.dims * board.dims);
-        });
+    test('draw calls _customizeNode with each node created', () => {
+        board._customizeNode = jest.fn();
+
+        board.draw();
+
+        board.nodes.forEach((node, idx) => expect(board._customizeNode).toHaveBeenNthCalledWith(idx + 1, node));
     });
 
     test('getNode returns the node at the correct index', () => {
@@ -139,5 +144,17 @@ describe('Board', () => {
         board.nodes.forEach((node) => {
             expect(node.setAsEmptyNode).toHaveBeenCalledTimes(1);
         });
+    });
+
+    test('_customizeNode calls nothing on node parameter', () => {
+        const node = new SnakeGameNode();
+
+        board._customizeNode(node);
+
+        for (let mock in node) {
+            if (mock !== 'constructor') {
+                expect(node[mock]).not.toHaveBeenCalled();
+            }
+        }
     });
 });

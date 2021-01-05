@@ -3,10 +3,15 @@ const Node = require('../core/node');
 class SudokuGameNode extends Node {
     constructor(row, col, idx, boardRow) {
         super(row, col, idx, boardRow, 'square');
+        this.trueValue = null;
     }
 
-    setValue(value) {
-        this.element.innerText = value;
+    renderTrueValue() {
+        this.element.innerText = this.trueValue;
+    }
+
+    userValueIsCorrect() {
+        return this.trueValue == this.input.value;
     }
 
     addInputEventListener(type, fn) {

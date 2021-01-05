@@ -38,12 +38,16 @@ describe('Test SudokuGameNode', () => {
         expect(node.input.id).toBe(`i${node.idx}`);
     });
 
-    test("setValue sets element's innerText property to value parameter", () => {
-        const value = 10;
+    test('constructor defines trueValue property', () => {
+        expect(node.trueValue).toBeDefined();
+    });
 
-        node.setValue(value);
+    test("renderTrueValue sets element's innerText property to trueValue property", () => {
+        node.trueValue = 10;
 
-        expect(node.element.innerText).toBe(value);
+        node.renderTrueValue();
+
+        expect(node.element.innerText).toBe(node.trueValue);
     });
 
     test('addInputEventListener calls addEventListener on input prop with type and fn params', () => {
@@ -54,6 +58,24 @@ describe('Test SudokuGameNode', () => {
         node.addInputEventListener(type, fn);
 
         expect(node.input.addEventListener).toHaveBeenCalledWith(type, fn);
+    });
+
+    test('userValueIsCorrect returns true when trueValue property and input.value are equal', () => {
+        node.trueValue = 1;
+        node.input.value = 1;
+
+        const retVal = node.userValueIsCorrect();
+
+        expect(retVal).toBe(true);
+    });
+
+    test('userValueIsCorrect returns false when trueValue property and input.value are not equal', () => {
+        node.trueValue = 1;
+        node.input.value = 2;
+
+        const retVal = node.userValueIsCorrect();
+
+        expect(retVal).toBe(false);
     });
 
     test('_handleInputEvent sets node.input.value to empty string if node.input.value is NaN', () => {

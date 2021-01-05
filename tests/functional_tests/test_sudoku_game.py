@@ -30,7 +30,7 @@ class TestSudokuGame:
         assert page.can_click_reset()
         assert page.can_click_hint()
 
-    def test_user_cant_enter_invalid_inputs_into_board_cells(self, url):
+    def test_user_can_enter_valid_but_not_invalid_inputs_into_board_cells(self, url):
         # The user goes to the page
         self.driver.get(url)
         page = SudokuPage(self.driver)
@@ -38,4 +38,17 @@ class TestSudokuGame:
         # the user selects an empty cell and enters a letter, but doesnt see it appear in the cell
         row, col = page.get_empty_node()
         page.enter_number(row, col, 'a')
-        assert page.get_node_value(row, col) != 'a'
+        assert page.get_node_input_value(row, col) == ''
+
+        # the user then tries to input 0 and again does not see it appear in the cell
+        page.enter_number(row, col, 0)
+        assert page.get_node_input_value(row, col) == ''
+
+        # the user now tries to input 1 - 9 and sees that they all appear in the cell
+        for i in range(1, 10):
+            page.enter_number(row, col, i)
+            assert page.get_node_input_value(row, col) == str(i)
+
+        # the user then tries to enter a double digit number, but only sees the first digit of that number appear
+        page.enter_number(row, col, 12)
+        assert page.get_node_input_value(row, col) == '1'

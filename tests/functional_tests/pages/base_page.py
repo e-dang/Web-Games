@@ -70,6 +70,10 @@ class BasePage:
         col = idx - row * self.num_cols
         return row, col
 
+    def _get_node_position(self, element):
+        idx = self._parse_idx_from_node_id(element.get_attribute('id'))
+        return self._extract_node_position_from_idx(idx)
+
     def _get_position_of_unique_node_type(self, n_type):
         elements = self._get_board().find_elements_by_class_name(n_type)
         if len(elements) == 0:
@@ -77,5 +81,13 @@ class BasePage:
         elif len(elements) > 1:
             raise RuntimeError(f'There are more than one occurances of {n_type} on the screen')
 
-        idx = self._parse_idx_from_node_id(elements[0].get_attribute('id'))
-        return self._extract_node_position_from_idx(idx)
+        return self._get_node_position(elements[0])
+
+    def _create_node_id(self, row, col):
+        if self.num_rows is None or self.num_cols is None:
+            self.num_rows, self.num_cols = self._get_board_dimensions()
+
+        return f'n{row * self.num_cols + col}'
+
+    def _get_node(self, row, col):
+        return self.driver.find_element_by_id(self._create_node_id(row, col))

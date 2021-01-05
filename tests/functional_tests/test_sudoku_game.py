@@ -29,3 +29,13 @@ class TestSudokuGame:
         assert page.board_cells_contain_numbers()
         assert page.can_click_reset()
         assert page.can_click_hint()
+
+    def test_user_cant_enter_invalid_inputs_into_board_cells(self, url):
+        # The user goes to the page
+        self.driver.get(url)
+        page = SudokuPage(self.driver)
+
+        # the user selects an empty cell and enters a letter, but doesnt see it appear in the cell
+        row, col = page.get_empty_node()
+        page.enter_number(row, col, 'a')
+        assert page.get_node_value(row, col) != 'a'

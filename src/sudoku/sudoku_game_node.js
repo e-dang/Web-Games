@@ -6,7 +6,17 @@ class SudokuGameNode extends Node {
         this.trueValue = null;
     }
 
+    setAsEmptyNode() {
+        super.setAsEmptyNode();
+        this.trueValue = null;
+        this.element.innerText = '';
+    }
+
     setAsGivenNode() {
+        if (this.isInputNode()) {
+            this.input.remove();
+            this.input = undefined;
+        }
         this._setAsNodeType('given');
     }
 
@@ -20,6 +30,7 @@ class SudokuGameNode extends Node {
     }
 
     setAsDefaultNode() {
+        super.setAsDefaultNode();
         this.setAsGivenNode();
     }
 

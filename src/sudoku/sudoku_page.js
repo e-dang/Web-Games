@@ -9,6 +9,23 @@ class SudokuPage {
         this.board.draw();
         this.board.reset();
         this.board.addNodeInputEventListeners('change', (node) => this._handleInputChangeEvent(node));
+        this.addEventHandlers();
+    }
+
+    addEventHandlers() {
+        this.addClickResetButtonEventHandler().addClickHintButtonEventHandler();
+    }
+
+    addClickResetButtonEventHandler() {
+        document.getElementById('resetBtn').addEventListener('click', () => this._handleClickResetButton());
+
+        return this;
+    }
+
+    addClickHintButtonEventHandler() {
+        document.getElementById('hintBtn').addEventListener('click', () => this._handleClickHintButton());
+
+        return this;
     }
 
     _handleInputChangeEvent(node) {
@@ -21,8 +38,16 @@ class SudokuPage {
 
     _handleSudokuComplete() {
         document.getElementById('gameOverTitle').innerText = 'Congratulations, You Solved It!';
-        document.getElementById('gameOverMessage').innerText = 'Time: 0s';
+        document.getElementById('gameOverMessage').innerText = `Number of Hints Used: ${this.board.numHints}`;
         $('#gameOverModal').modal();
+    }
+
+    _handleClickResetButton() {
+        this.board.reset();
+    }
+
+    _handleClickHintButton() {
+        this.board.getHint();
     }
 }
 

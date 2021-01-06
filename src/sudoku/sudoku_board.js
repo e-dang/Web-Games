@@ -6,6 +6,7 @@ class SudokuBoard extends Board {
     constructor(dimensions) {
         super(dimensions, SudokuGameNode);
         this.solver = new SudokuSolver();
+        this.numHints = 0;
     }
 
     reset() {
@@ -13,6 +14,14 @@ class SudokuBoard extends Board {
         this.solver.solve(this).next();
         this._selectInputNodes(5);
         this.nodes.forEach((node) => node.renderTrueValue());
+        this.numHints = 0;
+    }
+
+    getHint() {
+        const node = this._getRandInputNode();
+        node.setAsGivenNode();
+        node.renderTrueValue();
+        this.numHints++;
     }
 
     isComplete() {
@@ -36,11 +45,19 @@ class SudokuBoard extends Board {
     }
 
     _getRandGivenNode() {
+        return this._getRandNodeOfType((node) => node.isGivenNode());
+    }
+
+    _getRandInputNode() {
+        return this._getRandNodeOfType((node) => node.isInputNode());
+    }
+
+    _getRandNodeOfType(fn) {
         while (true) {
             const row = Math.floor(Math.random() * this.dims);
             const col = Math.floor(Math.random() * this.dims);
             const node = this.getNode(row, col);
-            if (node.isGivenNode()) {
+            if (fn(node)) {
                 return node;
             }
         }

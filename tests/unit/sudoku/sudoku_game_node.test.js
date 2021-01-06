@@ -49,6 +49,42 @@ describe('Test SudokuGameNode', () => {
         expect(node._setAsNodeType).toHaveBeenCalledWith('given');
     });
 
+    test('setAsGivenNode calls remove method on input property if node is an input node', () => {
+        node.isInputNode = jest.fn(() => true);
+        const mockInput = {remove: jest.fn()};
+        node.input = mockInput;
+
+        node.setAsGivenNode();
+
+        expect(mockInput.remove).toHaveBeenCalledTimes(1);
+    });
+
+    test('setAsGivenNode sets input property to undefined if node is an input node', () => {
+        node.isInputNode = jest.fn(() => true);
+        const mockInput = {remove: jest.fn()};
+        node.input = mockInput;
+
+        node.setAsGivenNode();
+
+        expect(node.input).toBeUndefined();
+    });
+
+    test('setAsEmptyNode sets trueValue to null', () => {
+        node.trueValue = 10;
+
+        node.setAsEmptyNode();
+
+        expect(node.trueValue).toBeNull();
+    });
+
+    test('setAsEmptyNode sets element innerText to empty string', () => {
+        node.element.innerText = '10';
+
+        node.setAsEmptyNode();
+
+        expect(node.element.innerText).toBe('');
+    });
+
     test('isGivenNode calls _isNodeOfType with "given"', () => {
         node._isNodeOfType = jest.fn();
 
@@ -81,7 +117,7 @@ describe('Test SudokuGameNode', () => {
 
         node.renderTrueValue();
 
-        expect(node.element.innerText).toBeUndefined();
+        expect(node.element.innerText).toBe('');
     });
 
     test('setAsInputNode calls _setAsNodeType with string "input"', () => {

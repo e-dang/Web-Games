@@ -34,46 +34,51 @@ describe('Test SudokuBoard', () => {
         expect(board.solver).toBeInstanceOf(SudokuSolver);
     });
 
-    test('reset calls clear method', () => {
-        board.clear = jest.fn();
-        board._selectInputNodes = jest.fn();
-        board.solver.solve.mockReturnValueOnce({next: jest.fn()});
-
-        board.reset();
-
-        expect(board.clear).toHaveBeenCalledTimes(1);
+    test('constructor sets numHints property to 0', () => {
+        expect(board.numHints).toBe(0);
     });
 
-    test('reset calls solve on solver prop', () => {
-        board.clear = jest.fn();
-        board._selectInputNodes = jest.fn();
-        board.solver.solve.mockReturnValueOnce({next: jest.fn()});
+    describe('test reset', () => {
+        beforeEach(() => {
+            board.clear = jest.fn();
+            board._selectInputNodes = jest.fn();
+            board.solver.solve.mockReturnValueOnce({next: jest.fn()});
+        });
 
-        board.reset();
+        test('reset calls clear method', () => {
+            board.reset();
 
-        expect(board.solver.solve).toHaveBeenCalledWith(board);
-    });
+            expect(board.clear).toHaveBeenCalledTimes(1);
+        });
 
-    test('reset calls _selectInputNodes', () => {
-        board.clear = jest.fn();
-        board._selectInputNodes = jest.fn();
-        board.solver.solve.mockReturnValueOnce({next: jest.fn()});
+        test('reset calls solve on solver prop', () => {
+            board.reset();
 
-        board.reset();
+            expect(board.solver.solve).toHaveBeenCalledWith(board);
+        });
 
-        expect(board._selectInputNodes).toHaveBeenCalledTimes(1);
-    });
+        test('reset calls _selectInputNodes', () => {
+            board.reset();
 
-    test('reset calls renderTrueValue on each node', () => {
-        board.clear = jest.fn();
-        board._selectInputNodes = jest.fn();
-        board.nodes = [new SudokuGameNode(), new SudokuGameNode(), new SudokuGameNode()];
-        board.solver.solve.mockReturnValueOnce({next: jest.fn()});
+            expect(board._selectInputNodes).toHaveBeenCalledTimes(1);
+        });
 
-        board.reset();
+        test('reset calls renderTrueValue on each node', () => {
+            board.nodes = [new SudokuGameNode(), new SudokuGameNode(), new SudokuGameNode()];
 
-        board.nodes.forEach((node) => {
-            expect(node.renderTrueValue).toHaveBeenCalledTimes(1);
+            board.reset();
+
+            board.nodes.forEach((node) => {
+                expect(node.renderTrueValue).toHaveBeenCalledTimes(1);
+            });
+        });
+
+        test('reset sets numHints property to 0', () => {
+            board.numHints = 10;
+
+            board.reset();
+
+            expect(board.numHints).toBe(0);
         });
     });
 
@@ -105,16 +110,37 @@ describe('Test SudokuBoard', () => {
         expect(retVal).toBe(false);
     });
 
-    test('_getRandGivenNode returns a given node', () => {
+    test('_getRandNodeOfType returns the node that causes the parameter function to return true', () => {
         const inputNode = new SudokuGameNode();
         const givenNode = new SudokuGameNode();
-        inputNode.isGivenNode.mockReturnValueOnce(false);
-        givenNode.isGivenNode.mockReturnValueOnce(true);
+        const func = jest.fn().mockReturnValueOnce(false).mockReturnValueOnce(true);
         board.getNode = jest.fn().mockReturnValueOnce(inputNode).mockReturnValueOnce(givenNode);
 
-        const retVal = board._getRandGivenNode();
+        const retVal = board._getRandNodeOfType(func);
 
         expect(retVal).toBe(givenNode);
+    });
+
+    test('_getRandGivenNode calls _getRandNodeOfType with a function that calls isGivenNode method on its parameter', () => {
+        const node = new SudokuGameNode();
+        board._getRandNodeOfType = jest.fn();
+
+        board._getRandGivenNode();
+
+        expect(board._getRandNodeOfType).toHaveBeenCalledTimes(1);
+        board._getRandNodeOfType.mock.calls[0][0](node);
+        expect(node.isGivenNode).toHaveBeenCalledTimes(1);
+    });
+
+    test('_getRandInputNode calls _getRandNodeOfType with a function that calls isInputNode method on its parameter', () => {
+        const node = new SudokuGameNode();
+        board._getRandNodeOfType = jest.fn();
+
+        board._getRandInputNode();
+
+        expect(board._getRandNodeOfType).toHaveBeenCalledTimes(1);
+        board._getRandNodeOfType.mock.calls[0][0](node);
+        expect(node.isInputNode).toHaveBeenCalledTimes(1);
     });
 
     test('_selectInputNodes calls setAsInputNode at least attempts number of times', () => {
@@ -138,5 +164,33 @@ describe('Test SudokuBoard', () => {
         board.nodes.forEach((node) => {
             expect(node.addInputEventListener).toHaveBeenCalled();
         });
+    });
+
+    test('getHint calls setAsGivenNode on node returned by _getRandInputNode', () => {
+        const node = new SudokuGameNode();
+        board._getRandInputNode = jest.fn(() => node);
+
+        board.getHint();
+
+        expect(node.setAsGivenNode).toHaveBeenCalledTimes(1);
+    });
+
+    test('getHint calls renderTrueValue on node returned by _getRandInputNode', () => {
+        const node = new SudokuGameNode();
+        board._getRandInputNode = jest.fn(() => node);
+
+        board.getHint();
+
+        expect(node.renderTrueValue).toHaveBeenCalledTimes(1);
+    });
+
+    test('getHint increments the numHints property', () => {
+        const prev = 0;
+        board.numHints = prev;
+        board._getRandInputNode = jest.fn(() => new SudokuGameNode());
+
+        board.getHint();
+
+        expect(board.numHints).toBe(prev + 1);
     });
 });

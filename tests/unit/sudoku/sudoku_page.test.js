@@ -50,4 +50,34 @@ describe('test SudokuPage', () => {
 
         page._handleSudokuComplete();
     });
+
+    test('_handleClickResetButton calls reset on board property', () => {
+        page.board = new SudokuBoard();
+
+        page._handleClickResetButton();
+
+        expect(page.board.reset).toHaveBeenCalledTimes(1);
+    });
+
+    test('_handleClickResetButton is called when the reset button is clicked', () => {
+        page._handleClickResetButton = jest.fn();
+
+        document.getElementById('resetBtn').click();
+
+        expect(page._handleClickResetButton).toHaveBeenCalledTimes(1);
+    });
+
+    test('_handleClickHintButton calls getHint on board property', () => {
+        page._handleClickHintButton();
+
+        expect(page.board.getHint).toHaveBeenCalledTimes(1);
+    });
+
+    test('_handleClickHintButton is called when the hint button is clicked', () => {
+        page._handleClickHintButton = jest.fn();
+
+        document.getElementById('hintBtn').click();
+
+        expect(page._handleClickHintButton).toHaveBeenCalledTimes(1);
+    });
 });

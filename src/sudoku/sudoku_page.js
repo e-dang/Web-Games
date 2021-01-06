@@ -6,11 +6,9 @@ class SudokuPage {
     constructor() {
         this.board = new SudokuBoard(DIMENSIONS);
 
-        this.board.draw((node) => this._customizeNode(node));
+        this.board.draw();
         this.board.reset();
-    }
-    _customizeNode(node) {
-        node.addInputEventListener('change', () => this._handleInputChangeEvent(node));
+        this.board.addNodeInputEventListeners('change', (node) => this._handleInputChangeEvent(node));
     }
 
     _handleInputChangeEvent(node) {
@@ -22,7 +20,8 @@ class SudokuPage {
     }
 
     _handleSudokuComplete() {
-        document.getElementById('gameOverTitle').innerText = 'Congratulations, You Won!';
+        document.getElementById('gameOverTitle').innerText = 'Congratulations, You Solved It!';
+        document.getElementById('gameOverMessage').innerText = 'Time: 0s';
         $('#gameOverModal').modal();
     }
 }

@@ -4,12 +4,18 @@ class Node {
         this.col = col;
         this.idx = idx;
         this.shape = shape;
-        this._createElement(boardRow);
-        this.setAsEmptyNode();
+        this.element = document.createElement('td');
+        this.element.id = `n${this.idx}`;
+        boardRow.appendChild(this.element);
+        this.setAsDefaultNode();
     }
 
     setAsEmptyNode() {
         this._setAsNodeType('empty');
+    }
+
+    setAsDefaultNode() {
+        this.setAsEmptyNode();
     }
 
     isEmptyNode() {
@@ -26,12 +32,6 @@ class Node {
         }
         this.element.className = '';
         this.element.classList.add('node', this.shape, ...type);
-    }
-
-    _createElement(boardRow) {
-        this.element = document.createElement('td');
-        this.element.id = `n${this.idx}`;
-        boardRow.appendChild(this.element);
     }
 }
 

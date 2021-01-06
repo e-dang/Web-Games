@@ -36,14 +36,14 @@ describe('Test Node', () => {
         expect(node.element.id).toBe(`n${node.idx}`);
     });
 
-    test('constructor calls setAsEmptyNode', () => {
-        const orig = Node.prototype.setAsEmptyNode;
+    test('constructor calls setAsDefaultNode', () => {
+        const orig = Node.prototype.setAsDefaultNode;
         const mock = jest.fn();
-        Node.prototype.setAsEmptyNode = mock;
+        Node.prototype.setAsDefaultNode = mock;
 
         node = new Node(row, col, idx, boardRow);
 
-        Node.prototype.setAsEmptyNode = orig;
+        Node.prototype.setAsDefaultNode = orig;
         expect(mock).toHaveBeenCalledTimes(1);
     });
 
@@ -101,5 +101,13 @@ describe('Test Node', () => {
         const retVal = node._isNodeOfType(type);
 
         expect(retVal).toBe(false);
+    });
+
+    test('setAsDefaultNode calls setAsEmptyNode', () => {
+        node.setAsEmptyNode = jest.fn();
+
+        node.setAsDefaultNode();
+
+        expect(node.setAsEmptyNode).toHaveBeenCalledTimes(1);
     });
 });

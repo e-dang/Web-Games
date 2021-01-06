@@ -68,9 +68,23 @@ describe('test SudokuPage', () => {
     });
 
     test('_handleClickHintButton calls getHint on board property', () => {
+        const mockRetVal = jest.fn();
+        page._handleInputChangeEvent = jest.fn();
+        page.board.getHint.mockReturnValueOnce(mockRetVal);
+
         page._handleClickHintButton();
 
         expect(page.board.getHint).toHaveBeenCalledTimes(1);
+    });
+
+    test('_handleClickHintButton calls _handleInputChangeEvent with return value of getHint', () => {
+        const mockRetVal = jest.fn();
+        page._handleInputChangeEvent = jest.fn();
+        page.board.getHint.mockReturnValueOnce(mockRetVal);
+
+        page._handleClickHintButton();
+
+        expect(page._handleInputChangeEvent).toHaveBeenCalledWith(mockRetVal);
     });
 
     test('_handleClickHintButton is called when the hint button is clicked', () => {

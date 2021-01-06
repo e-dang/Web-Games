@@ -47,7 +47,7 @@ class SudokuPage {
     }
 
     _handleClickHintButton() {
-        this.board.getHint();
+        this._handleInputChangeEvent(this.board.getHint());
     }
 }
 

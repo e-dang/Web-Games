@@ -22,6 +22,7 @@ class SudokuBoard extends Board {
         node.setAsGivenNode();
         node.renderTrueValue();
         this.numHints++;
+        return node;
     }
 
     isComplete() {

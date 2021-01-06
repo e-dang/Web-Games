@@ -193,4 +193,13 @@ describe('Test SudokuBoard', () => {
 
         expect(board.numHints).toBe(prev + 1);
     });
+
+    test('getHint returns the node returned by _getRandInputNode', () => {
+        const node = new SudokuGameNode();
+        board._getRandInputNode = jest.fn(() => node);
+
+        const retVal = board.getHint();
+
+        expect(retVal).toBe(node);
+    });
 });

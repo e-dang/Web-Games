@@ -7,8 +7,7 @@ class SudokuPage {
         this.board = new SudokuBoard(DIMENSIONS);
 
         this.board.draw();
-        this.board.reset();
-        this.board.addNodeInputEventListeners('change', (node) => this._handleInputChangeEvent(node));
+        this._handleClickResetButton();
         this.addEventHandlers();
     }
 
@@ -44,6 +43,7 @@ class SudokuPage {
 
     _handleClickResetButton() {
         this.board.reset();
+        this.board.addNodeInputEventListeners('change', (node) => this._handleInputChangeEvent(node));
     }
 
     _handleClickHintButton() {

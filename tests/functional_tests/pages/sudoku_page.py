@@ -58,6 +58,13 @@ class SudokuPage(BasePage):
     def click_reset(self):
         self.driver.find_element_by_id('resetBtn').click()
 
+    def change_difficulty(self, difficulty):
+        self._get_navbar().find_element_by_id('difficultySelection').click()
+        self.wait_to_find_by_id(difficulty).click()
+
+    def get_current_difficulty(self):
+        return self.wait_to_find_by_id('currentDifficulty').get_attribute('innerText')
+
     def _create_input_id(self, row, col):
         if self.num_rows is None or self.num_cols is None:
             self.num_rows, self.num_cols = self._get_board_dimensions()

@@ -47,6 +47,16 @@ class TestSudokuGame:
         assert page.can_click_reset()
         assert page.can_click_hint()
 
+        # The user also sees a dropdown menu to select the difficulty, which they then click through
+        page.change_difficulty('easy')
+        assert page.get_current_difficulty() == 'Easy'
+        page.change_difficulty('moderate')
+        assert page.get_current_difficulty() == 'Moderate'
+        page.change_difficulty('hard')
+        assert page.get_current_difficulty() == 'Hard'
+        page.change_difficulty('veryHard')
+        assert page.get_current_difficulty() == 'Very Hard'
+
     def test_user_can_enter_valid_but_not_invalid_inputs_into_board_cells(self, url):
         # The user goes to the page
         self.driver.get(url)

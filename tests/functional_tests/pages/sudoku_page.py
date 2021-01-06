@@ -1,21 +1,4 @@
-from time import sleep, time
-
-from selenium.common.exceptions import TimeoutException
-
-from .base_page import TIMEOUT, BasePage
-
-
-def wait(fn, timeout=TIMEOUT):
-    def inner(*args, **kwargs):
-        start = time()
-        while time() - start < timeout:
-            ret_val = fn(*args, **kwargs)
-            if ret_val:
-                return ret_val
-            sleep(1)
-
-        raise TimeoutException
-    return inner
+from .base_page import BasePage, wait
 
 
 class SudokuPage(BasePage):

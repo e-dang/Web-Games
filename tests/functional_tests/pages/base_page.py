@@ -1,9 +1,24 @@
-from selenium.common.exceptions import NoSuchElementException
+from time import sleep, time
+
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 TIMEOUT = 10
+
+
+def wait(fn, timeout=TIMEOUT):
+    def inner(*args, **kwargs):
+        start = time()
+        while time() - start < timeout:
+            ret_val = fn(*args, **kwargs)
+            if ret_val:
+                return ret_val
+            sleep(1)
+
+        raise TimeoutException
+    return inner
 
 
 class BasePage:
@@ -13,8 +28,7 @@ class BasePage:
         self.num_cols = None
 
     def wait_to_find_by_id(self, id_):
-        WebDriverWait(self.driver, TIMEOUT).until(EC.visibility_of_element_located((By.ID, id_)))
-        return self.driver.find_element_by_id(id_)
+        return WebDriverWait(self.driver, TIMEOUT).until(EC.visibility_of_element_located((By.ID, id_)))
 
     def has_correct_title(self, title):
         return self.driver.title == f'Web Games - {title}'
@@ -40,6 +54,12 @@ class BasePage:
 
     def game_is_over(self):
         return self.wait_to_find_by_id('gameOverMessage').is_displayed()
+
+    def clear_modal(self):
+        # sleep for modal to appear and disappear
+        sleep(1.5)
+        self.driver.find_element_by_id('closeGameOverModal').click()
+        sleep(1.5)
 
     def _get_navbar(self):
         return self.driver.find_element_by_id('navBar')

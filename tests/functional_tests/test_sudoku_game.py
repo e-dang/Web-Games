@@ -9,6 +9,23 @@ class TestSudokuGame:
     def url(self):
         return 'http://localhost:5000/sudoku'
 
+    def solve_board(self, page):
+        solver = SudokuSolver()
+
+        board = page.get_board_as_array()
+        given_indices = []
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if board[i][j] != '':
+                    given_indices.append((i, j))
+
+        solver.solve(board)
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if (i, j) not in given_indices:
+                    page.enter_number(i, j, board[i][j])
+        self.driver.find_elements_by_tag_name('body')[0].click()  # click away from the input box
+
     def test_user_is_presented_with_correct_controls_and_options(self, url):
         # The user goes to the page
         self.driver.get(url)
@@ -57,22 +74,9 @@ class TestSudokuGame:
         # The user goes to the page
         self.driver.get(url)
         page = SudokuPage(self.driver)
-        solver = SudokuSolver()
-
-        board = page.get_board_as_array()
-        given_indices = []
-        for i in range(len(board)):
-            for j in range(len(board[0])):
-                if board[i][j] != '':
-                    given_indices.append((i, j))
 
         # the user is a genius and solves the puzzle extremely quickly
-        solver.solve(board)
-        for i in range(len(board)):
-            for j in range(len(board[0])):
-                if (i, j) not in given_indices:
-                    page.enter_number(i, j, board[i][j])
-        self.driver.find_elements_by_tag_name('body')[0].click()  # click away from the input box
+        self.solve_board(page)
 
         assert page.game_is_over()
 
@@ -109,6 +113,12 @@ class TestSudokuGame:
         for _ in range(num_blanks):
             page.click_get_hint()
 
+        assert page.game_is_over()
+
+        # the user then clears the modal, resets the board, and solves the board manually
+        page.clear_modal()
+        page.click_reset()
+        self.solve_board(page)
         assert page.game_is_over()
 
 

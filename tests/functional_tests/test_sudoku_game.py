@@ -94,7 +94,22 @@ class TestSudokuGame:
 
         # the user doesnt like the board they were given and chooses to reset it
         page.click_reset()
-        assert board_f != page.get_board_as_array()
+        board = page.get_board_as_array()
+        assert board_f != board
+        assert page.board_cells_are_square()
+        assert page.board_cells_contain_numbers()
+
+        # the user then decides to only use hints to solve the board
+        num_blanks = 0
+        for r in board:
+            for c in r:
+                if c == '':
+                    num_blanks += 1
+
+        for _ in range(num_blanks):
+            page.click_get_hint()
+
+        assert page.game_is_over()
 
 
 class SudokuSolver:

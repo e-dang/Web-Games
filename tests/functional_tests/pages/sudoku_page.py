@@ -1,6 +1,21 @@
-from selenium.webdriver.support.ui import WebDriverWait
+from time import sleep, time
+
+from selenium.common.exceptions import TimeoutException
 
 from .base_page import TIMEOUT, BasePage
+
+
+def wait(fn, timeout=TIMEOUT):
+    def inner(*args, **kwargs):
+        start = time()
+        while time() - start < timeout:
+            ret_val = fn(*args, **kwargs)
+            if ret_val:
+                return ret_val
+            sleep(1)
+
+        raise TimeoutException
+    return inner
 
 
 class SudokuPage(BasePage):
@@ -10,16 +25,15 @@ class SudokuPage(BasePage):
     def has_correct_header(self):
         return super().has_correct_header('Sudoku')
 
+    @wait
     def board_cells_contain_numbers(self):
-        def func():
-            board = self._get_board()
-            nums = map(str, range(10))
-            for cell in board.find_elements_by_tag_name('td'):
-                if cell.text in nums:
-                    return True
+        board = self._get_board()
+        nums = list(map(str, range(10)))
+        for cell in board.find_elements_by_tag_name('td'):
+            if cell.text in nums:
+                return True
 
-        WebDriverWait(self.driver, TIMEOUT).until(lambda x: func())
-        return True
+        return False
 
     def can_click_reset(self):
         element = self.driver.find_element_by_id('resetBtn')

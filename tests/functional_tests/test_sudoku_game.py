@@ -72,6 +72,7 @@ class TestSudokuGame:
             for j in range(len(board[0])):
                 if (i, j) not in given_indices:
                     page.enter_number(i, j, board[i][j])
+        self.driver.find_elements_by_tag_name('body')[0].click()
 
         assert page.game_is_over()
 

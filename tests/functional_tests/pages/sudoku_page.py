@@ -1,4 +1,6 @@
-from .base_page import BasePage
+from selenium.webdriver.support.ui import WebDriverWait
+
+from .base_page import TIMEOUT, BasePage
 
 
 class SudokuPage(BasePage):
@@ -9,13 +11,15 @@ class SudokuPage(BasePage):
         return super().has_correct_header('Sudoku')
 
     def board_cells_contain_numbers(self):
-        board = self._get_board()
-        nums = map(str, range(10))
-        for column in board.find_elements_by_tag_name('td'):
-            if column.text in nums:
-                return True
+        def func():
+            board = self._get_board()
+            nums = map(str, range(10))
+            for cell in board.find_elements_by_tag_name('td'):
+                if cell.text in nums:
+                    return True
 
-        return False
+        WebDriverWait(self.driver, TIMEOUT).until(lambda x: func())
+        return True
 
     def can_click_reset(self):
         element = self.driver.find_element_by_id('resetBtn')

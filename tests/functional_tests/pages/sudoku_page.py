@@ -55,6 +55,12 @@ class SudokuPage(BasePage):
 
         return board_arr
 
+    def click_get_hint(self):
+        self.driver.find_element_by_id('hintBtn').click()
+
+    def click_reset(self):
+        self.driver.find_element_by_id('resetBtn').click()
+
     def _create_input_id(self, row, col):
         if self.num_rows is None or self.num_cols is None:
             self.num_rows, self.num_cols = self._get_board_dimensions()

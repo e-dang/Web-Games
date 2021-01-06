@@ -72,9 +72,29 @@ class TestSudokuGame:
             for j in range(len(board[0])):
                 if (i, j) not in given_indices:
                     page.enter_number(i, j, board[i][j])
-        self.driver.find_elements_by_tag_name('body')[0].click()
+        self.driver.find_elements_by_tag_name('body')[0].click()  # click away from the input box
 
         assert page.game_is_over()
+
+    def test_user_can_get_a_hint_and_reset_in_middle_of_game(self, url):
+        # The user goes to the page
+        self.driver.get(url)
+        page = SudokuPage(self.driver)
+
+        # the user immediately asks for a hint and sees a number appear in an empty node
+        board_i = page.get_board_as_array()
+        page.click_get_hint()
+        board_f = page.get_board_as_array()
+        num_different = 0
+        for r_i, r_f in zip(board_i, board_f):
+            for c_i, c_f in zip(r_i, r_f):
+                if c_i != c_f:
+                    num_different += 1
+        assert num_different == 1
+
+        # the user doesnt like the board they were given and chooses to reset it
+        page.click_reset()
+        assert board_f != page.get_board_as_array()
 
 
 class SudokuSolver:

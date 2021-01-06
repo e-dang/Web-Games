@@ -56,7 +56,7 @@ class BasePage:
         return self.wait_to_find_by_id('gameOverMessage').is_displayed()
 
     def clear_modal(self):
-        # sleep for modal to appear and disappear
+        # sleep for modal to appear and disappear because selenium cant properly detect it with WebDriverWait
         sleep(1.5)
         self.driver.find_element_by_id('closeGameOverModal').click()
         sleep(1.5)

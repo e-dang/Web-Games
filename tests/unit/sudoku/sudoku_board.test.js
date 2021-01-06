@@ -143,13 +143,17 @@ describe('Test SudokuBoard', () => {
         expect(node.isInputNode).toHaveBeenCalledTimes(1);
     });
 
-    test('_selectInputNodes calls setAsInputNode at least attempts number of times', () => {
-        const attempts = 2;
+    test('_selectInputNodes calls setAsInputNode as long as board is too easy', () => {
         const node = new SudokuGameNode();
         board._getRandGivenNode = jest.fn(() => node);
+        board._isBoardTooEasy = jest
+            .fn()
+            .mockReturnValueOnce(true)
+            .mockReturnValueOnce(true)
+            .mockReturnValueOnce(false);
         board.solver.calcNumSolutions.mockReturnValue(2);
 
-        board._selectInputNodes(attempts);
+        board._selectInputNodes();
 
         expect(node.setAsInputNode).toHaveBeenCalledTimes(2);
     });
@@ -201,5 +205,56 @@ describe('Test SudokuBoard', () => {
         const retVal = board.getHint();
 
         expect(retVal).toBe(node);
+    });
+
+    test.each([['setDifficultyEasy'], ['setDifficultyModerate'], ['setDifficultyHard'], ['setDifficultyVeryHard']])(
+        '%s calls callback function',
+        (method) => {
+            const callback = jest.fn();
+
+            board[method](callback);
+
+            expect(callback).toHaveBeenCalledTimes(1);
+        },
+    );
+
+    test('_isBoardTooEasy returns true when there are still attempts remaining and the number of givens are at or above the lower bound', () => {
+        board.setDifficultyEasy(() => {});
+        const attempts = 1;
+        const numGivens = board.givensLowerBound;
+
+        const retVal = board._isBoardTooEasy(attempts, numGivens);
+
+        expect(retVal).toBe(true);
+    });
+
+    test('_isBoardTooEasy returns true when numGivens is greater than the givensUpperBound', () => {
+        board.setDifficultyEasy(() => {});
+        const attempts = -1;
+        const numGivens = board.givensUpperBound + 1;
+
+        const retVal = board._isBoardTooEasy(attempts, numGivens);
+
+        expect(retVal).toBe(true);
+    });
+
+    test('_isBoardTooEasy returns false when numGivens is less than the givensUpperBound and there are no attempts remaining', () => {
+        board.setDifficultyEasy(() => {});
+        const attempts = 0;
+        const numGivens = board.givensUpperBound;
+
+        const retVal = board._isBoardTooEasy(attempts, numGivens);
+
+        expect(retVal).toBe(false);
+    });
+
+    test('_isBoardTooEasy returns false when numGivens is less than the givensLowerBound', () => {
+        board.setDifficultyEasy(() => {});
+        const attempts = 0;
+        const numGivens = board.givensLowerBound - 1;
+
+        const retVal = board._isBoardTooEasy(attempts, numGivens);
+
+        expect(retVal).toBe(false);
     });
 });

@@ -37,7 +37,7 @@ class Board {
 
     clear() {
         this.nodes.forEach((node) => {
-            node.setAsEmptyNode();
+            node.setAsDefaultNode();
         });
     }
 }

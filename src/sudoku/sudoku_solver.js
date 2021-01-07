@@ -10,6 +10,12 @@ class SudokuSolver {
         return [...this.solve(board)].length;
     }
 
+    hasMoreThanOneSolution(board) {
+        const generator = this.solve(board);
+        generator.next();
+        return !generator.next().done;
+    }
+
     _getBitMaps(board) {
         const rowBitMap = [];
         const colBitMap = [];

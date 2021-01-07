@@ -72,7 +72,7 @@ class SudokuBoard extends Board {
             const node = this._getRandGivenNode();
 
             node.setAsInputNode();
-            if (this.solver.calcNumSolutions(this) > 1) {
+            if (this.solver.hasMoreThanOneSolution(this)) {
                 attempts--;
                 node.setAsGivenNode();
             } else {

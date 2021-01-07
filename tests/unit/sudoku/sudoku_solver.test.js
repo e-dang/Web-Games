@@ -211,4 +211,56 @@ describe('test SudokuSolver', () => {
             }
         }
     });
+
+    test('hasMoreThanOneSolution returns true when there is only one solution', () => {
+        const boardArr = [
+            [5, null, null, 8, null, null, null, 2, 7],
+            [2, null, null, 4, 6, null, null, null, 3],
+            [null, null, null, 5, null, null, 4, 6, null],
+            [null, 1, null, null, null, null, null, 9, null],
+            [null, null, null, null, null, null, null, null, null],
+            [null, 9, null, null, 5, 1, 2, null, null],
+            [null, 3, null, null, 7, 2, 6, null, 9],
+            [1, 2, null, null, 4, null, null, 3, 8],
+            [4, 6, null, null, 3, null, 1, null, null],
+        ];
+        const board = new SudokuBoard(9);
+        for (let i = 0; i < board.dims; i++) {
+            for (let j = 0; j < board.dims; j++) {
+                const node = new SudokuGameNode();
+                node.trueValue = boardArr[i][j];
+                board.nodes.push(node);
+            }
+        }
+
+        const retVal = solver.hasMoreThanOneSolution(board);
+
+        expect(retVal).toBe(false);
+    });
+
+    test('hasMoreThanOneSolution returns true when there is more than one solution', () => {
+        const boardArr = [
+            [null, null, null, 8, null, null, null, 2, 7],
+            [2, null, null, 4, 6, null, null, null, 3],
+            [null, null, null, 5, null, null, 4, 6, null],
+            [null, 1, null, null, null, null, null, 9, null],
+            [null, null, null, null, null, null, null, null, null],
+            [null, 9, null, null, 5, 1, 2, null, null],
+            [null, 3, null, null, 7, 2, 6, null, 9],
+            [1, 2, null, null, 4, null, null, 3, 8],
+            [4, 6, null, null, 3, null, 1, null, null],
+        ];
+        const board = new SudokuBoard(9);
+        for (let i = 0; i < board.dims; i++) {
+            for (let j = 0; j < board.dims; j++) {
+                const node = new SudokuGameNode();
+                node.trueValue = boardArr[i][j];
+                board.nodes.push(node);
+            }
+        }
+
+        const retVal = solver.hasMoreThanOneSolution(board);
+
+        expect(retVal).toBe(true);
+    });
 });

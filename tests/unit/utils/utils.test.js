@@ -48,4 +48,12 @@ describe('Test utils', () => {
             });
         });
     });
+
+    test('millisecondsToSeconds converts millisconds to seconds', () => {
+        const time = Date.now();
+
+        const retVal = utils.millisecondsToSeconds(time);
+
+        expect(retVal).toBe(time / 1000);
+    });
 });

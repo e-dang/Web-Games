@@ -1,12 +1,14 @@
 const Board = require('../core/board');
 const SudokuGameNode = require('./sudoku_game_node');
 const SudokuSolver = require('./sudoku_solver');
-const {shuffle} = require('../utils/utils');
+const {shuffle, millisecondsToSeconds} = require('../utils/utils');
+
 class SudokuBoard extends Board {
     constructor(dimensions) {
         super(dimensions, SudokuGameNode);
         this.solver = new SudokuSolver();
         this.numHints = 0;
+        this.startTime = Date.now();
     }
 
     reset() {
@@ -15,6 +17,7 @@ class SudokuBoard extends Board {
         this._selectInputNodes();
         this.nodes.forEach((node) => node.renderTrueValue());
         this.numHints = 0;
+        this.startTime = Date.now();
     }
 
     getHint() {
@@ -23,6 +26,10 @@ class SudokuBoard extends Board {
         node.renderTrueValue();
         this.numHints++;
         return node;
+    }
+
+    getElapsedTime() {
+        return millisecondsToSeconds(Date.now() - this.startTime);
     }
 
     isComplete() {

@@ -28,8 +28,13 @@ function shuffle(array) {
     return array;
 }
 
+function millisecondsToSeconds(time) {
+    return time / 1000;
+}
+
 module.exports = {
     sleep,
     selectRandom,
     shuffle,
+    millisecondsToSeconds,
 };

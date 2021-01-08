@@ -46,7 +46,9 @@ class SudokuPage {
 
     _handleSudokuComplete() {
         document.getElementById('gameOverTitle').innerText = 'Congratulations, You Solved It!';
-        document.getElementById('gameOverMessage').innerText = `Number of Hints Used: ${this.board.numHints}`;
+        document.getElementById(
+            'gameOverMessage',
+        ).innerText = `Time: ${this.board.getElapsedTime()}s\nNumber of Hints Used: ${this.board.numHints}`;
         $('#gameOverModal').modal();
     }
 

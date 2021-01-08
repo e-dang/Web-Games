@@ -1,6 +1,7 @@
 const SudokuBoard = require('../../../src/sudoku/sudoku_board');
 const SudokuGameNode = require('../../../src/sudoku/sudoku_game_node');
 const SudokuSolver = require('../../../src/sudoku/sudoku_solver');
+const {millisecondsToSeconds} = require('../../../src/utils/utils');
 
 jest.mock('../../../src/sudoku/sudoku_game_node');
 jest.mock('../../../src/sudoku/sudoku_solver');
@@ -36,6 +37,10 @@ describe('Test SudokuBoard', () => {
 
     test('constructor sets numHints property to 0', () => {
         expect(board.numHints).toBe(0);
+    });
+
+    test('constructor sets startTime to Date.now()', () => {
+        expect(millisecondsToSeconds(board.startTime)).toBeCloseTo(millisecondsToSeconds(Date.now()));
     });
 
     describe('test reset', () => {
@@ -79,6 +84,10 @@ describe('Test SudokuBoard', () => {
             board.reset();
 
             expect(board.numHints).toBe(0);
+        });
+
+        test('reset sets startTime to Date.now()', () => {
+            expect(millisecondsToSeconds(board.startTime)).toBeCloseTo(millisecondsToSeconds(Date.now()));
         });
     });
 
@@ -287,5 +296,11 @@ describe('Test SudokuBoard', () => {
 
         expect(node.addBottomBorder).toHaveBeenCalledTimes(1);
         expect(node.addRightBorder).toHaveBeenCalledTimes(1);
+    });
+
+    test('getElapsedTime returns the current time - startTime proeprty', () => {
+        const retVal = board.getElapsedTime();
+
+        expect(millisecondsToSeconds(retVal)).toBeCloseTo(millisecondsToSeconds(Date.now() - board.startTime));
     });
 });

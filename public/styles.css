@@ -3,6 +3,10 @@
     --empty-node-color: white;
     --snake-node-color: black;
     --food-node-color: green;
+    --error-node-color: red;
+    --error-section1-node-color: rgba(255, 0, 0, 0.2);
+    --error-section2-node-color: rgba(255, 0, 0, 0.4);
+    --error-section3-node-color: rgba(255, 0, 0, 0.6);
 }
 
 .node {
@@ -17,6 +21,7 @@ td > input {
     width: 100%;
     border: none;
     text-align: center;
+    background: transparent;
 }
 
 .node.square {
@@ -41,4 +46,20 @@ td > input {
 
 .node.square.bottom {
     border-bottom: 3px solid var(--node-border-color);
+}
+
+.node.square.error {
+    border: 3px solid var(--error-node-color);
+}
+
+.node.square.error-section1 {
+    background-color: var(--error-section1-node-color);
+}
+
+.node.square.error-section2 {
+    background-color: var(--error-section2-node-color);
+}
+
+.node.square.error-section3 {
+    background-color: var(--error-section3-node-color);
 }

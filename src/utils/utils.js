@@ -32,9 +32,16 @@ function millisecondsToSeconds(time) {
     return time / 1000;
 }
 
+function setSeed(seed) {
+    if (seed) {
+        Math.seedrandom(seed);
+    }
+}
+
 module.exports = {
     sleep,
     selectRandom,
     shuffle,
     millisecondsToSeconds,
+    setSeed,
 };

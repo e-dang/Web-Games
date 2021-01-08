@@ -145,6 +145,7 @@ describe('Test SudokuBoard', () => {
 
     test('_selectInputNodes calls setAsInputNode as long as board is too easy', () => {
         const node = new SudokuGameNode();
+        board.nodes = [node, node, node];
         board._getRandGivenNode = jest.fn(() => node);
         board._isBoardTooEasy = jest
             .fn()

@@ -1,7 +1,7 @@
 const Board = require('../core/board');
 const SudokuGameNode = require('./sudoku_game_node');
 const SudokuSolver = require('./sudoku_solver');
-
+const {shuffle} = require('../utils/utils');
 class SudokuBoard extends Board {
     constructor(dimensions) {
         super(dimensions, SudokuGameNode);
@@ -66,13 +66,15 @@ class SudokuBoard extends Board {
     }
 
     _selectInputNodes() {
+        let givenNodes = shuffle([...this.nodes]);
         let attempts = this.attempts;
         let numGivens = this.nodes.length;
-        while (this._isBoardTooEasy(attempts, numGivens)) {
-            const node = this._getRandGivenNode();
+
+        while (this._isBoardTooEasy(attempts, numGivens) && givenNodes.length) {
+            const node = givenNodes.shift();
 
             node.setAsInputNode();
-            if (this.solver.hasMoreThanOneSolution(this)) {
+            if (this.solver.hasMoreThanOneSolution(this, node)) {
                 attempts--;
                 node.setAsGivenNode();
             } else {

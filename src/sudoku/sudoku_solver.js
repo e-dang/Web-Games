@@ -3,16 +3,41 @@ const utils = require('../utils/utils');
 class SudokuSolver {
     *solve(board) {
         const [rowBitMap, colBitMap, boxBitMap] = this._getBitMaps(board);
-        yield* this._solveHelper(0, 0, rowBitMap, colBitMap, boxBitMap, board);
+        const func = (row, col, boxIdx, value, rowBitMap, colBitMap, boxBitMap) =>
+            this._isValidGuess(row, col, boxIdx, value, rowBitMap, colBitMap, boxBitMap);
+        yield* this._solveHelper(0, 0, rowBitMap, colBitMap, boxBitMap, board, func);
     }
 
     calcNumSolutions(board) {
         return [...this.solve(board)].length;
     }
 
-    hasMoreThanOneSolution(board) {
+    hasMoreThanOneSolution(board, prunedNode = null) {
+        // store original trueValues because generator is not ran to termination
+        const origValues = board.nodes.map((node) => node.trueValue);
+
+        const retVal =
+            prunedNode === null
+                ? this._hasMoreThanOneSolution(board)
+                : this._hasMoreThanOneSolutionPruned(board, prunedNode);
+
+        // restore orig node values
+        board.nodes.forEach((node, idx) => (node.trueValue = origValues[idx]));
+
+        return retVal;
+    }
+
+    _hasMoreThanOneSolution(board) {
         const generator = this.solve(board);
         generator.next();
+        return !generator.next().done;
+    }
+
+    _hasMoreThanOneSolutionPruned(board, prunedNode) {
+        const func = (row, col, boxIdx, value, rowBitMap, colBitMap, boxBitMap) =>
+            this._isValidGuessPruned(row, col, boxIdx, value, rowBitMap, colBitMap, boxBitMap, prunedNode);
+        const [rowBitMap, colBitMap, boxBitMap] = this._getBitMaps(board);
+        const generator = this._solveHelper(0, 0, rowBitMap, colBitMap, boxBitMap, board, func);
         return !generator.next().done;
     }
 
@@ -44,14 +69,29 @@ class SudokuSolver {
         return [rowBitMap, colBitMap, boxBitMap];
     }
 
-    *_solveHelper(row, col, rowBitMap, colBitMap, boxBitMap, board) {
+    _isValidGuess(row, col, boxIdx, value, rowBitMap, colBitMap, boxBitMap) {
+        return (
+            this._getBit(rowBitMap[row], value) &&
+            this._getBit(colBitMap[col], value) &&
+            this._getBit(boxBitMap[boxIdx], value)
+        );
+    }
+
+    _isValidGuessPruned(row, col, boxIdx, value, rowBitMap, colBitMap, boxBitMap, node) {
+        return (
+            this._isValidGuess(row, col, boxIdx, value, rowBitMap, colBitMap, boxBitMap) &&
+            !(row == node.row && col == node.col && value + 1 == node.trueValue)
+        );
+    }
+
+    *_solveHelper(row, col, rowBitMap, colBitMap, boxBitMap, board, isValidGuess) {
         if (board.isInvalidSpace(row, col)) {
             yield;
         } else {
             const [nextRow, nextCol] = this._getNextMove(row, col, board.dims);
             const currNode = board.getNode(row, col);
             if (!this._isNullNode(currNode)) {
-                yield* this._solveHelper(nextRow, nextCol, rowBitMap, colBitMap, boxBitMap, board);
+                yield* this._solveHelper(nextRow, nextCol, rowBitMap, colBitMap, boxBitMap, board, isValidGuess);
             }
 
             const boxIdx = this._calcBoxIdx(row, col);
@@ -61,25 +101,20 @@ class SudokuSolver {
             const prevNodeValue = currNode.trueValue;
             const randValues = this._getRandValues(board.dims);
             for (let i of randValues) {
-                if (
-                    this._getBit(rowBitMap[row], i) &&
-                    this._getBit(colBitMap[col], i) &&
-                    this._getBit(boxBitMap[boxIdx], i)
-                ) {
+                if (isValidGuess(row, col, boxIdx, i, rowBitMap, colBitMap, boxBitMap)) {
                     currNode.trueValue = i + 1;
                     rowBitMap[row] = this._clearBit(rowBitMap[row], i);
                     colBitMap[col] = this._clearBit(colBitMap[col], i);
                     boxBitMap[boxIdx] = this._clearBit(boxBitMap[boxIdx], i);
 
-                    yield* this._solveHelper(nextRow, nextCol, rowBitMap, colBitMap, boxBitMap, board);
+                    yield* this._solveHelper(nextRow, nextCol, rowBitMap, colBitMap, boxBitMap, board, isValidGuess);
 
                     rowBitMap[row] = prevRowBitMap;
                     colBitMap[col] = prevColBitMap;
                     boxBitMap[boxIdx] = prevBoxBitMap;
+                    currNode.trueValue = prevNodeValue;
                 }
             }
-
-            currNode.trueValue = prevNodeValue;
         }
     }
 

@@ -212,7 +212,7 @@ describe('test SudokuSolver', () => {
         }
     });
 
-    test('hasMoreThanOneSolution returns true when there is only one solution', () => {
+    test('hasMoreThanOneSolution returns false when there is only one solution', () => {
         const boardArr = [
             [5, null, null, 8, null, null, null, 2, 7],
             [2, null, null, 4, 6, null, null, null, 3],
@@ -262,5 +262,138 @@ describe('test SudokuSolver', () => {
         const retVal = solver.hasMoreThanOneSolution(board);
 
         expect(retVal).toBe(true);
+    });
+
+    test('hasMoreThanOneSolution does not mutate original board', () => {
+        const boardArr = [
+            [null, null, null, 8, null, null, null, 2, 7],
+            [2, null, null, 4, 6, null, null, null, 3],
+            [null, null, null, 5, null, null, 4, 6, null],
+            [null, 1, null, null, null, null, null, 9, null],
+            [null, null, null, null, null, null, null, null, null],
+            [null, 9, null, null, 5, 1, 2, null, null],
+            [null, 3, null, null, 7, 2, 6, null, 9],
+            [1, 2, null, null, 4, null, null, 3, 8],
+            [4, 6, null, null, 3, null, 1, null, null],
+        ];
+        const board = new SudokuBoard(9);
+        for (let i = 0; i < board.dims; i++) {
+            for (let j = 0; j < board.dims; j++) {
+                const node = new SudokuGameNode();
+                node.trueValue = boardArr[i][j];
+                board.nodes.push(node);
+            }
+        }
+
+        solver.hasMoreThanOneSolution(board);
+
+        for (let i = 0; i < board.dims; i++) {
+            for (let j = 0; j < board.dims; j++) {
+                expect(board.getNode(i, j).trueValue).toBe(boardArr[i][j]);
+            }
+        }
+    });
+
+    test('hasMoreThanOneSolution returns false when given a pruned node and there is only one solution ', () => {
+        const boardArr = [
+            [5, 4, 6, 8, 1, 3, 9, 2, 7],
+            [2, 7, 1, 4, 6, 9, 5, 8, 3],
+            [9, 8, 3, 5, 2, 7, 4, 6, 1],
+            [7, 1, 4, 2, 8, 6, 3, 9, 5],
+            [3, 5, 2, 7, 9, 4, 8, 1, 6],
+            [6, 9, 8, 3, 5, 1, 2, 7, 4],
+            [8, 3, 5, 1, 7, 2, 6, 4, 9],
+            [1, 2, 9, 6, 4, 5, 7, 3, 8],
+            [4, 6, 7, 9, 3, 8, 1, 5, 2],
+        ];
+        let prunedNode;
+        const board = new SudokuBoard(9);
+        for (let i = 0; i < board.dims; i++) {
+            for (let j = 0; j < board.dims; j++) {
+                const node = new SudokuGameNode();
+                if (i == 0 && j == 1) {
+                    node.isInputNode.mockReturnValue(true);
+                    prunedNode = node;
+                }
+                node.row = i;
+                node.col = j;
+                node.trueValue = boardArr[i][j];
+                board.nodes.push(node);
+            }
+        }
+
+        const retVal = solver.hasMoreThanOneSolution(board, prunedNode);
+
+        expect(retVal).toBe(false);
+    });
+
+    test('hasMoreThanOneSolution returns true when given a pruned node and there is more than one solution', () => {
+        const boardArr = [
+            [5, null, null, 8, null, null, null, 2, 7],
+            [2, null, null, 4, 6, null, null, null, 3],
+            [null, null, null, 5, null, null, 4, 6, null],
+            [null, 1, null, null, null, null, null, 9, null],
+            [null, null, null, null, null, null, null, null, null],
+            [null, 9, null, null, 5, 1, 2, null, null],
+            [null, 3, null, null, 7, 2, 6, null, 9],
+            [1, 2, null, null, 4, null, null, 3, 8],
+            [4, 6, null, null, 3, null, 1, null, null],
+        ];
+        let prunedNode;
+        const board = new SudokuBoard(9);
+        for (let i = 0; i < board.dims; i++) {
+            for (let j = 0; j < board.dims; j++) {
+                const node = new SudokuGameNode();
+                if (i == 0 && j == 0) {
+                    node.isInputNode.mockReturnValue(true);
+                    prunedNode = node;
+                }
+                node.row = i;
+                node.col = j;
+                node.trueValue = boardArr[i][j];
+                board.nodes.push(node);
+            }
+        }
+
+        const retVal = solver.hasMoreThanOneSolution(board, prunedNode);
+
+        expect(retVal).toBe(true);
+    });
+
+    test('hasMoreThanOneSolution does not mutate original board when given a pruned node', () => {
+        const boardArr = [
+            [null, null, null, 8, null, null, null, 2, 7],
+            [2, null, null, 4, 6, null, null, null, 3],
+            [null, null, null, 5, null, null, 4, 6, null],
+            [null, 1, null, null, null, null, null, 9, null],
+            [null, null, null, null, null, null, null, null, null],
+            [null, 9, null, null, 5, 1, 2, null, null],
+            [null, 3, null, null, 7, 2, 6, null, 9],
+            [1, 2, null, null, 4, null, null, 3, 8],
+            [4, 6, null, null, 3, null, 1, null, null],
+        ];
+        let prunedNode;
+        const board = new SudokuBoard(9);
+        for (let i = 0; i < board.dims; i++) {
+            for (let j = 0; j < board.dims; j++) {
+                const node = new SudokuGameNode();
+                if (i == 0 && j == 0) {
+                    node.isInputNode.mockReturnValue(true);
+                    prunedNode = node;
+                }
+                node.row = i;
+                node.col = j;
+                node.trueValue = boardArr[i][j];
+                board.nodes.push(node);
+            }
+        }
+
+        solver.hasMoreThanOneSolution(board, prunedNode);
+
+        for (let i = 0; i < board.dims; i++) {
+            for (let j = 0; j < board.dims; j++) {
+                expect(board.getNode(i, j).trueValue).toBe(boardArr[i][j]);
+            }
+        }
     });
 });

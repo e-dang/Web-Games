@@ -51,7 +51,7 @@ describe('Board', () => {
     });
 
     test('draw calls constructs dims * dims number of nodeTypes', () => {
-        board.nodeType = jest.fn();
+        board.nodeType = jest.fn().mockImplementation(() => new SnakeGameNode());
 
         board.draw();
 
@@ -64,12 +64,12 @@ describe('Board', () => {
         expect(board.nodes.length).toBe(board.dims * board.dims);
     });
 
-    test('draw calls function parameter with each node created', () => {
-        const func = jest.fn();
+    test('draw calls _initNode with each node created', () => {
+        board._initNode = jest.fn();
 
-        board.draw(func);
+        board.draw();
 
-        board.nodes.forEach((node, idx) => expect(func).toHaveBeenNthCalledWith(idx + 1, node));
+        board.nodes.forEach((node, idx) => expect(board._initNode).toHaveBeenNthCalledWith(idx + 1, node));
     });
 
     test('getNode returns the node at the correct index', () => {
@@ -144,5 +144,13 @@ describe('Board', () => {
         board.nodes.forEach((node) => {
             expect(node.setAsDefaultNode).toHaveBeenCalledTimes(1);
         });
+    });
+
+    test('_initNode calls setAsDefaultNode on node param', () => {
+        const node = new SnakeGameNode();
+
+        board._initNode(node);
+
+        expect(node.setAsDefaultNode).toHaveBeenCalledTimes(1);
     });
 });

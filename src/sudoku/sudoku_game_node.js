@@ -4,6 +4,7 @@ class SudokuGameNode extends Node {
     constructor(row, col, idx, boardRow) {
         super(row, col, idx, boardRow, 'square');
         this.trueValue = null;
+        this.borders = [];
     }
 
     setAsEmptyNode() {
@@ -62,11 +63,25 @@ class SudokuGameNode extends Node {
         }
     }
 
+    addRightBorder() {
+        this.borders.push('right');
+        this.element.classList.add('right');
+    }
+
+    addBottomBorder() {
+        this.borders.push('bottom');
+        this.element.classList.add('bottom');
+    }
+
     _handleInputEvent() {
         const value = parseInt(this.input.value);
         if (isNaN(value) || value === 0) {
             this.input.value = '';
         }
+    }
+
+    _setAsNodeType(type) {
+        super._setAsNodeType([type, ...this.borders]);
     }
 }
 

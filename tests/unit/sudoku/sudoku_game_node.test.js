@@ -1,4 +1,3 @@
-const Node = require('../../../src/core/node');
 const SudokuGameNode = require('../../../src/sudoku/sudoku_game_node');
 
 describe('Test SudokuGameNode', () => {
@@ -31,6 +30,10 @@ describe('Test SudokuGameNode', () => {
 
     test('constructor defines trueValue property', () => {
         expect(node.trueValue).toBeDefined();
+    });
+
+    test('constructor sets border property to empty array', () => {
+        expect(node.borders).toEqual([]);
     });
 
     test('setAsDefaultNode calls setAsGivenNode', () => {
@@ -112,6 +115,7 @@ describe('Test SudokuGameNode', () => {
     });
 
     test("renderTrueValue doesnt set element's innerText property to trueValue property if node is not a given node", () => {
+        node.setAsEmptyNode();
         node.isGivenNode = jest.fn(() => false);
         node.trueValue = 10;
 
@@ -233,5 +237,46 @@ describe('Test SudokuGameNode', () => {
         node.input.dispatchEvent(new Event('input'));
 
         expect(node._handleInputEvent).toHaveBeenCalledTimes(1);
+    });
+
+    test('addRightBorder adds "right" to border list', () => {
+        node.borders = [];
+
+        node.addRightBorder();
+
+        expect(node.borders).toContain('right');
+    });
+
+    test('addRightBorder adds "right" to class list', () => {
+        node.element.className = '';
+
+        node.addRightBorder();
+
+        expect(node.element.classList.contains('right')).toBe(true);
+    });
+
+    test('addBottomBorder adds "bottom" to border list', () => {
+        node.borders = [];
+
+        node.addBottomBorder();
+
+        expect(node.borders).toContain('bottom');
+    });
+
+    test('addBottomBorder adds "bottom" to class list', () => {
+        node.element.className = '';
+
+        node.addBottomBorder();
+
+        expect(node.element.classList.contains('bottom')).toBe(true);
+    });
+
+    test('_setAsNodeType adds border classes to node classList', () => {
+        node.element.className = '';
+        node.borders.push('right');
+
+        node._setAsNodeType('stuff');
+
+        expect(node.element.classList.contains('right')).toBe(true);
     });
 });

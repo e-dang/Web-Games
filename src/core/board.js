@@ -5,7 +5,7 @@ class Board {
         this.nodes = [];
     }
 
-    draw(customizeNodeFn = () => {}) {
+    draw() {
         const board = document.createElement('tbody');
         board.id = 'gameBoard';
 
@@ -15,7 +15,7 @@ class Board {
             for (let j = 0; j < this.dims; j++) {
                 const idx = i * this.dims + j;
                 const node = new this.nodeType(i, j, idx, row);
-                customizeNodeFn(node);
+                this._initNode(node);
                 this.nodes.push(node);
             }
         }
@@ -39,6 +39,10 @@ class Board {
         this.nodes.forEach((node) => {
             node.setAsDefaultNode();
         });
+    }
+
+    _initNode(node) {
+        node.setAsDefaultNode();
     }
 }
 

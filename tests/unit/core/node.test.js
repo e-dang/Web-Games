@@ -36,17 +36,6 @@ describe('Test Node', () => {
         expect(node.element.id).toBe(`n${node.idx}`);
     });
 
-    test('constructor calls setAsDefaultNode', () => {
-        const orig = Node.prototype.setAsDefaultNode;
-        const mock = jest.fn();
-        Node.prototype.setAsDefaultNode = mock;
-
-        node = new Node(row, col, idx, boardRow);
-
-        Node.prototype.setAsDefaultNode = orig;
-        expect(mock).toHaveBeenCalledTimes(1);
-    });
-
     test('setAsEmptyNode calls _setAsNodeType with parameter empty', () => {
         node._setAsNodeType = jest.fn();
 

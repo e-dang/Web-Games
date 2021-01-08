@@ -258,4 +258,34 @@ describe('Test SudokuBoard', () => {
 
         expect(retVal).toBe(false);
     });
+
+    test.each([
+        ['addBottomBorder', 'row', 2],
+        ['addBottomBorder', 'row', 5],
+        ['addRightBorder', 'col', 2],
+        ['addRightBorder', 'col', 5],
+    ])('_initNode calls %s on node param if %s is %d', (method, prop, value) => {
+        const node = new SudokuGameNode();
+        node[prop] = value;
+
+        board._initNode(node);
+
+        expect(node[method]).toHaveBeenCalledTimes(1);
+    });
+
+    test.each([
+        [2, 2],
+        [2, 5],
+        [5, 2],
+        [5, 5],
+    ])('_initNode calls both border methods if row and col are %s', (row, col) => {
+        const node = new SudokuGameNode();
+        node.row = row;
+        node.col = col;
+
+        board._initNode(node);
+
+        expect(node.addBottomBorder).toHaveBeenCalledTimes(1);
+        expect(node.addRightBorder).toHaveBeenCalledTimes(1);
+    });
 });

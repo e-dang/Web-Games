@@ -105,6 +105,20 @@ class SudokuBoard extends Board {
             }
         }
     }
+
+    _initNode(node) {
+        const borderIdxs = [2, 5];
+
+        if (borderIdxs.includes(node.col)) {
+            node.addRightBorder();
+        }
+
+        if (borderIdxs.includes(node.row)) {
+            node.addBottomBorder();
+        }
+
+        super._initNode(node);
+    }
 }
 
 module.exports = SudokuBoard;

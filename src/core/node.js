@@ -7,7 +7,6 @@ class Node {
         this.element = document.createElement('td');
         this.element.id = `n${this.idx}`;
         boardRow.appendChild(this.element);
-        this.setAsDefaultNode();
     }
 
     setAsEmptyNode() {

@@ -156,6 +156,14 @@ class TestSudokuGame:
                 for i in range(1, num_errors + 1):
                     assert page.node_has_error_section_background(r, c, i)
 
+        # The user then clears the selection and sees the error borders removed
+        page.enter_number(row, col, '')
+        for r in range(len(board)):
+            for c in range(len(board[0])):
+                assert not page.node_has_error_border(r, c)
+                for i in range(1, 4):
+                    assert not page.node_has_error_section_background(r, c, i)
+
 
 class SudokuSolver:
     def solve(self, board):

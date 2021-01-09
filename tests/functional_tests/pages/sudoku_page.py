@@ -1,4 +1,5 @@
 from .base_page import BasePage, wait
+from selenium.webdriver.common.keys import Keys
 
 
 class SudokuPage(BasePage):
@@ -35,6 +36,7 @@ class SudokuPage(BasePage):
         element = self.driver.find_element_by_id(self._create_input_id(row, col))
         element.clear()
         element.send_keys(value)
+        element.send_keys(Keys.ENTER)
 
     def get_node_input_value(self, row, col):
         return self._get_node_input(row, col).get_attribute('value')
@@ -64,6 +66,12 @@ class SudokuPage(BasePage):
 
     def get_current_difficulty(self):
         return self.wait_to_find_by_id('currentDifficulty').get_attribute('innerText')
+
+    def node_has_error_border(self, row, col):
+        return 'error' in self._get_node(row, col).get_attribute('class')
+
+    def node_has_error_section_background(self, row, col, level):
+        return f'error-section{level}' in self._get_node(row, col).get_attribute('class')
 
     def _create_input_id(self, row, col):
         if self.num_rows is None or self.num_cols is None:

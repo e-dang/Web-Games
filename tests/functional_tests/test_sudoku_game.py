@@ -24,7 +24,6 @@ class TestSudokuGame:
             for j in range(len(board[0])):
                 if (i, j) not in given_indices:
                     page.enter_number(i, j, board[i][j])
-        self.driver.find_elements_by_tag_name('body')[0].click()  # click away from the input box
 
     def test_user_is_presented_with_correct_controls_and_options(self, url):
         # The user goes to the page
@@ -131,6 +130,32 @@ class TestSudokuGame:
         self.solve_board(page)
         assert page.game_is_over()
 
+    def test_invalid_nodes_get_error_highlighted(self, url):
+        # The user goes to the page
+        self.driver.get(f'{url}/1')  # url parameter is rng seed
+        page = SudokuPage(self.driver)
+
+        # the user enters an invalid value into a node
+        row, col, value = 0, 1, '6'
+        box_idx = get_box_idx(row, col)
+        page.enter_number(row, col, value)
+
+        # The user then sees that error borders and background appear around the nodes with the same value and in the
+        # same row, col, box
+        board = page.get_board_as_array()
+        for r in range(len(board)):
+            for c in range(len(board[0])):
+                same_row = r == row
+                same_col = c == col
+                same_box = box_idx == get_box_idx(r, c)
+                num_errors = sum([same_row, same_col, same_box])
+
+                if (same_row or same_col or same_box) and board[r][c] == value:
+                    assert page.node_has_error_border(r, c)
+
+                for i in range(1, num_errors + 1):
+                    assert page.node_has_error_section_background(r, c, i)
+
 
 class SudokuSolver:
     def solve(self, board):
@@ -149,7 +174,7 @@ class SudokuSolver:
                     remaining_count += 1
                     continue
 
-                box_idx = self.get_box_idx(row, col)
+                box_idx = get_box_idx(row, col)
                 row_bit_map[row] = self.clear_bit(row_bit_map[row], int(board[row][col]) - 1)
                 col_bit_map[col] = self.clear_bit(col_bit_map[col], int(board[row][col]) - 1)
                 box_bit_map[box_idx] = self.clear_bit(box_bit_map[box_idx], int(board[row][col]) - 1)
@@ -164,7 +189,7 @@ class SudokuSolver:
         if board[row][col] != '':
             return self.solve_helper(next_row, next_col, remaining_count, row_bit_map, col_bit_map, box_bit_map, board)
 
-        box_idx = self.get_box_idx(row, col)
+        box_idx = get_box_idx(row, col)
         prev_row_bit_map = row_bit_map[row]
         prev_col_bit_map = col_bit_map[col]
         prev_box_bit_map = box_bit_map[box_idx]
@@ -191,11 +216,12 @@ class SudokuSolver:
             return row + 1, next_col
         return row, next_col
 
-    def get_box_idx(self, row, col):
-        return (row // 3) * 3 + (col // 3)
-
     def get_bit(self, bit_map, pos):
         return bit_map & (1 << pos)
 
     def clear_bit(self, bit_map, pos):
         return bit_map & ~(1 << pos)
+
+
+def get_box_idx(row, col):
+    return (row // 3) * 3 + (col // 3)

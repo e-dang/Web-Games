@@ -5,6 +5,7 @@ class SudokuGameNode extends Node {
         super(row, col, idx, boardRow, 'square');
         this.trueValue = null;
         this.borders = [];
+        this.errorLevel = 0;
     }
 
     setAsEmptyNode() {
@@ -57,6 +58,14 @@ class SudokuGameNode extends Node {
         return this.trueValue == this.input.value;
     }
 
+    getInputValue() {
+        if (this.isGivenNode()) {
+            return null;
+        }
+
+        return this.input.value;
+    }
+
     addInputEventListener(type, fn) {
         if (this.isInputNode()) {
             this.input.addEventListener(type, fn);
@@ -71,6 +80,36 @@ class SudokuGameNode extends Node {
     addBottomBorder() {
         this.borders.push('bottom');
         this.element.classList.add('bottom');
+    }
+
+    addErrorBorder() {
+        this.element.classList.add('error');
+    }
+
+    addErrorSection() {
+        this.errorLevel++;
+        if (this.errorLevel == 1) {
+            this.element.classList.add('error-section1');
+        } else if (this.errorLevel == 2) {
+            this.element.classList.add('error-section2');
+        } else if (this.errorLevel == 3) {
+            this.element.classList.add('error-section3');
+        }
+    }
+
+    removeErrorBorder() {
+        this.element.classList.remove('error');
+    }
+
+    removeErrorSection() {
+        if (this.errorLevel == 1) {
+            this.element.classList.remove('error-section1');
+        } else if (this.errorLevel == 2) {
+            this.element.classList.remove('error-section2');
+        } else if (this.errorLevel == 3) {
+            this.element.classList.remove('error-section3');
+        }
+        this.errorLevel--;
     }
 
     _handleInputEvent() {

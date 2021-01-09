@@ -28,8 +28,22 @@ class SudokuBoard extends Board {
         return node;
     }
 
+    getInvalidNodes() {
+        return this.solver.getInvalidNodes(this);
+    }
+
     getElapsedTime() {
         return millisecondsToSeconds(Date.now() - this.startTime);
+    }
+
+    getNodeInBox(idx, boxIdx) {
+        const col = (boxIdx % 3) * 3 + (idx % 3);
+        const row = Math.floor(boxIdx / 3) * 3 + Math.floor(idx / 3);
+        return this.getNode(row, col);
+    }
+
+    calcBoxIdx(row, col) {
+        return Math.floor(row / 3) * 3 + Math.floor(col / 3);
     }
 
     isComplete() {

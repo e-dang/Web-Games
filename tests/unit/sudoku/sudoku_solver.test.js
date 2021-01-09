@@ -48,22 +48,6 @@ describe('test SudokuSolver', () => {
         expect(retVal).toBe(bitMap);
     });
 
-    test.each([
-        [0, 0, 0],
-        [1, 1, 3],
-        [2, 2, 6],
-        [3, 3, 1],
-        [4, 4, 4],
-        [5, 5, 7],
-        [6, 6, 2],
-        [7, 7, 5],
-        [8, 8, 8],
-    ])('_calcBoxIdx returns %d when row is %d and col is %d', (expected, row, col) => {
-        const retVal = solver._calcBoxIdx(row, col);
-
-        expect(retVal).toBe(expected);
-    });
-
     test('_getNextMove returns [row + 1, 0] when col == numCols - 1', () => {
         const row = 1;
         const col = 8;
@@ -395,5 +379,65 @@ describe('test SudokuSolver', () => {
                 expect(board.getNode(i, j).trueValue).toBe(boardArr[i][j]);
             }
         }
+    });
+
+    test('_getDuplicate returns the duplicate node specified by selector', () => {
+        const board = new SudokuBoard(3);
+        board.nodes = [new SudokuGameNode(), new SudokuGameNode(), new SudokuGameNode()];
+        board.nodes.forEach((node, idx) => (node.idx = idx));
+        board.nodes[0].trueValue = 1;
+        board.nodes[1].trueValue = 0;
+        board.nodes[2].trueValue = 1;
+
+        const retVal = solver._getDuplicate(
+            (col) => board.getNode(0, col),
+            board.nodes[0].trueValue,
+            board.dims,
+            board.nodes[0],
+        );
+
+        expect(retVal.idx).toBe(board.nodes[2].idx);
+    });
+
+    test('getInvalidNodes returns invalid nodes', () => {
+        const boardArr = [
+            [5, 4, 6, 8, 1, 3, 9, 2, 7],
+            [2, 7, 1, 4, 6, 9, 5, 8, 3],
+            [9, 8, 3, 5, 2, 7, 4, 6, 1],
+            [7, 1, 4, 2, 8, 6, 3, 9, 5],
+            [3, 5, 2, 7, 9, 4, 8, 1, 6],
+            [6, 9, 8, 3, 5, 1, 2, 7, 4],
+            [8, 3, 5, 1, 7, 2, 6, 4, 9],
+            [1, 2, 9, 6, 4, 5, 7, 3, 8],
+            [4, 6, 7, 9, 3, 8, 1, 5, 2],
+        ];
+        const invalidNodes = [2, 1, 38, 19, 22];
+        let idx = 0;
+        const board = new SudokuBoard(9);
+        for (let i = 0; i < board.dims; i++) {
+            for (let j = 0; j < board.dims; j++) {
+                const node = new SudokuGameNode();
+                node.idx = ++idx;
+                if ((i == 0 && j == 1) || (i == 2 && j == 0)) {
+                    node.isGivenNode.mockReturnValue(false);
+                    node.isInputNode.mockReturnValue(true);
+                    node.getInputValue.mockReturnValue(5);
+                } else {
+                    node.isGivenNode.mockReturnValue(true);
+                    node.isInputNode.mockReturnValue(false);
+                }
+                node.row = i;
+                node.col = j;
+                node.trueValue = boardArr[i][j];
+                board.nodes.push(node);
+            }
+        }
+
+        const retVal = solver.getInvalidNodes(board);
+
+        idxs = retVal.map((node) => node.idx);
+        invalidNodes.forEach((idx) => {
+            expect(idxs).toContain(idx);
+        });
     });
 });

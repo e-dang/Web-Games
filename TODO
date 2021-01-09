@@ -1,10 +1,19 @@
-const SudokuBoard = require('./sudoku_board');
+Try using queue for storing moves in a time interval - snake
+Implement FT for testing navigation between games
+Implement different difficulties in snake (maybe?)
+Implement error checking in sudoku
 
-DIMENSIONS = 9;
+
+ALLOWS TABLE TO HAVE CIRCULAR CELLS
+/* table {
+    border-collapse: separate;
+} */
+
 
 class SudokuPage {
     constructor() {
         this.board = new SudokuBoard(DIMENSIONS);
+        this.errorMap = {};
 
         this.addEventHandlers();
         this.board.draw();
@@ -37,6 +46,13 @@ class SudokuPage {
     }
 
     _handleInputChangeEvent(userInputNode) {
+        if (userInputNode.idx in this.errorMap) {
+            const {borderNodes, errorSectionNodes} = this.errorMap[userInputNode.idx];
+            borderNodes.forEach((node) => node.removeErrorBorder());
+            errorSectionNodes.forEach((node) => node.removeErrorSection());
+            delete this.errorMap[userInputNode.idx];
+        }
+
         let invalidNodes;
         if (userInputNode.userValueIsCorrect()) {
             if (this.board.isComplete()) {
@@ -109,7 +125,10 @@ class SudokuPage {
                 errorSectionNodes.push(node);
             }
         });
+
+        this.errorMap[userInputNode.idx] = {
+            borderNodes,
+            errorSectionNodes,
+        };
     }
 }
-
-module.exports = SudokuPage;

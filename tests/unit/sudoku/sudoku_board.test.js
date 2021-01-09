@@ -40,7 +40,7 @@ describe('Test SudokuBoard', () => {
     });
 
     test('constructor sets startTime to Date.now()', () => {
-        expect(millisecondsToSeconds(board.startTime)).toBeCloseTo(millisecondsToSeconds(Date.now()));
+        expect(millisecondsToSeconds(board.startTime)).toBeCloseTo(millisecondsToSeconds(Date.now()), 1);
     });
 
     describe('test reset', () => {
@@ -87,7 +87,7 @@ describe('Test SudokuBoard', () => {
         });
 
         test('reset sets startTime to Date.now()', () => {
-            expect(millisecondsToSeconds(board.startTime)).toBeCloseTo(millisecondsToSeconds(Date.now()));
+            expect(millisecondsToSeconds(board.startTime)).toBeCloseTo(millisecondsToSeconds(Date.now()), 1);
         });
     });
 
@@ -301,6 +301,52 @@ describe('Test SudokuBoard', () => {
     test('getElapsedTime returns the current time - startTime proeprty', () => {
         const retVal = board.getElapsedTime();
 
-        expect(millisecondsToSeconds(retVal)).toBeCloseTo(millisecondsToSeconds(Date.now() - board.startTime));
+        expect(millisecondsToSeconds(retVal)).toBeCloseTo(millisecondsToSeconds(Date.now() - board.startTime), 1);
+    });
+
+    test('getInvalidNodes returns the return value of solver.getInvalidNodes', () => {
+        const mock = jest.fn();
+        board.solver.getInvalidNodes.mockReturnValueOnce(mock);
+
+        const retVal = board.getInvalidNodes();
+
+        expect(retVal).toBe(mock);
+        expect(board.solver.getInvalidNodes).toHaveBeenCalledWith(board);
+    });
+
+    test.each([
+        [1, 1, 4, 0],
+        [5, 5, 8, 4],
+        [7, 8, 5, 8],
+    ])('getNodeInBox returns node at row %d, col %d for idx %d and boxIdx %d', (row, col, idx, boxIdx) => {
+        for (let i = 0; i < board.dims; i++) {
+            for (let j = 0; j < board.dims; j++) {
+                const node = new SudokuGameNode();
+                node.row = i;
+                node.col = j;
+                board.nodes.push(node);
+            }
+        }
+
+        const retVal = board.getNodeInBox(idx, boxIdx, board);
+
+        expect(retVal.row).toBe(row);
+        expect(retVal.col).toBe(col);
+    });
+
+    test.each([
+        [0, 0, 0],
+        [1, 1, 3],
+        [2, 2, 6],
+        [3, 3, 1],
+        [4, 4, 4],
+        [5, 5, 7],
+        [6, 6, 2],
+        [7, 7, 5],
+        [8, 8, 8],
+    ])('calcBoxIdx returns %d when row is %d and col is %d', (expected, row, col) => {
+        const retVal = board.calcBoxIdx(row, col);
+
+        expect(retVal).toBe(expected);
     });
 });

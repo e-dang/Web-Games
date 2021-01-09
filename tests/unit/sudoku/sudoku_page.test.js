@@ -39,6 +39,18 @@ describe('test SudokuPage', () => {
         expect(page._handleSudokuComplete).toHaveBeenCalledTimes(1);
     });
 
+    test('_handleInputChangeEvent calls _handleUserValueError with event node and return value of board.getInvalidNodes when user value is not correct', () => {
+        const node = new SudokuGameNode();
+        const retVal = [node];
+        node.userValueIsCorrect.mockReturnValueOnce(false);
+        page._handleUserValueError = jest.fn();
+        page.board.getInvalidNodes = jest.fn().mockReturnValueOnce(retVal);
+
+        page._handleInputChangeEvent(node);
+
+        expect(page._handleUserValueError).toHaveBeenCalledWith(node, retVal);
+    });
+
     test('_handleSudokuComplete displays gameOverModal', async (done) => {
         $('#gameOverModal').on('shown.bs.modal', (event) => {
             expect(event.target).toHaveClass('show');
@@ -155,4 +167,37 @@ describe('test SudokuPage', () => {
             expect(page._updateDifficulty).toHaveBeenCalledTimes(1);
         },
     );
+
+    test('_handleUserValueError calls addErrorBorder on each node in nodes parameter', () => {
+        const nodes = [new SudokuGameNode(), new SudokuGameNode(), new SudokuGameNode()];
+        page.board.nodes = nodes;
+
+        page._handleUserValueError(nodes[0], nodes);
+
+        nodes.forEach((node) => expect(node.addErrorBorder).toHaveBeenCalledTimes(1));
+    });
+
+    test('_handleUserValueError calls addErrorSection on each node in nodes parameter that shares a row, col, or box with userInputNode', () => {
+        const dims = 9;
+        page.board.calcBoxIdx.mockReturnValue((node) => node.boxIdx);
+        page.board.nodes = [];
+        for (let i = 0; i < dims; i++) {
+            for (let j = 0; j < dims; j++) {
+                const node = new SudokuGameNode();
+                node.row = i;
+                node.col = j;
+                node.boxIdx = i % 3;
+                page.board.nodes.push(node);
+            }
+        }
+        const userInputNode = page.board.nodes[0];
+
+        page._handleUserValueError(userInputNode, page.board.nodes);
+
+        page.board.nodes.forEach((node) => {
+            if (node.col == userInputNode.col || node.row == userInputNode.row || node.boxIdx == userInputNode.boxIdx) {
+                expect(node.addErrorSection).toHaveBeenCalled();
+            }
+        });
+    });
 });

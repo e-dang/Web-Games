@@ -36,6 +36,10 @@ describe('Test SudokuGameNode', () => {
         expect(node.borders).toEqual([]);
     });
 
+    test('constructor sets errorLevel to a number', () => {
+        expect(typeof node.errorLevel).toBe('number');
+    });
+
     test('setAsDefaultNode calls setAsGivenNode', () => {
         node.setAsGivenNode = jest.fn();
 
@@ -247,7 +251,7 @@ describe('Test SudokuGameNode', () => {
         expect(node.borders).toContain('right');
     });
 
-    test('addRightBorder adds "right" to class list', () => {
+    test('addRightBorder adds "right" to classList', () => {
         node.element.className = '';
 
         node.addRightBorder();
@@ -263,12 +267,41 @@ describe('Test SudokuGameNode', () => {
         expect(node.borders).toContain('bottom');
     });
 
-    test('addBottomBorder adds "bottom" to class list', () => {
+    test('addBottomBorder adds "bottom" to classList', () => {
         node.element.className = '';
 
         node.addBottomBorder();
 
         expect(node.element.classList.contains('bottom')).toBe(true);
+    });
+
+    test('addErrorBorder adds "error" to classList', () => {
+        node.element.className = '';
+
+        node.addErrorBorder();
+
+        expect(node.element.classList.contains('error')).toBe(true);
+    });
+
+    test.each([1, 2, 3])(
+        'addErrorSection adds "error-section%d" to classList for corresponding error level - 1',
+        (level) => {
+            node.element.className = '';
+            node.errorLevel = level - 1;
+
+            node.addErrorSection();
+
+            expect(node.element.classList.contains(`error-section${level}`)).toBe(true);
+        },
+    );
+
+    test('addErrorSection increments errorLevel', () => {
+        const orig = 1;
+        node.errorLevel = orig;
+
+        node.addErrorSection();
+
+        expect(node.errorLevel).toBe(orig + 1);
     });
 
     test('_setAsNodeType adds border classes to node classList', () => {
@@ -278,5 +311,52 @@ describe('Test SudokuGameNode', () => {
         node._setAsNodeType('stuff');
 
         expect(node.element.classList.contains('right')).toBe(true);
+    });
+
+    test('removeErrorBorder removes "error" from classList', () => {
+        node.element.classList.add('error');
+
+        node.removeErrorBorder();
+
+        expect(node.element.classList.contains('error')).toBe(false);
+    });
+
+    test('removeErrorSection decrements errorLevel prop', () => {
+        const prev = 1;
+        node.errorLevel = prev;
+
+        node.removeErrorSection();
+
+        expect(node.errorLevel).toBe(prev - 1);
+    });
+
+    test.each([1, 2, 3])(
+        'removeErrorSection adds "error-section%d" to classList for corresponding errorLevel',
+        (level) => {
+            node.element.className = `error-section${level}`;
+            node.errorLevel = level;
+
+            node.removeErrorSection();
+
+            expect(node.element.classList.contains(`error-section${level}`)).toBe(false);
+        },
+    );
+
+    test('getInputValue returns value on input html element if node is not a given node', () => {
+        const val = 1;
+        node.isGivenNode = jest.fn().mockReturnValue(false);
+        node.input = {value: val};
+
+        const retVal = node.getInputValue();
+
+        expect(retVal).toBe(val);
+    });
+
+    test('getInputValue returns null if node is a given node', () => {
+        node.isGivenNode = jest.fn().mockReturnValue(true);
+
+        const retVal = node.getInputValue();
+
+        expect(retVal).toBe(null);
     });
 });

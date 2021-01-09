@@ -27,6 +27,54 @@ class SudokuSolver {
         return retVal;
     }
 
+    getInvalidNodes(board) {
+        const [rowBitMap, colBitMap, boxBitMap] = this._getBitMaps(board);
+        const invalidNodes = [];
+
+        for (let row = 0; row < board.dims; row++) {
+            for (let col = 0; col < board.dims; col++) {
+                const node = board.getNode(row, col);
+                if (node.isGivenNode()) {
+                    continue;
+                }
+
+                const boxIdx = board.calcBoxIdx(row, col);
+                const value = node.getInputValue();
+                const rowTaken = !this._getBit(rowBitMap[row], value - 1);
+                const colTaken = !this._getBit(colBitMap[col], value - 1);
+                const boxTaken = !this._getBit(boxBitMap[boxIdx], value - 1);
+                if (!value && !rowTaken && !colTaken && !boxTaken) {
+                    continue;
+                }
+
+                invalidNodes.push(node);
+                if (rowTaken) {
+                    invalidNodes.push(this._getDuplicate((col) => board.getNode(row, col), value, board.dims, node));
+                }
+
+                if (colTaken) {
+                    invalidNodes.push(this._getDuplicate((row) => board.getNode(row, col), value, board.dims, node));
+                }
+
+                if (boxTaken) {
+                    invalidNodes.push(
+                        this._getDuplicate((i) => board.getNodeInBox(i, boxIdx), value, board.dims, node),
+                    );
+                }
+            }
+        }
+        return invalidNodes;
+    }
+
+    _getDuplicate(selector, value, dims, origNode) {
+        for (let i = 0; i < dims; i++) {
+            const node = selector(i);
+            if (node.trueValue == value && node.idx != origNode.idx) {
+                return node;
+            }
+        }
+    }
+
     _hasMoreThanOneSolution(board) {
         const generator = this.solve(board);
         generator.next();
@@ -59,7 +107,7 @@ class SudokuSolver {
                     continue;
                 }
 
-                const boxIdx = this._calcBoxIdx(row, col);
+                const boxIdx = board.calcBoxIdx(row, col);
                 rowBitMap[row] = this._clearBit(rowBitMap[row], node.trueValue - 1);
                 colBitMap[col] = this._clearBit(colBitMap[col], node.trueValue - 1);
                 boxBitMap[boxIdx] = this._clearBit(boxBitMap[boxIdx], node.trueValue - 1);
@@ -94,7 +142,7 @@ class SudokuSolver {
                 yield* this._solveHelper(nextRow, nextCol, rowBitMap, colBitMap, boxBitMap, board, isValidGuess);
             }
 
-            const boxIdx = this._calcBoxIdx(row, col);
+            const boxIdx = board.calcBoxIdx(row, col);
             const prevRowBitMap = rowBitMap[row];
             const prevColBitMap = colBitMap[col];
             const prevBoxBitMap = boxBitMap[boxIdx];
@@ -129,10 +177,6 @@ class SudokuSolver {
         }
 
         return utils.shuffle(arr);
-    }
-
-    _calcBoxIdx(row, col) {
-        return Math.floor(row / 3) * 3 + Math.floor(col / 3);
     }
 
     _getNextMove(row, col, numCols) {

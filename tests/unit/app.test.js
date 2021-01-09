@@ -13,6 +13,7 @@ describe('test the path "/snake"', () => {
     it('should respond with index.html on GET', async () => {
         const html = await ejs.renderFile(path.resolve(global.PROJECT_DIR, 'views', 'index.ejs'), {
             pageName: 'Snake',
+            seed: '',
         });
 
         const response = await request(app).get('/snake');
@@ -31,6 +32,7 @@ describe('test the path "/sudoku"', () => {
     it('should respond with sudoku.html on GET', async () => {
         const html = await ejs.renderFile(path.resolve(global.PROJECT_DIR, 'views', 'index.ejs'), {
             pageName: 'Sudoku',
+            seed: '',
         });
 
         const response = await request(app).get('/sudoku');

@@ -5,6 +5,7 @@ DIMENSIONS = 9;
 class SudokuPage {
     constructor() {
         this.board = new SudokuBoard(DIMENSIONS);
+        this.errorMap = {};
 
         this.addEventHandlers();
         this.board.draw();
@@ -36,14 +37,16 @@ class SudokuPage {
         return this;
     }
 
-    _handleInputChangeEvent(userInputNode) {
+    _handleInputChangeEvent(node) {
+        this._removeErrorSignals(node);
+
         let invalidNodes;
-        if (userInputNode.userValueIsCorrect()) {
+        if (node.userValueIsCorrect()) {
             if (this.board.isComplete()) {
                 this._handleSudokuComplete();
             }
         } else if ((invalidNodes = this.board.getInvalidNodes()).length != 0) {
-            this._handleUserValueError(userInputNode, invalidNodes);
+            this._handleUserValueError(node, invalidNodes);
         }
     }
 
@@ -109,6 +112,20 @@ class SudokuPage {
                 errorSectionNodes.push(node);
             }
         });
+
+        this.errorMap[userInputNode.idx] = {
+            borderNodes,
+            errorSectionNodes,
+        };
+    }
+
+    _removeErrorSignals(node) {
+        if (node.idx in this.errorMap) {
+            const {borderNodes, errorSectionNodes} = this.errorMap[node.idx];
+            borderNodes.forEach((node) => node.removeErrorBorder());
+            errorSectionNodes.forEach((node) => node.removeErrorSection());
+            delete this.errorMap[node.idx];
+        }
     }
 }
 

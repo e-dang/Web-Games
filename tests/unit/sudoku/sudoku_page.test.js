@@ -30,6 +30,7 @@ describe('test SudokuPage', () => {
 
     test('_handleInputChangeEvent calls _handleSudokuComplete when node.userValueIsCorrect and board.isComplete returns true', () => {
         const node = new SudokuGameNode();
+        page._removeErrorSignals = jest.fn();
         node.userValueIsCorrect.mockReturnValueOnce(true);
         page.board.isComplete.mockReturnValueOnce(true);
         page._handleSudokuComplete = jest.fn();
@@ -44,11 +45,25 @@ describe('test SudokuPage', () => {
         const retVal = [node];
         node.userValueIsCorrect.mockReturnValueOnce(false);
         page._handleUserValueError = jest.fn();
+        page._removeErrorSignals = jest.fn();
         page.board.getInvalidNodes = jest.fn().mockReturnValueOnce(retVal);
 
         page._handleInputChangeEvent(node);
 
         expect(page._handleUserValueError).toHaveBeenCalledWith(node, retVal);
+    });
+
+    test('_handleInputChangeEvent calls _removeErrorSignals with event node', () => {
+        const node = new SudokuGameNode();
+        const retVal = [];
+        node.userValueIsCorrect.mockReturnValueOnce(false);
+        page._handleUserValueError = jest.fn();
+        page._removeErrorSignals = jest.fn();
+        page.board.getInvalidNodes = jest.fn().mockReturnValueOnce(retVal);
+
+        page._handleInputChangeEvent(node);
+
+        expect(page._removeErrorSignals).toHaveBeenCalledWith(node);
     });
 
     test('_handleSudokuComplete displays gameOverModal', async (done) => {
@@ -199,5 +214,40 @@ describe('test SudokuPage', () => {
                 expect(node.addErrorSection).toHaveBeenCalled();
             }
         });
+    });
+
+    test('_removeErrorSignals calls removeErrorBorder and removeErrorSection on each node mapped to node.idx', () => {
+        const node = new SudokuGameNode();
+        node.idx = 1;
+        const borderNodes = [new SudokuGameNode(), new SudokuGameNode(), new SudokuGameNode()];
+        const errorSectionNodes = [new SudokuGameNode(), new SudokuGameNode(), new SudokuGameNode()];
+        page.errorMap[node.idx] = {
+            borderNodes,
+            errorSectionNodes,
+        };
+
+        page._removeErrorSignals(node);
+
+        borderNodes.forEach((node) => {
+            expect(node.removeErrorBorder).toHaveBeenCalledTimes(1);
+        });
+        errorSectionNodes.forEach((node) => {
+            expect(node.removeErrorSection).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    test('_removeErrorSignals node.idx entry from errorMap', () => {
+        const node = new SudokuGameNode();
+        node.idx = 1;
+        const borderNodes = [];
+        const errorSectionNodes = [];
+        page.errorMap[node.idx] = {
+            borderNodes,
+            errorSectionNodes,
+        };
+
+        page._removeErrorSignals(node);
+
+        expect(node.idx in page.errorMap).toBe(false);
     });
 });

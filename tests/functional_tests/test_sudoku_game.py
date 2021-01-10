@@ -136,9 +136,9 @@ class TestSudokuGame:
         page = SudokuPage(self.driver)
 
         # the user enters an invalid value into a node
-        row, col, value = 0, 1, '6'
-        box_idx = get_box_idx(row, col)
-        page.enter_number(row, col, value)
+        row, col_1, value = 0, 1, '6'
+        box_idx_1 = get_box_idx(row, col_1)
+        page.enter_number(row, col_1, value)
 
         # The user then sees that error borders and background appear around the nodes with the same value and in the
         # same row, col, box
@@ -146,8 +146,8 @@ class TestSudokuGame:
         for r in range(len(board)):
             for c in range(len(board[0])):
                 same_row = r == row
-                same_col = c == col
-                same_box = box_idx == get_box_idx(r, c)
+                same_col = c == col_1
+                same_box = box_idx_1 == get_box_idx(r, c)
                 num_errors = sum([same_row, same_col, same_box])
 
                 if (same_row or same_col or same_box) and board[r][c] == value:
@@ -157,7 +157,36 @@ class TestSudokuGame:
                     assert page.node_has_error_section_background(r, c, i)
 
         # The user then clears the selection and sees the error borders removed
-        page.enter_number(row, col, '')
+        page.enter_number(row, col_1, '')
+        for r in range(len(board)):
+            for c in range(len(board[0])):
+                assert not page.node_has_error_border(r, c)
+                for i in range(1, 4):
+                    assert not page.node_has_error_section_background(r, c, i)
+
+        # the user then tries to see if the error signals stack on top of each other by entering two invalid values
+        col_2 = 3
+        box_idx_2 = get_box_idx(row, col_2)
+        page.enter_number(row, col_1, value)
+        page.enter_number(row, col_2, value)
+        for r in range(len(board)):
+            for c in range(len(board[0])):
+                same_row = r == row
+                same_col_1 = c == col_1
+                same_box_1 = box_idx_1 == get_box_idx(r, c)
+                same_col_2 = c == col_2
+                same_box_2 = box_idx_2 == get_box_idx(r, c)
+                num_errors = sum([same_row, same_col_1, same_col_2, same_box_1, same_box_2])
+
+                if (same_row or same_col_1 or same_box_1 or same_col_2 or same_box_2) and board[r][c] == value:
+                    assert page.node_has_error_border(r, c)
+
+                for i in range(1, min(num_errors + 1, 4)):
+                    assert page.node_has_error_section_background(r, c, i)
+
+        # The user then clears the selection and sees the error borders removed
+        page.enter_number(row, col_1, '')
+        page.enter_number(row, col_2, '')
         for r in range(len(board)):
             for c in range(len(board[0])):
                 assert not page.node_has_error_border(r, c)

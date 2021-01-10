@@ -84,14 +84,6 @@ describe('test SudokuPage', () => {
         expect(page.board.reset).toHaveBeenCalledTimes(1);
     });
 
-    test('_handleClickResetButton is called when the reset button is clicked', () => {
-        page._handleClickResetButton = jest.fn();
-
-        document.getElementById('resetBtn').click();
-
-        expect(page._handleClickResetButton).toHaveBeenCalledTimes(1);
-    });
-
     test('_handleClickHintButton calls getHint on board property', () => {
         const mockRetVal = jest.fn();
         page._handleInputChangeEvent = jest.fn();
@@ -120,51 +112,6 @@ describe('test SudokuPage', () => {
         expect(page._handleClickHintButton).toHaveBeenCalledTimes(1);
     });
 
-    test('_updateDifficulty sets textContent of currentDifficulty HTML element to textContent of events target', () => {
-        const textContent = 'some text';
-        const currDiff = document.getElementById('currentDifficulty');
-
-        page._updateDifficulty({target: {textContent}});
-
-        expect(currDiff.textContent).toBe(textContent);
-    });
-
-    test('_updateDifficulty calls _handleClickResetButton', () => {
-        const textContent = 'some text';
-        page._handleClickResetButton = jest.fn();
-
-        page._updateDifficulty({target: {textContent}});
-
-        expect(page._handleClickResetButton).toHaveBeenCalledTimes(1);
-    });
-
-    test('_setDefaultDifficulty calls _handleChangeDifficulty', () => {
-        page._handleChangeDifficulty = jest.fn();
-
-        page._setDefaultDifficulty();
-
-        expect(page._handleChangeDifficulty).toHaveBeenCalledTimes(1);
-    });
-
-    test('_setDefaultDifficulty calls setDifficultyEasy on board prop', () => {
-        page.board.setDifficultyEasy = jest.fn();
-
-        page._setDefaultDifficulty();
-
-        expect(page.board.setDifficultyEasy).toHaveBeenCalledTimes(1);
-    });
-
-    test.each([['easy'], ['moderate'], ['hard'], ['veryHard']])(
-        '_handleChangeDifficulty is called when %s button is clicked',
-        (btnId) => {
-            page._handleChangeDifficulty = jest.fn();
-
-            document.getElementById(btnId).click();
-
-            expect(page._handleChangeDifficulty).toHaveBeenCalledTimes(1);
-        },
-    );
-
     test.each([
         ['setDifficultyEasy', 'easy'],
         ['setDifficultyModerate', 'moderate'],
@@ -174,6 +121,7 @@ describe('test SudokuPage', () => {
         '_handleChangeDifficulty calls %s with callback that calls _updateDifficulty on board property when event.target.id is %s',
         (methodName, id) => {
             page.board[methodName] = jest.fn();
+            page.difficultyMap[id] = page.board[methodName];
             page._updateDifficulty = jest.fn();
 
             page._handleChangeDifficulty({target: {id}});

@@ -3,13 +3,11 @@ const {TicTacToeBoard} = require('./tic_tac_toe_board');
 
 class TicTacToePage extends Page {
     constructor() {
-        super();
-        this.board = new TicTacToeBoard();
-        this.difficultyMap = {
+        super(new TicTacToeBoard(), {
             easy: (callback) => callback(),
             moderate: (callback) => callback(),
             hard: (callback) => callback(),
-        };
+        });
 
         this.addEventHandlers();
         this.board.draw();

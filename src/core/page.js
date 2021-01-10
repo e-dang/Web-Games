@@ -1,5 +1,8 @@
 class Page {
-    constructor() {}
+    constructor(board, difficultyMap) {
+        this.board = board;
+        this.difficultyMap = difficultyMap;
+    }
 
     addEventHandlers() {
         this.addClickResetButtonEventHandler().addChangeDifficultyEventHandlers();

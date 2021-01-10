@@ -23,10 +23,12 @@ class TestTicTacToe:
         assert page.has_correct_header()
         assert page.can_select_games()
 
-        # they also notice that there is a board and button that allows them to reset the game
+        # they also notice that there is a board, a button that allows them to reset the game, and a button to
+        # select their symbol
         assert page.has_board()
         assert page.board_cells_are_square()
         assert page.can_click_reset()
+        assert page.can_select_symbol()
 
         # they also notice that they can change the difficulty of the opponent player
         page.change_difficulty('easy')
@@ -35,3 +37,22 @@ class TestTicTacToe:
         assert page.get_current_difficulty() == 'Moderate'
         page.change_difficulty('hard')
         assert page.get_current_difficulty() == 'Hard'
+
+    @pytest.mark.parametrize('url, symbol', [
+        (None, 'x'),
+        (None, 'o')
+    ],
+        indirect=['url'],
+        ids=['x', 'o'])
+    def test_user_can_play_tic_tac_toe(self, url, symbol):
+        # The user goes to the webpage
+        self.driver.get(url)
+        page = TicTacToePage(self.driver)
+
+        # the user selects their move symbol
+        page.select_symbol(symbol)
+
+        # the user then clicks a node and sees their symbol appear in the node
+        row, col = page.get_empty_node()
+        page.click_node(row, col)
+        assert page.node_has_symbol(row, col, symbol)

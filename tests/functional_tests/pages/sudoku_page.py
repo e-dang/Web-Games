@@ -57,9 +57,6 @@ class SudokuPage(BasePage):
     def click_get_hint(self):
         self.driver.find_element_by_id('hintBtn').click()
 
-    def get_current_difficulty(self):
-        return self.wait_to_find_by_id('currentDifficulty').get_attribute('innerText')
-
     def node_has_error_border(self, row, col):
         return 'error' in self._get_node(row, col).get_attribute('class')
 

@@ -65,6 +65,9 @@ class BasePage:
         self._get_navbar().find_element_by_id('difficultySelection').click()
         self.wait_to_find_by_id(difficulty).click()
 
+    def get_current_difficulty(self):
+        return self.wait_to_find_by_id('currentDifficulty').get_attribute('innerText')
+
     def click_reset(self):
         self.driver.find_element_by_id('resetBtn').click()
 

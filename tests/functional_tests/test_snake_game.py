@@ -34,7 +34,13 @@ class TestSnakeGame:
         # they notice that they can still select a new game from the drop down menu though
         assert page.can_select_games()
 
-    def test_snake_game_controls_and_triggers_work(self, url):
+    @pytest.mark.parametrize('url, up_func, left_func, down_func, right_func', [
+        (None, 'press_up_key', 'press_left_key', 'press_down_key', 'press_right_key'),
+        (None, 'press_W_key', 'press_A_key', 'press_S_key', 'press_D_key')
+    ],
+        indirect=['url'],
+        ids=['arrow_keys', 'wasd_keys'])
+    def test_snake_game_controls_and_triggers_work(self, url, up_func, left_func, down_func, right_func):
         # The user goes to the webpage
         self.driver.get(url)
         page = SnakePage(self.driver)
@@ -56,36 +62,20 @@ class TestSnakeGame:
         assert page.get_snake_length() > i_length
 
         # The user can control the snake with arrow keys
-        page.press_up_key()
+        getattr(page, up_func)()
         d_row, d_col = page.get_snake_position_delta()
         assert d_row < 0 and d_col == 0
 
-        page.press_left_key()
+        getattr(page, left_func)()
         d_row, d_col = page.get_snake_position_delta()
         assert d_row == 0 and d_col < 0
 
-        page.press_down_key()
+        getattr(page, down_func)()
         d_row, d_col = page.get_snake_position_delta()
         assert d_row > 0 and d_col == 0
 
-        page.press_right_key()
-        d_row, d_col = page.get_snake_position_delta()
-        assert d_row == 0 and d_col > 0
-
-        # The user can also control the snake with "W A S D" keys
-        page.press_W_key()
-        d_row, d_col = page.get_snake_position_delta()
-        assert d_row < 0 and d_col == 0
-
-        page.press_A_key()
-        d_row, d_col = page.get_snake_position_delta()
-        assert d_row == 0 and d_col < 0
-
-        page.press_S_key()
-        d_row, d_col = page.get_snake_position_delta()
-        assert d_row > 0 and d_col == 0
-
-        page.press_D_key()
+        getattr(page, right_func)()
+        # page.press_right_key()
         d_row, d_col = page.get_snake_position_delta()
         assert d_row == 0 and d_col > 0
 

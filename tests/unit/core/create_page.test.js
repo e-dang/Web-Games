@@ -5,6 +5,7 @@ const TicTacToePage = require('../../../src/tic_tac_toe/tic_tac_toe_page');
 
 jest.mock('../../../src/snake/snake_page');
 jest.mock('../../../src/sudoku/sudoku_page');
+jest.mock('../../../src/tic_tac_toe/tic_tac_toe_page');
 
 describe('test createPage', () => {
     test('createPage returns a new SnakePage object when parameter is "Snake"', () => {

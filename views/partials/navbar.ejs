@@ -17,7 +17,7 @@
                     <a class="dropdown-item" href="sudoku">Sudoku</a>
                 </div>
             </li>
-            <% var path=`${pageName.toLowerCase()}_buttons`; %>
+            <% var path=`${pageName.toLowerCase().split(' ').join('')}_buttons`; %>
                 <%- include(path); %>
         </ul>
     </div>

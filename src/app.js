@@ -13,4 +13,8 @@ app.get('/sudoku/:seed?', (req, res) => {
     res.render('index', {pageName: 'Sudoku', seed: req.params.seed});
 });
 
+app.get('/tic-tac-toe', (req, res) => {
+    res.render('index', {pageName: 'Tic Tac Toe', seed: ''});
+});
+
 module.exports = app;

@@ -1,8 +1,6 @@
 const Board = require('../../../src/core/board');
 const SnakeGameNode = require('../../../src/snake/snake_game_node');
-const {cacheHTML, clearHTML} = require('../utils');
-
-const loadHTML = cacheHTML('index.html');
+const {loadHTML, clearHTML} = require('../utils');
 
 jest.mock('../../../src/snake/snake_game_node');
 
@@ -11,15 +9,17 @@ describe('Board', () => {
     let dims;
     let nodeType;
 
-    beforeEach(() => {
-        loadHTML();
+    beforeEach(async (done) => {
+        await loadHTML('/snake');
         dims = 10;
         nodeType = SnakeGameNode;
         board = new Board(dims, nodeType);
+        done();
     });
 
     afterEach(() => {
         clearHTML();
+        SnakeGameNode.mockReset();
     });
 
     test('constructor sets dims prop to dims parameter', () => {
@@ -30,42 +30,46 @@ describe('Board', () => {
         expect(board.nodeType).toBe(nodeType);
     });
 
-    describe('test draw', () => {
-        let wrapper;
-        let gameBoard;
+    test('draw adds tbody element with id=board to gameBoardWrapper element', () => {
+        board.draw();
 
-        beforeEach(() => {
-            wrapper = document.getElementById('gameBoardWrapper');
+        const wrapper = document.getElementById('gameBoardWrapper');
+        const gameBoard = document.getElementById('gameBoard');
+        expect(gameBoard.parentElement).toBe(wrapper);
+    });
 
-            board.draw();
+    test('draw adds dim number of rows to board', () => {
+        const rows = document.getElementsByTagName('tr');
 
-            gameBoard = document.getElementById('gameBoard');
-        });
+        board.draw();
 
-        test('draw adds tbody element with id=board to gameBoardWrapper element', () => {
-            expect(gameBoard.parentElement).toBe(wrapper);
-        });
+        const gameBoard = document.getElementById('gameBoard');
+        expect(rows.length).toBe(board.dims);
+        for (let row of rows) {
+            expect(row.parentElement).toBe(gameBoard);
+        }
+    });
 
-        test('draw adds dim number of rows to board', () => {
-            const rows = document.getElementsByTagName('tr');
+    test('draw calls constructs dims * dims number of nodeTypes', () => {
+        board.nodeType = jest.fn().mockImplementation(() => new SnakeGameNode());
 
-            expect(rows.length).toBe(board.dims);
-            for (let row of rows) {
-                expect(row.parentElement).toBe(gameBoard);
-            }
-        });
+        board.draw();
 
-        test('draw calls constructs dims * dims number of nodeTypes', () => {
-            board.nodeType = jest.fn();
+        expect(board.nodeType).toHaveBeenCalledTimes(board.dims * board.dims);
+    });
 
-            board.draw();
+    test('draw fills nodes prop with dims * dims elements', () => {
+        board.draw();
 
-            expect(board.nodeType).toHaveBeenCalledTimes(board.dims * board.dims);
-        });
+        expect(board.nodes.length).toBe(board.dims * board.dims);
+    });
 
-        test('draw fills nodes prop with dims * dims elements', () => {
-            expect(board.nodes.length).toBe(board.dims * board.dims);
-        });
+    test('draw calls _initNode with each node created', () => {
+        board._initNode = jest.fn();
+
+        board.draw();
+
+        board.nodes.forEach((node, idx) => expect(board._initNode).toHaveBeenNthCalledWith(idx + 1, node));
     });
 
     test('getNode returns the node at the correct index', () => {
@@ -130,7 +134,7 @@ describe('Board', () => {
         expect(retVal).toBe(false);
     });
 
-    test('clear calls setAsEmptyNode on all nodes', () => {
+    test('clear calls setAsDefaultNode on all nodes', () => {
         for (let i = 0; i < dims; i++) {
             board.nodes.push(new SnakeGameNode());
         }
@@ -138,7 +142,15 @@ describe('Board', () => {
         board.clear();
 
         board.nodes.forEach((node) => {
-            expect(node.setAsEmptyNode).toHaveBeenCalledTimes(1);
+            expect(node.setAsDefaultNode).toHaveBeenCalledTimes(1);
         });
+    });
+
+    test('_initNode calls setAsDefaultNode on node param', () => {
+        const node = new SnakeGameNode();
+
+        board._initNode(node);
+
+        expect(node.setAsDefaultNode).toHaveBeenCalledTimes(1);
     });
 });

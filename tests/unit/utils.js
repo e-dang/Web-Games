@@ -1,13 +1,8 @@
-const fs = require('fs');
-const path = require('path');
+const app = require('../../src/app');
+const request = require('supertest');
 
-function cacheHTML(filename) {
-    const html = fs.readFileSync(path.resolve(__dirname, '..', '..', 'public', filename), 'utf8');
-    function innerFunc() {
-        document.documentElement.innerHTML = html;
-    }
-
-    return innerFunc;
+async function loadHTML(path) {
+    document.documentElement.innerHTML = (await request(app).get(path)).text;
 }
 
 function clearHTML() {
@@ -15,6 +10,6 @@ function clearHTML() {
 }
 
 module.exports = {
-    cacheHTML,
+    loadHTML,
     clearHTML,
 };

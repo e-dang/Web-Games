@@ -4,7 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from .base_page import TIMEOUT, BasePage
 
-TIME_STEP = 0.12
+TIME_STEP = 0.13
 
 
 class SnakePage(BasePage):
@@ -72,9 +72,6 @@ class SnakePage(BasePage):
 
     def wait_for_snake_to_run_off_grid(self):
         WebDriverWait(self.driver, TIMEOUT).until(lambda x: self.get_snake_position_delta() == (0, 0))
-
-    def is_game_over(self):
-        return self.wait_to_find_by_id('gameOverMessage').is_displayed()
 
     def get_snake_length(self):
         return len(self._get_board().find_elements_by_class_name('snake'))

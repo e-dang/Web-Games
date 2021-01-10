@@ -5,13 +5,16 @@ class Node {
         this.idx = idx;
         this.shape = shape;
         this.element = document.createElement('td');
-        this.element.id = `n${idx}`;
-        this.setAsEmptyNode();
+        this.element.id = `n${this.idx}`;
         boardRow.appendChild(this.element);
     }
 
     setAsEmptyNode() {
         this._setAsNodeType('empty');
+    }
+
+    setAsDefaultNode() {
+        this.setAsEmptyNode();
     }
 
     isEmptyNode() {

@@ -1,0 +1,24 @@
+<nav id="navBar" class="navbar navbar-expand-sm navbar-light bg-light">
+    <a class="navbar-brand" href="#">Web Games <span id="currentGame">- <%= pageName %></span></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbarSupportedContent" class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li id="gameSelection" class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    Select Game...
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="snake">Snake</a>
+                    <a class="dropdown-item" href="sudoku">Sudoku</a>
+                </div>
+            </li>
+            <% var path=`${pageName.toLowerCase()}_buttons`; %>
+                <%- include(path); %>
+        </ul>
+    </div>
+</nav>

@@ -14,7 +14,9 @@ class Board {
             board.appendChild(row);
             for (let j = 0; j < this.dims; j++) {
                 const idx = i * this.dims + j;
-                this.nodes.push(new this.nodeType(i, j, idx, row));
+                const node = new this.nodeType(i, j, idx, row);
+                this._initNode(node);
+                this.nodes.push(node);
             }
         }
 
@@ -35,8 +37,12 @@ class Board {
 
     clear() {
         this.nodes.forEach((node) => {
-            node.setAsEmptyNode();
+            node.setAsDefaultNode();
         });
+    }
+
+    _initNode(node) {
+        node.setAsDefaultNode();
     }
 }
 

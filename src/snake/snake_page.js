@@ -1,8 +1,8 @@
 const {SnakeGame} = require('../snake/snake_game');
 
-class PageController {
-    constructor(gameType) {
-        this.game = this._gameFromString(gameType);
+class SnakePage {
+    constructor() {
+        this.game = new SnakeGame();
 
         this.addEventListeners();
     }
@@ -19,14 +19,6 @@ class PageController {
         event.target.disabled = true;
         this.game.start(() => (event.target.disabled = false));
     }
-
-    _gameFromString(strNodeType) {
-        if (strNodeType === 'snake') {
-            return new SnakeGame();
-        } else {
-            return null;
-        }
-    }
 }
 
-module.exports = PageController;
+module.exports = SnakePage;

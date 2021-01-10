@@ -61,6 +61,17 @@ class BasePage:
         self.driver.find_element_by_id('closeGameOverModal').click()
         sleep(1.5)
 
+    def change_difficulty(self, difficulty):
+        self._get_navbar().find_element_by_id('difficultySelection').click()
+        self.wait_to_find_by_id(difficulty).click()
+
+    def click_reset(self):
+        self.driver.find_element_by_id('resetBtn').click()
+
+    def can_click_reset(self):
+        element = self.driver.find_element_by_id('resetBtn')
+        return element.is_displayed() and element.is_enabled()
+
     def _get_navbar(self):
         return self.driver.find_element_by_id('navBar')
 

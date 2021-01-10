@@ -25,4 +25,4 @@ class TicTacToePage(BasePage):
         return x.is_enabled() and x.is_displayed() and o.is_enabled() and o.is_displayed()
 
     def select_symbol(self, symbol):
-        self.driver.find_element_by_id(symbol).click()
+        self.driver.find_element_by_id(f'{symbol}-label').click()

@@ -24,4 +24,12 @@ describe('test TicTacToePage', () => {
     test('constructor calls draw on board', () => {
         expect(page.board.draw).toHaveBeenCalledTimes(1);
     });
+
+    test.each(['x', 'o'])('_handleChangeSymbol is called when %s button is clicked', (symbol) => {
+        page._handleChangeSymbol = jest.fn();
+
+        document.getElementById(symbol).click();
+
+        expect(page._handleChangeSymbol).toHaveBeenCalledTimes(1);
+    });
 });

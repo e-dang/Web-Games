@@ -27,6 +27,22 @@ class SudokuSolver {
         return retVal;
     }
 
+    isNodeInvalid(board, node) {
+        if (node.isGivenNode()) {
+            return false;
+        }
+
+        const [rowBitMap, colBitMap, boxBitMap] = this._getBitMaps(board);
+        const value = node.getInputValue();
+        const boxIdx = board.calcBoxIdx(node.row, node.col);
+        return (
+            value &&
+            (!this._getBit(rowBitMap[node.row], value - 1) ||
+                !this._getBit(colBitMap[node.col], value - 1) ||
+                !this._getBit(boxBitMap[boxIdx], value - 1))
+        );
+    }
+
     getInvalidNodes(board) {
         const [rowBitMap, colBitMap, boxBitMap] = this._getBitMaps(board);
         const invalidNodes = [];

@@ -46,6 +46,10 @@ class SudokuBoard extends Board {
         return Math.floor(row / 3) * 3 + Math.floor(col / 3);
     }
 
+    isNodeInvalid(node) {
+        return this.solver.isNodeInvalid(this, node);
+    }
+
     isComplete() {
         return this.nodes.reduce((accum, node) => accum + node.userValueIsCorrect(), 0) == this.nodes.length;
     }

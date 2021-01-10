@@ -40,13 +40,12 @@ class SudokuPage {
     _handleInputChangeEvent(node) {
         this._removeErrorSignals(node);
 
-        let invalidNodes;
         if (node.userValueIsCorrect()) {
             if (this.board.isComplete()) {
                 this._handleSudokuComplete();
             }
-        } else if ((invalidNodes = this.board.getInvalidNodes()).length != 0) {
-            this._handleUserValueError(node, invalidNodes);
+        } else if (this.board.isNodeInvalid(node)) {
+            this._handleUserValueError(node, this.board.getInvalidNodes());
         }
     }
 

@@ -440,4 +440,114 @@ describe('test SudokuSolver', () => {
             expect(idxs).toContain(idx);
         });
     });
+
+    test('isNodeInvalid returns true when node is an invalid input node', () => {
+        const boardArr = [
+            [5, 4, 6, 8, 1, 3, 9, 2, 7],
+            [2, 7, 1, 4, 6, 9, 5, 8, 3],
+            [9, 8, 3, 5, 2, 7, 4, 6, 1],
+            [7, 1, 4, 2, 8, 6, 3, 9, 5],
+            [3, 5, 2, 7, 9, 4, 8, 1, 6],
+            [6, 9, 8, 3, 5, 1, 2, 7, 4],
+            [8, 3, 5, 1, 7, 2, 6, 4, 9],
+            [1, 2, 9, 6, 4, 5, 7, 3, 8],
+            [4, 6, 7, 9, 3, 8, 1, 5, 2],
+        ];
+        let idx = 0;
+        let invalidNode;
+        const board = new SudokuBoard(9);
+        for (let i = 0; i < board.dims; i++) {
+            for (let j = 0; j < board.dims; j++) {
+                const node = new SudokuGameNode();
+                node.idx = ++idx;
+                if (i == 0 && j == 1) {
+                    node.isGivenNode.mockReturnValue(false);
+                    node.isInputNode.mockReturnValue(true);
+                    node.getInputValue.mockReturnValue(5);
+                    invalidNode = node;
+                } else {
+                    node.isGivenNode.mockReturnValue(true);
+                    node.isInputNode.mockReturnValue(false);
+                }
+                node.row = i;
+                node.col = j;
+                node.trueValue = boardArr[i][j];
+                board.nodes.push(node);
+            }
+        }
+
+        const retVal = solver.isNodeInvalid(board, invalidNode);
+
+        expect(retVal).toBe(true);
+    });
+
+    test('isNodeInvalid returns false when node is a given node', () => {
+        const boardArr = [
+            [5, 4, 6, 8, 1, 3, 9, 2, 7],
+            [2, 7, 1, 4, 6, 9, 5, 8, 3],
+            [9, 8, 3, 5, 2, 7, 4, 6, 1],
+            [7, 1, 4, 2, 8, 6, 3, 9, 5],
+            [3, 5, 2, 7, 9, 4, 8, 1, 6],
+            [6, 9, 8, 3, 5, 1, 2, 7, 4],
+            [8, 3, 5, 1, 7, 2, 6, 4, 9],
+            [1, 2, 9, 6, 4, 5, 7, 3, 8],
+            [4, 6, 7, 9, 3, 8, 1, 5, 2],
+        ];
+        let validNode;
+        const board = new SudokuBoard(9);
+        for (let i = 0; i < board.dims; i++) {
+            for (let j = 0; j < board.dims; j++) {
+                const node = new SudokuGameNode();
+                validNode = node;
+                node.isGivenNode.mockReturnValue(true);
+                node.isInputNode.mockReturnValue(false);
+                node.row = i;
+                node.col = j;
+                node.trueValue = boardArr[i][j];
+                board.nodes.push(node);
+            }
+        }
+
+        const retVal = solver.isNodeInvalid(board, validNode);
+
+        expect(retVal).toBe(false);
+    });
+
+    test('isNodeInvalid returns false when node is a valid input node', () => {
+        const boardArr = [
+            [5, 4, 6, 8, 1, 3, 9, 2, 7],
+            [2, 7, 1, 4, 6, 9, 5, 8, 3],
+            [9, 8, 3, 5, 2, 7, 4, 6, 1],
+            [7, 1, 4, 2, 8, 6, 3, 9, 5],
+            [3, 5, 2, 7, 9, 4, 8, 1, 6],
+            [6, 9, 8, 3, 5, 1, 2, 7, 4],
+            [8, 3, 5, 1, 7, 2, 6, 4, 9],
+            [1, 2, 9, 6, 4, 5, 7, 3, 8],
+            [4, 6, 7, 9, 3, 8, 1, 5, 2],
+        ];
+        let validNode;
+        const board = new SudokuBoard(9);
+        for (let i = 0; i < board.dims; i++) {
+            for (let j = 0; j < board.dims; j++) {
+                const node = new SudokuGameNode();
+                if (i == 0 && j == 1) {
+                    node.isGivenNode.mockReturnValue(false);
+                    node.isInputNode.mockReturnValue(true);
+                    node.getInputValue.mockReturnValue(4);
+                    validNode = node;
+                } else {
+                    node.isGivenNode.mockReturnValue(true);
+                    node.isInputNode.mockReturnValue(false);
+                }
+                node.row = i;
+                node.col = j;
+                node.trueValue = boardArr[i][j];
+                board.nodes.push(node);
+            }
+        }
+
+        const retVal = solver.isNodeInvalid(board, validNode);
+
+        expect(retVal).toBe(false);
+    });
 });

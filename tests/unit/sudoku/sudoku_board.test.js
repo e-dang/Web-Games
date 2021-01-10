@@ -349,4 +349,15 @@ describe('Test SudokuBoard', () => {
 
         expect(retVal).toBe(expected);
     });
+
+    test('isNodeInvalid returns the return value of board.isNodeInvalid', () => {
+        const mock = jest.fn();
+        const node = new SudokuGameNode();
+        board.solver.isNodeInvalid.mockReturnValueOnce(mock);
+
+        const retVal = board.isNodeInvalid(node);
+
+        expect(board.solver.isNodeInvalid).toHaveBeenCalledWith(board, node);
+        expect(retVal).toBe(mock);
+    });
 });

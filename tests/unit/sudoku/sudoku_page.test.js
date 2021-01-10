@@ -40,13 +40,14 @@ describe('test SudokuPage', () => {
         expect(page._handleSudokuComplete).toHaveBeenCalledTimes(1);
     });
 
-    test('_handleInputChangeEvent calls _handleUserValueError with event node and return value of board.getInvalidNodes when user value is not correct', () => {
+    test('_handleInputChangeEvent calls _handleUserValueError with event node and return value of board.getInvalidNodes when user value is not correct and node is invalid', () => {
         const node = new SudokuGameNode();
         const retVal = [node];
         node.userValueIsCorrect.mockReturnValueOnce(false);
         page._handleUserValueError = jest.fn();
         page._removeErrorSignals = jest.fn();
         page.board.getInvalidNodes = jest.fn().mockReturnValueOnce(retVal);
+        page.board.isNodeInvalid = jest.fn().mockReturnValueOnce(true);
 
         page._handleInputChangeEvent(node);
 

@@ -7,6 +7,10 @@ class TicTacToeBoard extends Board {
     constructor() {
         super(TICTACTOE_DIMENSIONS, TicTacToeNode);
     }
+
+    addNodeClickEventListeners(fn) {
+        this.nodes.forEach((node) => node.addClickEventListener(fn));
+    }
 }
 
 module.exports = {TicTacToeBoard, TICTACTOE_DIMENSIONS};

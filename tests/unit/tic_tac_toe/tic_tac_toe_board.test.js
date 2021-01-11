@@ -17,4 +17,15 @@ describe('test TicTacToeBoard', () => {
     test('constructor sets nodeType to TicTacToeNode', () => {
         expect(board.nodeType).toBe(TicTacToeNode);
     });
+
+    test('addNodeClickEventListeners calls addClickEventListener on each node with the function parameter', () => {
+        const func = jest.fn();
+
+        board.addNodeClickEventListeners(func);
+
+        board.nodes.forEach((node) => {
+            expect(node.addClickEventListener).toHaveBeenCalledTimes(1);
+            expect(node.addClickEventListener).toHaveBeenCalledWith(func);
+        });
+    });
 });

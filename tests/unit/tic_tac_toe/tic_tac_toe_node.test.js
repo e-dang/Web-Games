@@ -26,4 +26,13 @@ describe('test TicTacToeNode', () => {
         Object.setPrototypeOf(TicTacToeNode, orig);
         expect(mock).toHaveBeenLastCalledWith(row, col, idx, boardRow, 'square');
     });
+
+    test('addClickEventListener adds the function parameter as a click event listener', () => {
+        const func = jest.fn();
+
+        node.addClickEventListener(func);
+        node.element.click();
+
+        expect(func).toHaveBeenLastCalledWith(node);
+    });
 });

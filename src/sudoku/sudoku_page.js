@@ -5,7 +5,8 @@ const DIMENSIONS = 9;
 
 class SudokuPage extends Page {
     constructor() {
-        super(new SudokuBoard(DIMENSIONS));
+        super();
+        this.board = new SudokuBoard(DIMENSIONS);
         this.difficultyMap = {
             easy: (callback) => this.board.setDifficultyEasy(callback),
             moderate: (callback) => this.board.setDifficultyModerate(callback),

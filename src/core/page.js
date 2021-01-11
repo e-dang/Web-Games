@@ -1,6 +1,5 @@
 class Page {
-    constructor(board, difficultyMap) {
-        this.board = board;
+    constructor(difficultyMap) {
         this.difficultyMap = difficultyMap;
     }
 
@@ -22,9 +21,7 @@ class Page {
         return this;
     }
 
-    _handleClickResetButton() {
-        this.board.clear();
-    }
+    _handleClickResetButton() {}
 
     _handleChangeDifficulty(event) {
         this.difficultyMap[event.target.id](() => this._updateDifficulty(event));

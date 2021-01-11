@@ -1,7 +1,4 @@
-const Board = require('../../../src/core/board');
 const Page = require('../../../src/core/page');
-
-jest.mock('../../../src/core/board');
 
 function createBtn(btn) {
     const element = document.createElement('button');
@@ -11,11 +8,9 @@ function createBtn(btn) {
 
 describe('test Page', () => {
     let page;
-    let board;
     let difficultyMap;
 
     beforeEach(() => {
-        board = new Board();
         difficultyMap = {
             easy: jest.fn(),
             moderate: jest.fn(),
@@ -26,11 +21,7 @@ describe('test Page', () => {
         createBtn('moderate');
         createBtn('hard');
         createBtn('currentDifficulty');
-        page = new Page(board, difficultyMap);
-    });
-
-    test('constructor sets board prop to board param', () => {
-        expect(page.board).toBe(board);
+        page = new Page(difficultyMap);
     });
 
     test('constructor sets difficultyMap to difficultyMap param', () => {

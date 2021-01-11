@@ -1,8 +1,8 @@
 const Player = require('./player');
 
 class HumanPlayer extends Player {
-    constructor(symbol) {
-        super(symbol);
+    constructor(board, symbol) {
+        super(board, symbol);
     }
 }
 

@@ -1,5 +1,6 @@
 class Player {
-    constructor(symbol) {
+    constructor(board, symbol) {
+        this.board = board;
         this._setSymbol(symbol);
     }
 

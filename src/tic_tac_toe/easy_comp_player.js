@@ -1,8 +1,8 @@
 const Player = require('./player');
 
 class EasyComputerPlayer extends Player {
-    constructor(symbol) {
-        super(symbol);
+    constructor(board, symbol) {
+        super(board, symbol);
     }
 }
 

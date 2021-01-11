@@ -1,12 +1,17 @@
 const Player = require('../../../src/tic_tac_toe/player');
+const {TicTacToeBoard} = require('../../../src/tic_tac_toe/tic_tac_toe_board');
+
+jest.mock('../../../src/tic_tac_toe/tic_tac_toe_board');
 
 describe('test Player', () => {
     let player;
     let origSymbol;
+    let board;
 
     beforeEach(() => {
+        board = new TicTacToeBoard();
         origSymbol = 'x';
-        player = new Player(origSymbol);
+        player = new Player(board, origSymbol);
     });
 
     test('constructor calls _setSymbol with symbol param', () => {
@@ -14,10 +19,14 @@ describe('test Player', () => {
         const mock = jest.fn();
         Player.prototype._setSymbol = mock;
 
-        player = new Player(origSymbol);
+        player = new Player(board, origSymbol);
 
         Player.prototype._setSymbol = orig;
         expect(mock).toHaveBeenCalledWith(origSymbol);
+    });
+
+    test('constructor sets board prop to board parameter', () => {
+        expect(player.board).toBe(board);
     });
 
     test('_setSymbol sets symbol prop to "x" when "x" is passed in', () => {

@@ -3,6 +3,7 @@ const HumanPlayer = require('./human_player');
 const {TicTacToeBoard} = require('./tic_tac_toe_board');
 const {X, O} = require('./constants');
 const ModerateComputerPlayer = require('./moderate_comp_player');
+const HardComputerPlayer = require('./hard_comp_player');
 
 class TicTacToeGame {
     constructor() {
@@ -69,7 +70,7 @@ class TicTacToeGame {
     }
 
     setDifficultyHard(callback) {
-        this.compPlayer = new EasyComputerPlayer(this.board, this._getComputerSymbol());
+        this.compPlayer = new HardComputerPlayer(this.board, this._getComputerSymbol());
         callback();
     }
 

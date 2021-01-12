@@ -13,7 +13,7 @@ class ModerateComputerPlayer extends Player {
         for (let i = 0; i < emptyNodes.length; i++) {
             const node = emptyNodes.shift();
             this._setAsMyNode(node);
-            const score = this.miniMax(emptyNodes, false);
+            const score = this._miniMax(emptyNodes, false);
             if (score > bestScore) {
                 bestScore = score;
                 bestMove = node;
@@ -25,7 +25,7 @@ class ModerateComputerPlayer extends Player {
         this._setAsMyNode(bestMove);
     }
 
-    miniMax(emptyNodes, isMaximizing) {
+    _miniMax(emptyNodes, isMaximizing) {
         const winner = this.board.getWinner();
         if (winner != null) {
             return this.scores[winner];
@@ -37,7 +37,7 @@ class ModerateComputerPlayer extends Player {
             for (let i = 0; i < emptyNodes.length; i++) {
                 const node = emptyNodes.shift();
                 this._setAsMyNode(node);
-                bestScore = Math.max(bestScore, this.miniMax(emptyNodes, false));
+                bestScore = Math.max(bestScore, this._miniMax(emptyNodes, false));
                 node.setAsEmptyNode();
                 emptyNodes.push(node);
             }
@@ -46,7 +46,7 @@ class ModerateComputerPlayer extends Player {
             for (let i = 0; i < emptyNodes.length; i++) {
                 const node = emptyNodes.shift();
                 this._setAsOpponentNode(node);
-                bestScore = Math.min(bestScore, this.miniMax(emptyNodes, true));
+                bestScore = Math.min(bestScore, this._miniMax(emptyNodes, true));
                 node.setAsEmptyNode();
                 emptyNodes.push(node);
             }

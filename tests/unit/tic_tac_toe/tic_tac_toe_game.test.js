@@ -5,6 +5,7 @@ const TicTacToeGame = require('../../../src/tic_tac_toe/tic_tac_toe_game');
 const TicTacToeNode = require('../../../src/tic_tac_toe/tic_tac_toe_node');
 const {X, O, DRAW} = require('../../../src/tic_tac_toe/constants');
 const ModerateComputerPlayer = require('../../../src/tic_tac_toe/moderate_comp_player');
+const HardComputerPlayer = require('../../../src/tic_tac_toe/hard_comp_player');
 
 jest.mock('../../../src/tic_tac_toe/easy_comp_player');
 jest.mock('../../../src/tic_tac_toe/moderate_comp_player');
@@ -198,7 +199,7 @@ describe('test TicTacToeGame', () => {
     test.each([
         ['setDifficultyEasy', EasyComputerPlayer],
         ['setDifficultyModerate', ModerateComputerPlayer],
-        ['setDifficultyHard', EasyComputerPlayer],
+        ['setDifficultyHard', HardComputerPlayer],
     ])('%s calls callback function and sets compPlayer to instance of %s', (method, klass) => {
         const fn = jest.fn();
 

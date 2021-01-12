@@ -10,13 +10,11 @@ describe('test Player', () => {
     let player;
     let origSymbol;
     let board;
-    let getCurrentTurn;
 
     beforeEach(() => {
         board = new TicTacToeBoard();
-        getCurrentTurn = jest.fn();
         origSymbol = X;
-        player = new Player(board, getCurrentTurn, origSymbol);
+        player = new Player(board, origSymbol);
     });
 
     test('constructor calls _setSymbol with symbol param', () => {
@@ -24,7 +22,7 @@ describe('test Player', () => {
         const mock = jest.fn();
         Player.prototype._setSymbol = mock;
 
-        player = new Player(board, getCurrentTurn, origSymbol);
+        player = new Player(board, origSymbol);
 
         Player.prototype._setSymbol = orig;
         expect(mock).toHaveBeenCalledWith(origSymbol);
@@ -32,10 +30,6 @@ describe('test Player', () => {
 
     test('constructor sets board prop to board parameter', () => {
         expect(player.board).toBe(board);
-    });
-
-    test('constructor sets getCurrentTurn property to getCurrentTurn parameter', () => {
-        expect(player.getCurrentTurn).toBe(getCurrentTurn);
     });
 
     test('_setSymbol sets symbol prop to "x" when "x" is passed in', () => {
@@ -76,26 +70,6 @@ describe('test Player', () => {
         player.useOSymbol();
 
         expect(player._setSymbol).toHaveBeenCalledWith(O);
-    });
-
-    test('isMyTurn returns true when return value of getCurrentTurn is equal to symbol property', () => {
-        const symbol = X;
-        getCurrentTurn.mockReturnValueOnce(symbol);
-        player.symbol = symbol;
-
-        const retVal = player.isMyTurn();
-
-        expect(retVal).toBe(true);
-    });
-
-    test('isMyTurn returns false when return value of getCurrentTurn is not equal to symbol property', () => {
-        const symbol = X;
-        getCurrentTurn.mockReturnValueOnce(symbol);
-        player.symbol = symbol + O;
-
-        const retVal = player.isMyTurn();
-
-        expect(retVal).toBe(false);
     });
 
     test('_setAsMyNode calls setAsXNode on node param if symbol property is x', () => {

@@ -13,7 +13,7 @@ class TicTacToeGame {
         this.board.draw();
 
         this.humanPlayer = new HumanPlayer(this.board, () => this.getCurrentTurn(), X);
-        this.compPlayer = new EasyComputerPlayer(this.board, () => this.getCurrentTurn(), O);
+        this.compPlayer = new EasyComputerPlayer(this.board, this._getComputerSymbol());
     }
 
     reset() {
@@ -43,10 +43,10 @@ class TicTacToeGame {
     }
 
     async start() {
-        if (this._isComputersTurn()) {
-            await this.compPlayer.makeMove();
-        } else {
+        if (this._isHumansTurn()) {
             await this.humanPlayer.makeMove();
+        } else {
+            await this.compPlayer.makeMove();
         }
         this._changeTurns();
 
@@ -59,21 +59,17 @@ class TicTacToeGame {
     }
 
     setDifficultyEasy(callback) {
-        this.compPlayer = new EasyComputerPlayer(this.board, () => this.getCurrentTurn(), this._getComputerSymbol());
+        this.compPlayer = new EasyComputerPlayer(this.board, this._getComputerSymbol());
         callback();
     }
 
     setDifficultyModerate(callback) {
-        this.compPlayer = new ModerateComputerPlayer(
-            this.board,
-            () => this.getCurrentTurn(),
-            this._getComputerSymbol(),
-        );
+        this.compPlayer = new ModerateComputerPlayer(this.board, this._getComputerSymbol());
         callback();
     }
 
     setDifficultyHard(callback) {
-        this.compPlayer = new EasyComputerPlayer(this.board, () => this.getCurrentTurn(), this._getComputerSymbol());
+        this.compPlayer = new EasyComputerPlayer(this.board, this._getComputerSymbol());
         callback();
     }
 
@@ -81,8 +77,8 @@ class TicTacToeGame {
         return this.humanPlayer.isXPlayer() ? O : X;
     }
 
-    _isComputersTurn() {
-        return this.compPlayer.isMyTurn();
+    _isHumansTurn() {
+        return this.humanPlayer.isMyTurn();
     }
 
     _changeTurns() {

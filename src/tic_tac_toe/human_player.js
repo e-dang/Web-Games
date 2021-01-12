@@ -3,7 +3,8 @@ const {sleep} = require('../utils/utils');
 
 class HumanPlayer extends Player {
     constructor(board, getCurrentTurn, symbol) {
-        super(board, getCurrentTurn, symbol);
+        super(board, symbol);
+        this.getCurrentTurn = getCurrentTurn;
         this.isTurnComplete = false;
 
         this._addNodeClickEventListeners();
@@ -15,6 +16,10 @@ class HumanPlayer extends Player {
         }
 
         this.isTurnComplete = false;
+    }
+
+    isMyTurn() {
+        return this.getCurrentTurn() == this.symbol;
     }
 
     _addNodeClickEventListeners() {

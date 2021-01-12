@@ -1,9 +1,8 @@
 const {X, O} = require('./constants');
 
 class Player {
-    constructor(board, getCurrentTurn, symbol) {
+    constructor(board, symbol) {
         this.board = board;
-        this.getCurrentTurn = getCurrentTurn;
         this._setSymbol(symbol);
     }
 
@@ -21,10 +20,6 @@ class Player {
 
     isOPlayer() {
         return this.symbol == O;
-    }
-
-    isMyTurn() {
-        return this.getCurrentTurn() == this.symbol;
     }
 
     _setAsMyNode(node) {

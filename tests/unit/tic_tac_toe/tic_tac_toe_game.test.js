@@ -109,11 +109,11 @@ describe('test TicTacToeGame', () => {
         expect(retVal).toBe(game.currentTurn);
     });
 
-    test('_isComputersTurn returns the return value of compPlayer.isMyTurn', () => {
+    test('_isHumansTurn returns the return value of humanPlayer.isMyTurn', () => {
         const mockRetVal = 1;
-        game.compPlayer.isMyTurn.mockReturnValue(mockRetVal);
+        game.humanPlayer.isMyTurn.mockReturnValue(mockRetVal);
 
-        const retVal = game._isComputersTurn();
+        const retVal = game._isHumansTurn();
 
         expect(retVal).toBe(mockRetVal);
     });

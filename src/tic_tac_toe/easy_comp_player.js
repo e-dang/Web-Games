@@ -2,8 +2,8 @@ const Player = require('./player');
 const utils = require('../utils/utils');
 
 class EasyComputerPlayer extends Player {
-    constructor(board, getCurrentTurn, symbol) {
-        super(board, getCurrentTurn, symbol);
+    constructor(board, symbol) {
+        super(board, symbol);
     }
 
     async makeMove() {

@@ -9,13 +9,11 @@ describe('test ModerateComputerPlayer', () => {
     let player;
     let origSymbol;
     let board;
-    let getCurrentTurn;
 
     beforeEach(() => {
         board = new TicTacToeBoard();
-        getCurrentTurn = jest.fn();
         origSymbol = 'x';
-        player = new ModerateComputerPlayer(board, getCurrentTurn, origSymbol);
+        player = new ModerateComputerPlayer(board, origSymbol);
     });
 
     test('constructor calls Player constructor', () => {
@@ -23,10 +21,10 @@ describe('test ModerateComputerPlayer', () => {
         const mock = jest.fn();
         Object.setPrototypeOf(ModerateComputerPlayer, mock);
 
-        player = new ModerateComputerPlayer(board, getCurrentTurn, origSymbol);
+        player = new ModerateComputerPlayer(board, origSymbol);
 
         Object.setPrototypeOf(ModerateComputerPlayer, orig);
-        expect(mock).toHaveBeenCalledWith(board, getCurrentTurn, origSymbol);
+        expect(mock).toHaveBeenCalledWith(board, origSymbol);
     });
 
     test('_setAsOpponentNode calls setAsONode on node parameter if isXPlayer is true', () => {

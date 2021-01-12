@@ -2,8 +2,8 @@ const Player = require('./player');
 const {X, O, DRAW} = require('./constants');
 
 class ModerateComputerPlayer extends Player {
-    constructor(board, getCurrentTurn, symbol) {
-        super(board, getCurrentTurn, symbol);
+    constructor(board, symbol) {
+        super(board, symbol);
     }
 
     async makeMove() {

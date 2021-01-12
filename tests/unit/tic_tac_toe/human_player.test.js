@@ -30,7 +30,7 @@ describe('test HumanPlayer', () => {
 
         HumanPlayer.prototype._addNodeClickEventListeners = origMethod;
         Object.setPrototypeOf(HumanPlayer, orig);
-        expect(mock).toHaveBeenCalledWith(board, getCurrentTurn, origSymbol);
+        expect(mock).toHaveBeenCalledWith(board, origSymbol);
     });
 
     test('constructor sets isTurnComplete to false', () => {
@@ -92,5 +92,25 @@ describe('test HumanPlayer', () => {
 
         expect(player.isTurnComplete).toBe(false);
         done();
+    });
+
+    test('isMyTurn returns true when return value of getCurrentTurn is equal to symbol property', () => {
+        const symbol = X;
+        getCurrentTurn.mockReturnValueOnce(symbol);
+        player.symbol = symbol;
+
+        const retVal = player.isMyTurn();
+
+        expect(retVal).toBe(true);
+    });
+
+    test('isMyTurn returns false when return value of getCurrentTurn is not equal to symbol property', () => {
+        const symbol = X;
+        getCurrentTurn.mockReturnValueOnce(symbol);
+        player.symbol = symbol + O;
+
+        const retVal = player.isMyTurn();
+
+        expect(retVal).toBe(false);
     });
 });

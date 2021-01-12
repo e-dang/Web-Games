@@ -8,13 +8,11 @@ describe('test EasyComputerPlayer', () => {
     let player;
     let origSymbol;
     let board;
-    let getCurrentTurn;
 
     beforeEach(() => {
         board = new TicTacToeBoard();
-        getCurrentTurn = jest.fn();
         origSymbol = 'x';
-        player = new EasyComputerPlayer(board, getCurrentTurn, origSymbol);
+        player = new EasyComputerPlayer(board, origSymbol);
     });
 
     test('constructor calls Player constructor', () => {
@@ -22,10 +20,10 @@ describe('test EasyComputerPlayer', () => {
         const mock = jest.fn();
         Object.setPrototypeOf(EasyComputerPlayer, mock);
 
-        player = new EasyComputerPlayer(board, getCurrentTurn, origSymbol);
+        player = new EasyComputerPlayer(board, origSymbol);
 
         Object.setPrototypeOf(EasyComputerPlayer, orig);
-        expect(mock).toHaveBeenCalledWith(board, getCurrentTurn, origSymbol);
+        expect(mock).toHaveBeenCalledWith(board, origSymbol);
     });
 
     test('makeMove calls _setAsMyNode with return value of selectRandom', async () => {

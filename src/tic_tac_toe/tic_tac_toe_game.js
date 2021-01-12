@@ -87,7 +87,10 @@ class TicTacToeGame {
     }
 
     _handleGameOver() {
-        console.log('game over');
+        const message = this.winner == this.humanPlayer ? 'You Win!' : 'You Lost!';
+        document.getElementById('gameOverTitle').innerText = 'Game Over';
+        document.getElementById('gameOverMessage').innerText = message;
+        $('#gameOverModal').modal();
     }
 
     _isGameComplete() {

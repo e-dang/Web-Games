@@ -1,9 +1,11 @@
 const createPage = require('../../../src/core/create_page');
 const SnakePage = require('../../../src/snake/snake_page');
 const SudokuPage = require('../../../src/sudoku/sudoku_page');
+const TicTacToePage = require('../../../src/tic_tac_toe/tic_tac_toe_page');
 
 jest.mock('../../../src/snake/snake_page');
 jest.mock('../../../src/sudoku/sudoku_page');
+jest.mock('../../../src/tic_tac_toe/tic_tac_toe_page');
 
 describe('test createPage', () => {
     test('createPage returns a new SnakePage object when parameter is "Snake"', () => {
@@ -28,5 +30,13 @@ describe('test createPage', () => {
         const retVal = createPage(type);
 
         expect(retVal).toBeInstanceOf(SudokuPage);
+    });
+
+    test('createPage returns a new TicTacToePage object when parameter is "Tic Tac Toe', () => {
+        const type = 'Tic Tac Toe';
+
+        const retVal = createPage(type);
+
+        expect(retVal).toBeInstanceOf(TicTacToePage);
     });
 });

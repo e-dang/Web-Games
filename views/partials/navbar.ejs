@@ -15,9 +15,10 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="snake">Snake</a>
                     <a class="dropdown-item" href="sudoku">Sudoku</a>
+                    <a class="dropdown-item" href="tic-tac-toe">Tic Tac Toe</a>
                 </div>
             </li>
-            <% var path=`${pageName.toLowerCase()}_buttons`; %>
+            <% var path=`${pageName.toLowerCase().split(' ').join('')}_buttons`; %>
                 <%- include(path); %>
         </ul>
     </div>

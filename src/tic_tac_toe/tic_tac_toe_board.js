@@ -11,6 +11,30 @@ class TicTacToeBoard extends Board {
     addNodeClickEventListeners(fn) {
         this.nodes.forEach((node) => node.addClickEventListener(fn));
     }
+
+    *getRow(row) {
+        for (let i = 0; i < this.dims; i++) {
+            yield this.getNode(row, i);
+        }
+    }
+
+    *getCol(col) {
+        for (let i = 0; i < this.dims; i++) {
+            yield this.getNode(i, col);
+        }
+    }
+
+    *getLeftToRightDiag() {
+        for (let i = 0; i < this.dims; i++) {
+            yield this.getNode(i, i);
+        }
+    }
+
+    *getRightToLeftDiag() {
+        for (let i = 0; i < this.dims; i++) {
+            yield this.getNode(i, this.dims - i - 1);
+        }
+    }
 }
 
 module.exports = {TicTacToeBoard, TICTACTOE_DIMENSIONS};

@@ -34,30 +34,66 @@ describe('test TicTacToeGame', () => {
     });
 
     test('reset calls clear on board property', () => {
+        game.start = jest.fn();
+
         game.reset();
 
         expect(game.board.clear).toHaveBeenCalledTimes(1);
     });
 
+    test('reset sets currentTurn to X', () => {
+        game.currentTurn = O;
+        game.start = jest.fn();
+
+        game.reset();
+
+        expect(game.currentTurn).toBe(X);
+    });
+
+    test('reset sets winner to null', () => {
+        game.winner = 1;
+        game.start = jest.fn();
+
+        game.reset();
+
+        expect(game.winner).toBeNull();
+    });
+
+    test('reset calls start', () => {
+        game.start = jest.fn();
+
+        game.reset();
+
+        expect(game.start).toHaveBeenCalled();
+    });
+
     test('setHumanPlayerSymbolAsX calls useXSymbol on humanPlayer', () => {
+        game.reset = jest.fn();
+
         game.setHumanPlayerSymbolAsX();
 
         expect(game.humanPlayer.useXSymbol).toHaveBeenCalledTimes(1);
     });
 
     test('setHumanPlayerSymbolAsX calls useOSymbol on compPlayer', () => {
+        game.reset = jest.fn();
+
         game.setHumanPlayerSymbolAsX();
 
         expect(game.compPlayer.useOSymbol).toHaveBeenCalledTimes(1);
     });
 
     test('setHumanPlayerSymbolAsO calls useXSymbol on compPlayer', () => {
+        game.reset = jest.fn();
+
         game.setHumanPlayerSymbolAsO();
 
         expect(game.compPlayer.useXSymbol).toHaveBeenCalledTimes(1);
     });
 
     test('setHumanPlayerSymbolAsO calls useOSymbol on humanPlayer', () => {
+        game.reset = jest.fn();
+
         game.setHumanPlayerSymbolAsO();
 
         expect(game.humanPlayer.useOSymbol).toHaveBeenCalledTimes(1);

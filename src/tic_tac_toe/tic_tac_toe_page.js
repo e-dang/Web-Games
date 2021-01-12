@@ -13,7 +13,6 @@ class TicTacToePage extends Page {
 
         this.addEventHandlers();
         this._setDefaultDifficulty();
-        this.game.start();
     }
 
     addEventHandlers() {

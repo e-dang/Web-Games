@@ -5,6 +5,8 @@ const {X, O} = require('./constants');
 
 class TicTacToeGame {
     constructor() {
+        this.currentLoop = null;
+        this.winner = null;
         this.currentTurn = X;
         this.board = new TicTacToeBoard();
         this.board.draw();
@@ -14,17 +16,25 @@ class TicTacToeGame {
     }
 
     reset() {
+        if (this.currentLoop) {
+            clearTimeout(this.currentLoop);
+        }
         this.board.clear();
+        this.currentTurn = X;
+        this.winner = null;
+        this.start();
     }
 
     setHumanPlayerSymbolAsX() {
         this.humanPlayer.useXSymbol();
         this.compPlayer.useOSymbol();
+        this.reset();
     }
 
     setHumanPlayerSymbolAsO() {
         this.humanPlayer.useOSymbol();
         this.compPlayer.useXSymbol();
+        this.reset();
     }
 
     getCurrentTurn() {
@@ -32,16 +42,19 @@ class TicTacToeGame {
     }
 
     async start() {
-        while (!this._isGameComplete()) {
-            if (this._isComputersTurn()) {
-                await this.compPlayer.makeMove();
-            } else {
-                await this.humanPlayer.makeMove();
-            }
-            this._changeTurns();
+        if (this._isComputersTurn()) {
+            await this.compPlayer.makeMove();
+        } else {
+            await this.humanPlayer.makeMove();
+        }
+        this._changeTurns();
+
+        if (this._isGameComplete()) {
+            this._handleGameOver();
+            return;
         }
 
-        this._handleGameOver();
+        this.currentLoop = setTimeout(this.start.bind(this), 10);
     }
 
     _isComputersTurn() {

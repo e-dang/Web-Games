@@ -9,6 +9,27 @@ class TicTacToeBoard extends Board {
         super(TICTACTOE_DIMENSIONS, TicTacToeNode);
     }
 
+    draw() {
+        super.draw();
+        this.nodes.forEach((node) => {
+            if (node.row == 0) {
+                node.removeTopBorder();
+            }
+
+            if (node.row == TICTACTOE_DIMENSIONS - 1) {
+                node.removeBottomBorder();
+            }
+
+            if (node.col == 0) {
+                node.removeLeftBorder();
+            }
+
+            if (node.col == TICTACTOE_DIMENSIONS - 1) {
+                node.removeRightBorder();
+            }
+        });
+    }
+
     getEmptyNodes() {
         return this.nodes.filter((node) => node.isEmptyNode());
     }

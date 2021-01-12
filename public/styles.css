@@ -16,50 +16,77 @@
     text-align: center;
 }
 
-td > input {
-    display: table-cell;
-    width: 100%;
-    border: none;
-    text-align: center;
-    background: transparent;
-}
-
-.node.square {
-    border-radius: 0%;
-}
-
 .node.empty {
     background-color: var(--empty-node-color);
 }
 
-.node.snake {
+.snake-game-node {
+    border-radius: 0%;
+}
+
+.snake-game-node.snake {
     background-color: var(--snake-node-color);
 }
 
-.node.food {
+.snake-game-node.food {
     background-color: var(--food-node-color);
 }
 
-.node.square.right {
+.sudoku-node {
+    width: 65px;
+    height: 65px;
+    border-radius: 0%;
+}
+
+td.sudoku-node > input {
+    display: table-cell;
+    width: 100%;
+    border: none;
+    background: transparent;
+}
+
+.sudoku-node.right {
     border-right: 3px solid var(--node-border-color);
 }
 
-.node.square.bottom {
+.sudoku-node.bottom {
     border-bottom: 3px solid var(--node-border-color);
 }
 
-.node.square.error {
+.sudoku-node.error {
     border: 3px solid var(--error-node-color);
 }
 
-.node.square.error-section1 {
+.sudoku-node.error-section1 {
     background-color: var(--error-section1-node-color);
 }
 
-.node.square.error-section2 {
+.sudoku-node.error-section2 {
     background-color: var(--error-section2-node-color);
 }
 
-.node.square.error-section3 {
+.sudoku-node.error-section3 {
     background-color: var(--error-section3-node-color);
+}
+
+.tic-tac-toe-node {
+    width: 100px;
+    height: 100px;
+    border-radius: 0%;
+}
+
+.tic-tac-toe-node.top {
+    border-top: none;
+}
+
+.tic-tac-toe-node.bottom {
+    border-bottom: none;
+}
+
+.tic-tac-toe-node.left {
+    border-left: none;
+}
+
+.tic-tac-toe-node.right {
+    border-right: none;
 }

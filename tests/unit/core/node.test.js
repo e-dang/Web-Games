@@ -5,14 +5,14 @@ describe('Test Node', () => {
     const row = 8;
     const col = 6;
     const idx = 68;
-    const shape = 'square';
+    const nodeType = 'refined-type';
     let boardRow;
 
     beforeEach(() => {
         boardRow = document.createElement('tr');
         boardRow.id = 'boardRow';
         document.body.appendChild(boardRow);
-        node = new Node(row, col, idx, boardRow, shape);
+        node = new Node(row, col, idx, boardRow, nodeType);
     });
 
     afterEach(() => {
@@ -23,9 +23,12 @@ describe('Test Node', () => {
         ['row', row],
         ['col', col],
         ['idx', idx],
-        ['shape', shape],
     ])('constructor sets %s property using the given parameter', (prop, value) => {
         expect(node[prop]).toBe(value);
+    });
+
+    test('constructor add nodeType to extraTypes property', () => {
+        expect(node.extraTypes).toContain(nodeType);
     });
 
     test('constructor adds a new cell to the boardRow html element', () => {
@@ -52,13 +55,15 @@ describe('Test Node', () => {
         expect(node._isNodeOfType).toHaveBeenCalledWith('empty');
     });
 
-    test('_setAsNodeType sets element classList to contain "node", this.shape, and the type parameter', () => {
+    test('_setAsNodeType sets element classList to contain "node", this.extraTypes, and the type parameter', () => {
         const type = 'random-type';
 
         node._setAsNodeType(type);
 
         expect(node.element.classList.contains('node')).toBe(true);
-        expect(node.element.classList.contains(shape)).toBe(true);
+        node.extraTypes.forEach((type) => {
+            expect(node.element.classList.contains(type)).toBe(true);
+        });
         expect(node.element.classList.contains(type)).toBe(true);
     });
 
@@ -68,7 +73,9 @@ describe('Test Node', () => {
         node._setAsNodeType(types);
 
         expect(node.element.classList.contains('node')).toBe(true);
-        expect(node.element.classList.contains(shape)).toBe(true);
+        node.extraTypes.forEach((type) => {
+            expect(node.element.classList.contains(type)).toBe(true);
+        });
         types.forEach((val) => {
             expect(node.element.classList.contains(val)).toBe(true);
         });

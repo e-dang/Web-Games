@@ -1,9 +1,9 @@
 class Node {
-    constructor(row, col, idx, boardRow, shape) {
+    constructor(row, col, idx, boardRow, nodeType) {
         this.row = row;
         this.col = col;
         this.idx = idx;
-        this.shape = shape;
+        this.extraTypes = [nodeType];
         this.element = document.createElement('td');
         this.element.id = `n${this.idx}`;
         boardRow.appendChild(this.element);
@@ -30,7 +30,7 @@ class Node {
             type = [type];
         }
         this.element.className = '';
-        this.element.classList.add('node', this.shape, ...type);
+        this.element.classList.add('node', ...this.extraTypes, ...type);
     }
 }
 

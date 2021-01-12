@@ -25,15 +25,11 @@ describe('Test SudokuGameNode', () => {
         node = new SudokuGameNode(row, col, idx, boardRow);
 
         Object.setPrototypeOf(SudokuGameNode, orig);
-        expect(mock).toHaveBeenLastCalledWith(row, col, idx, boardRow, 'square');
+        expect(mock).toHaveBeenLastCalledWith(row, col, idx, boardRow, 'sudoku-node');
     });
 
     test('constructor defines trueValue property', () => {
         expect(node.trueValue).toBeDefined();
-    });
-
-    test('constructor sets border property to empty array', () => {
-        expect(node.borders).toEqual([]);
     });
 
     test('constructor sets errorLevel to a number', () => {
@@ -243,12 +239,12 @@ describe('Test SudokuGameNode', () => {
         expect(node._handleInputEvent).toHaveBeenCalledTimes(1);
     });
 
-    test('addRightBorder adds "right" to border list', () => {
-        node.borders = [];
+    test('addRightBorder adds "right" to extraTypes list', () => {
+        node.extraTypes = [];
 
         node.addRightBorder();
 
-        expect(node.borders).toContain('right');
+        expect(node.extraTypes).toContain('right');
     });
 
     test('addRightBorder adds "right" to classList', () => {
@@ -259,12 +255,12 @@ describe('Test SudokuGameNode', () => {
         expect(node.element.classList.contains('right')).toBe(true);
     });
 
-    test('addBottomBorder adds "bottom" to border list', () => {
-        node.borders = [];
+    test('addBottomBorder adds "bottom" to extraTypes list', () => {
+        node.extraTypes = [];
 
         node.addBottomBorder();
 
-        expect(node.borders).toContain('bottom');
+        expect(node.extraTypes).toContain('bottom');
     });
 
     test('addBottomBorder adds "bottom" to classList', () => {
@@ -302,15 +298,6 @@ describe('Test SudokuGameNode', () => {
         node.addErrorSection();
 
         expect(node.errorLevel).toBe(orig + 1);
-    });
-
-    test('_setAsNodeType adds border classes to node classList', () => {
-        node.element.className = '';
-        node.borders.push('right');
-
-        node._setAsNodeType('stuff');
-
-        expect(node.element.classList.contains('right')).toBe(true);
     });
 
     test('removeErrorBorder removes "error" from classList', () => {

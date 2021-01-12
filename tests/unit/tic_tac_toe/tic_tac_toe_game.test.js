@@ -3,6 +3,7 @@ const HumanPlayer = require('../../../src/tic_tac_toe/human_player');
 const {TicTacToeBoard} = require('../../../src/tic_tac_toe/tic_tac_toe_board');
 const TicTacToeGame = require('../../../src/tic_tac_toe/tic_tac_toe_game');
 const TicTacToeNode = require('../../../src/tic_tac_toe/tic_tac_toe_node');
+const {X, O} = require('../../../src/tic_tac_toe/constants');
 
 jest.mock('../../../src/tic_tac_toe/easy_comp_player');
 jest.mock('../../../src/tic_tac_toe/human_player');
@@ -63,7 +64,7 @@ describe('test TicTacToeGame', () => {
     });
 
     test('getCurrentTurn returns the value of currentTurn', () => {
-        game.currentTurn = 'x';
+        game.currentTurn = X;
 
         const retVal = game.getCurrentTurn();
 
@@ -80,19 +81,19 @@ describe('test TicTacToeGame', () => {
     });
 
     test('_changeTurns sets currentTurn to "x" if currentTurn is "o"', () => {
-        game.currentTurn = 'o';
+        game.currentTurn = O;
 
         game._changeTurns();
 
-        expect(game.currentTurn).toBe('x');
+        expect(game.currentTurn).toBe(X);
     });
 
     test('_changeTurns sets currentTurn to "o" if currentTurn is "x"', () => {
-        game.currentTurn = 'x';
+        game.currentTurn = X;
 
         game._changeTurns();
 
-        expect(game.currentTurn).toBe('o');
+        expect(game.currentTurn).toBe(O);
     });
 
     test.each([

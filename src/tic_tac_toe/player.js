@@ -1,3 +1,5 @@
+const {X, O} = require('./constants');
+
 class Player {
     constructor(board, getCurrentTurn, symbol) {
         this.board = board;
@@ -6,19 +8,19 @@ class Player {
     }
 
     useXSymbol() {
-        this._setSymbol('x');
+        this._setSymbol(X);
     }
 
     useOSymbol() {
-        this._setSymbol('o');
+        this._setSymbol(O);
     }
 
     isXPlayer() {
-        return this.symbol == 'x';
+        return this.symbol == X;
     }
 
     isOPlayer() {
-        return this.symbol == 'o';
+        return this.symbol == O;
     }
 
     isMyTurn() {
@@ -26,7 +28,7 @@ class Player {
     }
 
     _setAsMyNode(node) {
-        if (this.symbol == 'x') {
+        if (this.symbol == X) {
             node.setAsXNode();
         } else {
             node.setAsONode();
@@ -34,7 +36,7 @@ class Player {
     }
 
     _setSymbol(symbol) {
-        if (symbol == 'x' || symbol == 'o') {
+        if (symbol == X || symbol == O) {
             this.symbol = symbol;
         }
     }

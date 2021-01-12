@@ -1,6 +1,7 @@
 const HumanPlayer = require('../../../src/tic_tac_toe/human_player');
 const {TicTacToeBoard} = require('../../../src/tic_tac_toe/tic_tac_toe_board');
 const TicTacToeNode = require('../../../src/tic_tac_toe/tic_tac_toe_node');
+const {X, O} = require('../../../src/tic_tac_toe/constants');
 
 jest.mock('../../../src/tic_tac_toe/tic_tac_toe_board');
 jest.mock('../../../src/tic_tac_toe/tic_tac_toe_node');
@@ -14,7 +15,7 @@ describe('test HumanPlayer', () => {
     beforeEach(() => {
         board = new TicTacToeBoard();
         getCurrentTurn = jest.fn();
-        origSymbol = 'x';
+        origSymbol = X;
         player = new HumanPlayer(board, getCurrentTurn, origSymbol);
     });
 

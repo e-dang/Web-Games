@@ -1,6 +1,7 @@
 const Player = require('../../../src/tic_tac_toe/player');
 const {TicTacToeBoard} = require('../../../src/tic_tac_toe/tic_tac_toe_board');
 const TicTacToeNode = require('../../../src/tic_tac_toe/tic_tac_toe_node');
+const {X, O} = require('../../../src/tic_tac_toe/constants');
 
 jest.mock('../../../src/tic_tac_toe/tic_tac_toe_board');
 jest.mock('../../../src/tic_tac_toe/tic_tac_toe_node');
@@ -14,7 +15,7 @@ describe('test Player', () => {
     beforeEach(() => {
         board = new TicTacToeBoard();
         getCurrentTurn = jest.fn();
-        origSymbol = 'x';
+        origSymbol = X;
         player = new Player(board, getCurrentTurn, origSymbol);
     });
 
@@ -40,25 +41,25 @@ describe('test Player', () => {
     test('_setSymbol sets symbol prop to "x" when "x" is passed in', () => {
         player.symbol = null;
 
-        player._setSymbol('x');
+        player._setSymbol(X);
 
-        expect(player.symbol).toBe('x');
+        expect(player.symbol).toBe(X);
     });
 
     test('_setSymbol sets symbol prop to "o" when "o" is passed in', () => {
         player.symbol = null;
 
-        player._setSymbol('o');
+        player._setSymbol(O);
 
-        expect(player.symbol).toBe('o');
+        expect(player.symbol).toBe(O);
     });
 
     test('_setSymbol doesnt set symbol prop when param is not x or o', () => {
-        player.symbol = 'o';
+        player.symbol = O;
 
         player._setSymbol('oadawfafdw');
 
-        expect(player.symbol).toBe('o');
+        expect(player.symbol).toBe(O);
     });
 
     test('useXSymbol calls _setSymbol with "x"', () => {
@@ -66,7 +67,7 @@ describe('test Player', () => {
 
         player.useXSymbol();
 
-        expect(player._setSymbol).toHaveBeenCalledWith('x');
+        expect(player._setSymbol).toHaveBeenCalledWith(X);
     });
 
     test('useOSymbol calls _setSymbol with "o"', () => {
@@ -74,11 +75,11 @@ describe('test Player', () => {
 
         player.useOSymbol();
 
-        expect(player._setSymbol).toHaveBeenCalledWith('o');
+        expect(player._setSymbol).toHaveBeenCalledWith(O);
     });
 
     test('isMyTurn returns true when return value of getCurrentTurn is equal to symbol property', () => {
-        const symbol = 'x';
+        const symbol = X;
         getCurrentTurn.mockReturnValueOnce(symbol);
         player.symbol = symbol;
 
@@ -88,9 +89,9 @@ describe('test Player', () => {
     });
 
     test('isMyTurn returns false when return value of getCurrentTurn is not equal to symbol property', () => {
-        const symbol = 'x';
+        const symbol = X;
         getCurrentTurn.mockReturnValueOnce(symbol);
-        player.symbol = symbol + 'o';
+        player.symbol = symbol + O;
 
         const retVal = player.isMyTurn();
 
@@ -98,7 +99,7 @@ describe('test Player', () => {
     });
 
     test('_setAsMyNode calls setAsXNode on node param if symbol property is x', () => {
-        player.symbol = 'x';
+        player.symbol = X;
         const node = new TicTacToeNode();
 
         player._setAsMyNode(node);
@@ -107,7 +108,7 @@ describe('test Player', () => {
     });
 
     test('_setAsMyNode calls setAsONode on node param if symbol property is o', () => {
-        player.symbol = 'o';
+        player.symbol = O;
         const node = new TicTacToeNode();
 
         player._setAsMyNode(node);
@@ -116,10 +117,10 @@ describe('test Player', () => {
     });
 
     test.each([
-        ['isXPlayer', true, 'x'],
-        ['isXPlayer', false, 'o'],
-        ['isOPlayer', true, 'o'],
-        ['isOPlayer', false, 'x'],
+        ['isXPlayer', true, X],
+        ['isXPlayer', false, O],
+        ['isOPlayer', true, O],
+        ['isOPlayer', false, X],
     ])('%s returns %s when symbol is %s', (method, expected, symbol) => {
         player.symbol = symbol;
 

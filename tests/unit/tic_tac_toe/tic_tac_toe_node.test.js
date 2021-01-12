@@ -1,4 +1,5 @@
 const TicTacToeNode = require('../../../src/tic_tac_toe/tic_tac_toe_node');
+const {X, O} = require('../../../src/tic_tac_toe/constants');
 
 describe('test TicTacToeNode', () => {
     let node;
@@ -53,7 +54,7 @@ describe('test TicTacToeNode', () => {
 
         node.setAsXNode();
 
-        expect(node._setAsNodeType).toHaveBeenCalledWith('x');
+        expect(node._setAsNodeType).toHaveBeenCalledWith(X);
     });
 
     test('setAsXNode sets value property to 1', () => {
@@ -70,7 +71,7 @@ describe('test TicTacToeNode', () => {
 
         node.setAsONode();
 
-        expect(node._setAsNodeType).toHaveBeenCalledWith('o');
+        expect(node._setAsNodeType).toHaveBeenCalledWith(O);
     });
 
     test('setAsONode sets value property to -1', () => {

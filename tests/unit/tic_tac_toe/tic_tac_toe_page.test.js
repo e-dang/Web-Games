@@ -1,5 +1,6 @@
 const TicTacToeGame = require('../../../src/tic_tac_toe/tic_tac_toe_game');
 const TicTacToePage = require('../../../src/tic_tac_toe/tic_tac_toe_page');
+const {X, O} = require('../../../src/tic_tac_toe/constants');
 const {loadHTML, clearHTML} = require('../utils');
 
 jest.mock('../../../src/tic_tac_toe/tic_tac_toe_game');
@@ -25,7 +26,7 @@ describe('test TicTacToePage', () => {
         expect(page.game.reset).toHaveBeenCalledTimes(1);
     });
 
-    test.each(['x', 'o'])('_handleChangeSymbol is called when %s button is clicked', (symbol) => {
+    test.each([X, O])('_handleChangeSymbol is called when %s button is clicked', (symbol) => {
         page._handleChangeSymbol = jest.fn();
 
         document.getElementById(symbol).click();
@@ -34,13 +35,13 @@ describe('test TicTacToePage', () => {
     });
 
     test('_handleChangeSymbol calls setHumanPlayerSymbolAsX on game when event.target.id is x', () => {
-        page._handleChangeSymbol({target: {id: 'x'}});
+        page._handleChangeSymbol({target: {id: X}});
 
         expect(page.game.setHumanPlayerSymbolAsX).toHaveBeenCalledTimes(1);
     });
 
     test('_handleChangeSymbol calls setHumanPlayerSymbolAsO on game when event.target.id is o', () => {
-        page._handleChangeSymbol({target: {id: 'o'}});
+        page._handleChangeSymbol({target: {id: O}});
 
         expect(page.game.setHumanPlayerSymbolAsO).toHaveBeenCalledTimes(1);
     });

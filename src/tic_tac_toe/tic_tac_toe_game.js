@@ -1,15 +1,16 @@
 const EasyComputerPlayer = require('./easy_comp_player');
 const HumanPlayer = require('./human_player');
 const {TicTacToeBoard} = require('./tic_tac_toe_board');
+const {X, O} = require('./constants');
 
 class TicTacToeGame {
     constructor() {
-        this.currentTurn = 'x';
+        this.currentTurn = X;
         this.board = new TicTacToeBoard();
         this.board.draw();
 
-        this.humanPlayer = new HumanPlayer(this.board, () => this.getCurrentTurn(), 'x');
-        this.compPlayer = new EasyComputerPlayer(this.board, () => this.getCurrentTurn(), 'o');
+        this.humanPlayer = new HumanPlayer(this.board, () => this.getCurrentTurn(), X);
+        this.compPlayer = new EasyComputerPlayer(this.board, () => this.getCurrentTurn(), O);
     }
 
     reset() {
@@ -48,7 +49,7 @@ class TicTacToeGame {
     }
 
     _changeTurns() {
-        this.currentTurn = this.currentTurn == 'x' ? 'o' : 'x';
+        this.currentTurn = this.currentTurn == X ? O : X;
     }
 
     _handleGameOver() {

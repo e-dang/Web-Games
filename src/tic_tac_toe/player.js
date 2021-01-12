@@ -1,6 +1,7 @@
 class Player {
-    constructor(board, symbol) {
+    constructor(board, getCurrentTurn, symbol) {
         this.board = board;
+        this.getCurrentTurn = getCurrentTurn;
         this._setSymbol(symbol);
     }
 
@@ -10,6 +11,26 @@ class Player {
 
     useOSymbol() {
         this._setSymbol('o');
+    }
+
+    isXPlayer() {
+        return this.symbol == 'x';
+    }
+
+    isOPlayer() {
+        return this.symbol == 'o';
+    }
+
+    isMyTurn() {
+        return this.getCurrentTurn() == this.symbol;
+    }
+
+    _setAsMyNode(node) {
+        if (this.symbol == 'x') {
+            node.setAsXNode();
+        } else {
+            node.setAsONode();
+        }
     }
 
     _setSymbol(symbol) {

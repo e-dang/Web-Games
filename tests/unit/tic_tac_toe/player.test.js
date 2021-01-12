@@ -1,17 +1,21 @@
 const Player = require('../../../src/tic_tac_toe/player');
 const {TicTacToeBoard} = require('../../../src/tic_tac_toe/tic_tac_toe_board');
+const TicTacToeNode = require('../../../src/tic_tac_toe/tic_tac_toe_node');
 
 jest.mock('../../../src/tic_tac_toe/tic_tac_toe_board');
+jest.mock('../../../src/tic_tac_toe/tic_tac_toe_node');
 
 describe('test Player', () => {
     let player;
     let origSymbol;
     let board;
+    let getCurrentTurn;
 
     beforeEach(() => {
         board = new TicTacToeBoard();
+        getCurrentTurn = jest.fn();
         origSymbol = 'x';
-        player = new Player(board, origSymbol);
+        player = new Player(board, getCurrentTurn, origSymbol);
     });
 
     test('constructor calls _setSymbol with symbol param', () => {
@@ -19,7 +23,7 @@ describe('test Player', () => {
         const mock = jest.fn();
         Player.prototype._setSymbol = mock;
 
-        player = new Player(board, origSymbol);
+        player = new Player(board, getCurrentTurn, origSymbol);
 
         Player.prototype._setSymbol = orig;
         expect(mock).toHaveBeenCalledWith(origSymbol);
@@ -27,6 +31,10 @@ describe('test Player', () => {
 
     test('constructor sets board prop to board parameter', () => {
         expect(player.board).toBe(board);
+    });
+
+    test('constructor sets getCurrentTurn property to getCurrentTurn parameter', () => {
+        expect(player.getCurrentTurn).toBe(getCurrentTurn);
     });
 
     test('_setSymbol sets symbol prop to "x" when "x" is passed in', () => {
@@ -67,5 +75,56 @@ describe('test Player', () => {
         player.useOSymbol();
 
         expect(player._setSymbol).toHaveBeenCalledWith('o');
+    });
+
+    test('isMyTurn returns true when return value of getCurrentTurn is equal to symbol property', () => {
+        const symbol = 'x';
+        getCurrentTurn.mockReturnValueOnce(symbol);
+        player.symbol = symbol;
+
+        const retVal = player.isMyTurn();
+
+        expect(retVal).toBe(true);
+    });
+
+    test('isMyTurn returns false when return value of getCurrentTurn is not equal to symbol property', () => {
+        const symbol = 'x';
+        getCurrentTurn.mockReturnValueOnce(symbol);
+        player.symbol = symbol + 'o';
+
+        const retVal = player.isMyTurn();
+
+        expect(retVal).toBe(false);
+    });
+
+    test('_setAsMyNode calls setAsXNode on node param if symbol property is x', () => {
+        player.symbol = 'x';
+        const node = new TicTacToeNode();
+
+        player._setAsMyNode(node);
+
+        expect(node.setAsXNode).toHaveBeenCalledTimes(1);
+    });
+
+    test('_setAsMyNode calls setAsONode on node param if symbol property is o', () => {
+        player.symbol = 'o';
+        const node = new TicTacToeNode();
+
+        player._setAsMyNode(node);
+
+        expect(node.setAsONode).toHaveBeenCalledTimes(1);
+    });
+
+    test.each([
+        ['isXPlayer', true, 'x'],
+        ['isXPlayer', false, 'o'],
+        ['isOPlayer', true, 'o'],
+        ['isOPlayer', false, 'x'],
+    ])('%s returns %s when symbol is %s', (method, expected, symbol) => {
+        player.symbol = symbol;
+
+        const retVal = player[method]();
+
+        expect(retVal).toBe(expected);
     });
 });

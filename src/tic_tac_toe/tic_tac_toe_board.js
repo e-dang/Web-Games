@@ -8,6 +8,10 @@ class TicTacToeBoard extends Board {
         super(TICTACTOE_DIMENSIONS, TicTacToeNode);
     }
 
+    getEmptyNodes() {
+        return this.nodes.filter((node) => node.isEmptyNode());
+    }
+
     addNodeClickEventListeners(fn) {
         this.nodes.forEach((node) => node.addClickEventListener(fn));
     }

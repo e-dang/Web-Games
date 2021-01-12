@@ -77,4 +77,17 @@ describe('test TicTacToeBoard', () => {
             }
         });
     });
+
+    test('getEmptyNodes returns all nodes that are empty', () => {
+        const emptyNode = new TicTacToeNode();
+        const nonEmptyNode = new TicTacToeNode();
+        emptyNode.isEmptyNode.mockReturnValueOnce(true);
+        nonEmptyNode.isEmptyNode.mockReturnValueOnce(false);
+        board.nodes.push(emptyNode);
+        board.nodes.push(nonEmptyNode);
+
+        const retVal = board.getEmptyNodes();
+
+        expect(retVal).toEqual([emptyNode]);
+    });
 });

@@ -42,6 +42,10 @@
     integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
     crossorigin="anonymous"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
-<script game-type="<%= pageName %>" seed="<%= seed %>" src="/public/dist/bundle.js"></script>
+<%if (locals.pageName && locals.seed) { %>
+    <script game-type="<%= pageName %>" seed="<%= seed %>" src="/public/dist/bundle.js"></script>
+    <% } else if (locals.pageName) { %>
+        <script game-type="<%= pageName %>" src="/public/dist/bundle.js"></script>
+        <% } %>
 
 </html>

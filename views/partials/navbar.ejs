@@ -1,5 +1,9 @@
 <nav id="navBar" class="navbar navbar-expand-sm navbar-light bg-light">
-    <a class="navbar-brand" href="#">Web Games <span id="currentGame">- <%= pageName %></span></a>
+    <a id="navBarHeader" class="navbar-brand" href="/">Web Games
+        <%if (locals.pageName) { %>
+            <span id="currentGame">- <%= pageName %></span>
+            <% } %>
+    </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -13,13 +17,15 @@
                     Select Game...
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="snake">Snake</a>
-                    <a class="dropdown-item" href="sudoku">Sudoku</a>
-                    <a class="dropdown-item" href="tic-tac-toe">Tic Tac Toe</a>
+                    <a id="snake" class="dropdown-item" href="snake">Snake</a>
+                    <a id="sudoku" class="dropdown-item" href="sudoku">Sudoku</a>
+                    <a id="tic-tac-toe" class="dropdown-item" href="tic-tac-toe">Tic Tac Toe</a>
                 </div>
             </li>
-            <% var path=`${pageName.toLowerCase().split(' ').join('')}_buttons`; %>
+            <%if (locals.pageName) { %>
+                <% var path=`${pageName.toLowerCase().split(' ').join('')}_buttons`; %>
                 <%- include(path); %>
+            <% } %>
         </ul>
     </div>
 </nav>

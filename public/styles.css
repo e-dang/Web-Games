@@ -56,7 +56,7 @@ td.sudoku-node > input {
 }
 
 .sudoku-node.error {
-    border: 3px solid var(--error-node-color);
+    border: 4px solid var(--error-node-color);
 }
 
 .sudoku-node.error-section1 {

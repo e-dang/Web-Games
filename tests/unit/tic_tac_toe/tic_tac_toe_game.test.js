@@ -214,9 +214,20 @@ describe('test TicTacToeGame', () => {
         },
     );
 
-    test('_isGameComplete returns false if _decideWinner always returns false', () => {
+    test('_isGameComplete returns true if _decideWinner always returns false and board.getEmptyNodes returns array of length == 0', () => {
         game.board.dims = 3;
         game._decideWinner = jest.fn(() => false);
+        game.board.getEmptyNodes.mockReturnValue([]);
+
+        const retVal = game._isGameComplete();
+
+        expect(retVal).toBe(true);
+    });
+
+    test('_isGameComplete returns false if _decideWinner always returns false and board.getEmptyNodes returns array of length > 0', () => {
+        game.board.dims = 3;
+        game._decideWinner = jest.fn(() => false);
+        game.board.getEmptyNodes.mockReturnValue([1]);
 
         const retVal = game._isGameComplete();
 

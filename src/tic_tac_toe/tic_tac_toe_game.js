@@ -97,7 +97,8 @@ class TicTacToeGame {
 
         if (
             this._decideWinner(this.board.getLeftToRightDiag()) ||
-            this._decideWinner(this.board.getRightToLeftDiag())
+            this._decideWinner(this.board.getRightToLeftDiag()) ||
+            this.board.getEmptyNodes().length == 0
         ) {
             return true;
         }

@@ -1,5 +1,8 @@
 from .base_page import BasePage
 
+X = 'X'
+O = 'O'
+
 
 class TicTacToePage(BasePage):
     def has_correct_title(self):
@@ -20,9 +23,9 @@ class TicTacToePage(BasePage):
         return self._get_node(row, col).get_attribute('innerText')
 
     def can_select_symbol(self):
-        x = self.driver.find_element_by_id('x')
-        o = self.driver.find_element_by_id('o')
+        x = self.driver.find_element_by_id(X)
+        o = self.driver.find_element_by_id(O)
         return x.is_enabled() and x.is_displayed() and o.is_enabled() and o.is_displayed()
 
     def select_symbol(self, symbol):
-        self.driver.find_element_by_id(f'{symbol}-label').click()
+        self.driver.find_element_by_id(f'{symbol.lower()}-label').click()

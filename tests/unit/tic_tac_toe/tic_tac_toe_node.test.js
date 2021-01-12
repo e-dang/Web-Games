@@ -27,6 +27,10 @@ describe('test TicTacToeNode', () => {
         expect(mock).toHaveBeenLastCalledWith(row, col, idx, boardRow, 'square');
     });
 
+    test('constructor sets value property to a number', () => {
+        expect(typeof node.value).toBe('number');
+    });
+
     test('addClickEventListener adds the function parameter as a click event listener', () => {
         const func = jest.fn();
 
@@ -34,5 +38,47 @@ describe('test TicTacToeNode', () => {
         node.element.click();
 
         expect(func).toHaveBeenLastCalledWith(node);
+    });
+
+    test('setAsEmptyNode sets value property to 0', () => {
+        node.value = 1;
+
+        node.setAsEmptyNode();
+
+        expect(node.value).toBe(0);
+    });
+
+    test('setAsXNode calls _setAsNodeType with "x"', () => {
+        node._setAsNodeType = jest.fn();
+
+        node.setAsXNode();
+
+        expect(node._setAsNodeType).toHaveBeenCalledWith('x');
+    });
+
+    test('setAsXNode sets value property to 1', () => {
+        node._setAsNodeType = jest.fn();
+        node.value = 0;
+
+        node.setAsXNode();
+
+        expect(node.value).toBe(1);
+    });
+
+    test('setAsONode calls _setAsNodeType with "o"', () => {
+        node._setAsNodeType = jest.fn();
+
+        node.setAsONode();
+
+        expect(node._setAsNodeType).toHaveBeenCalledWith('o');
+    });
+
+    test('setAsONode sets value property to -1', () => {
+        node._setAsNodeType = jest.fn();
+        node.value = 0;
+
+        node.setAsONode();
+
+        expect(node.value).toBe(-1);
     });
 });

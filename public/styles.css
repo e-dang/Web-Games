@@ -63,3 +63,11 @@ td > input {
 .node.square.error-section3 {
     background-color: var(--error-section3-node-color);
 }
+
+.node.x {
+    background-color: red;
+}
+
+.node.o {
+    background-color: blue;
+}

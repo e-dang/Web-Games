@@ -1,26 +1,27 @@
 const Page = require('../core/page');
-const EasyComputerPlayer = require('./easy_comp_player');
-const HumanPlayer = require('./human_player');
-const {TicTacToeBoard} = require('./tic_tac_toe_board');
+const TicTacToeGame = require('./tic_tac_toe_game');
 
 class TicTacToePage extends Page {
     constructor() {
-        super(new TicTacToeBoard(), {
+        super({
             easy: (callback) => callback(),
             moderate: (callback) => callback(),
             hard: (callback) => callback(),
         });
-        this.humanPlayer = new HumanPlayer('x');
-        this.compPlayer = new EasyComputerPlayer('o');
+        this.game = new TicTacToeGame();
 
         this.addEventHandlers();
-        this.board.draw();
         this._setDefaultDifficulty();
+        this.game.start();
     }
 
     addEventHandlers() {
         super.addEventHandlers();
         this.addSelectSymbolEventHandler();
+    }
+
+    _handleClickResetButton() {
+        this.game.reset();
     }
 
     addSelectSymbolEventHandler() {
@@ -30,11 +31,9 @@ class TicTacToePage extends Page {
 
     _handleChangeSymbol(event) {
         if (event.target.id == 'x') {
-            this.humanPlayer.useXSymbol();
-            this.compPlayer.useOSymbol();
+            this.game.setHumanPlayerSymbolAsX();
         } else {
-            this.humanPlayer.useOSymbol();
-            this.compPlayer.useXSymbol();
+            this.game.setHumanPlayerSymbolAsO();
         }
     }
 }

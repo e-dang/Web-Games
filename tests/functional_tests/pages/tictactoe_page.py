@@ -16,8 +16,8 @@ class TicTacToePage(BasePage):
             if element.get_attribute('innerText') == '':
                 return self._get_node_position(element)
 
-    def node_has_symbol(self, row, col, symbol):
-        return self._get_node(row, col).get_attribute('innerText') == symbol
+    def get_node_symbol(self, row, col):
+        return self._get_node(row, col).get_attribute('innerText')
 
     def can_select_symbol(self):
         x = self.driver.find_element_by_id('x')

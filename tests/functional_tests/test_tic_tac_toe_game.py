@@ -38,21 +38,62 @@ class TestTicTacToe:
         page.change_difficulty('hard')
         assert page.get_current_difficulty() == 'Hard'
 
+    @pytest.mark.parametrize('difficulty', [
+        ('easy'),
+        ('moderate'),
+        ('hard'),
+    ])
     @pytest.mark.parametrize('url, symbol', [
         (None, 'x'),
         (None, 'o')
     ],
         indirect=['url'],
         ids=['x', 'o'])
-    def test_user_can_play_tic_tac_toe(self, url, symbol):
+    def test_user_can_play_tic_tac_toe(self, url, symbol, difficulty):
         # The user goes to the webpage
         self.driver.get(url)
         page = TicTacToePage(self.driver)
 
-        # the user selects their move symbol
+        # the user selects the difficulty and their symbol
+        page.change_difficulty(difficulty)
         page.select_symbol(symbol)
 
         # the user then clicks a node and sees their symbol appear in the node
         row, col = page.get_empty_node()
         page.click_node(row, col)
-        assert page.node_has_symbol(row, col, symbol)
+        assert page.get_node_symbol(row, col) == symbol
+
+        # the user also sees a node containing the opposite symbol from the computer making a move
+        opposite_symbol = 'x' if symbol == 'o' else 'o'
+        has_node_with_opp_symbol = False
+        for row in range(page.num_rows):
+            for col in range(page.num_cols):
+                if page.get_node_symbol(row, col) == opposite_symbol:
+                    opp_row = row
+                    opp_col = col
+                    has_node_with_opp_symbol = True
+                    break
+            else:
+                continue
+            break
+
+        assert has_node_with_opp_symbol
+
+        # the user tries to click that node but nothing happens
+        page.click_node(opp_row, opp_col)
+        assert page.get_node_symbol(opp_row, opp_col) == opposite_symbol
+
+        # the user then clicks reset and sees that at most there is 1 node containing a symbol
+        page.click_reset()
+        count = 0
+        for row in range(page.num_rows):
+            for col in range(page.num_cols):
+                if page.get_node_symbol(row, col) != '':
+                    count += 1
+
+        assert count < 2
+
+        # the user can still click nodes despite the game reseting
+        row, col = page.get_empty_node()
+        page.click_node(row, col)
+        assert page.get_node_symbol(row, col) == symbol

@@ -57,6 +57,25 @@ class TicTacToeGame {
         this.currentLoop = setTimeout(this.start.bind(this), 10);
     }
 
+    setDifficultyEasy(callback) {
+        this.compPlayer = new EasyComputerPlayer(this.board, () => this.getCurrentTurn(), this._getComputerSymbol());
+        callback();
+    }
+
+    setDifficultyModerate(callback) {
+        this.compPlayer = new EasyComputerPlayer(this.board, () => this.getCurrentTurn(), this._getComputerSymbol());
+        callback();
+    }
+
+    setDifficultyHard(callback) {
+        this.compPlayer = new EasyComputerPlayer(this.board, () => this.getCurrentTurn(), this._getComputerSymbol());
+        callback();
+    }
+
+    _getComputerSymbol() {
+        return this.humanPlayer.isXPlayer() ? O : X;
+    }
+
     _isComputersTurn() {
         return this.compPlayer.isMyTurn();
     }

@@ -4,11 +4,12 @@ const {X, O} = require('./constants');
 
 class TicTacToePage extends Page {
     constructor() {
-        super({
-            easy: (callback) => callback(),
-            moderate: (callback) => callback(),
-            hard: (callback) => callback(),
-        });
+        super();
+        this.difficultyMap = {
+            easy: (callback) => this.game.setDifficultyEasy(callback),
+            moderate: (callback) => this.game.setDifficultyModerate(callback),
+            hard: (callback) => this.game.setDifficultyHard(callback),
+        };
         this.game = new TicTacToeGame();
 
         this.addEventHandlers();

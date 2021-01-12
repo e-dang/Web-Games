@@ -222,4 +222,28 @@ describe('test TicTacToeGame', () => {
 
         expect(retVal).toBe(false);
     });
+
+    test.each([
+        ['setDifficultyEasy', EasyComputerPlayer],
+        ['setDifficultyModerate', EasyComputerPlayer],
+        ['setDifficultyHard', EasyComputerPlayer],
+    ])('%s calls callback function and sets compPlayer to instance of %s', (method, klass) => {
+        const fn = jest.fn();
+
+        game[method](fn);
+
+        expect(fn).toHaveBeenCalledTimes(1);
+        expect(game.compPlayer).toBeInstanceOf(klass);
+    });
+
+    test.each([
+        [true, O],
+        [false, X],
+    ])('_getComputerSymbol returns the opposite symbol of humanPlayer', (mockRetVal, expected) => {
+        game.humanPlayer.isXPlayer.mockReturnValueOnce(mockRetVal);
+
+        const retVal = game._getComputerSymbol();
+
+        expect(retVal).toBe(expected);
+    });
 });

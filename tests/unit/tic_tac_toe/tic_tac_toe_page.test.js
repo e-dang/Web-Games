@@ -23,6 +23,8 @@ describe('test TicTacToePage', () => {
     });
 
     test('_handleClickResetButton calls reset on game property', () => {
+        page._handleClickResetButton();
+
         expect(page.game.reset).toHaveBeenCalledTimes(1);
     });
 

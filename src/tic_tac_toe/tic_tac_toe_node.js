@@ -8,16 +8,19 @@ class TicTacToeNode extends Node {
 
     setAsEmptyNode() {
         super.setAsEmptyNode();
+        this.element.innerText = '';
         this.value = 0;
     }
 
     setAsXNode() {
         this._setAsNodeType(X);
+        this.element.innerText = X;
         this.value = 1;
     }
 
     setAsONode() {
         this._setAsNodeType(O);
+        this.element.innerText = O;
         this.value = -1;
     }
 

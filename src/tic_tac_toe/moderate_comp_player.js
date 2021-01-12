@@ -4,6 +4,7 @@ const {X, O, DRAW} = require('./constants');
 class ModerateComputerPlayer extends Player {
     constructor(board, symbol) {
         super(board, symbol);
+        this.depthLimit = 3;
     }
 
     async makeMove() {
@@ -13,7 +14,7 @@ class ModerateComputerPlayer extends Player {
         for (let i = 0; i < emptyNodes.length; i++) {
             const node = emptyNodes.shift();
             this._setAsMyNode(node);
-            const score = this._miniMax(emptyNodes, false);
+            const score = this._miniMax(1, emptyNodes, false);
             if (score > bestScore) {
                 bestScore = score;
                 bestMove = node;
@@ -25,10 +26,12 @@ class ModerateComputerPlayer extends Player {
         this._setAsMyNode(bestMove);
     }
 
-    _miniMax(emptyNodes, isMaximizing) {
+    _miniMax(depth, emptyNodes, isMaximizing) {
         const winner = this.board.getWinner();
         if (winner != null) {
             return this.scores[winner];
+        } else if (depth == this.depthLimit) {
+            return 0;
         }
 
         let bestScore;
@@ -37,7 +40,7 @@ class ModerateComputerPlayer extends Player {
             for (let i = 0; i < emptyNodes.length; i++) {
                 const node = emptyNodes.shift();
                 this._setAsMyNode(node);
-                bestScore = Math.max(bestScore, this._miniMax(emptyNodes, false));
+                bestScore = Math.max(bestScore, this._miniMax(depth + 1, emptyNodes, false));
                 node.setAsEmptyNode();
                 emptyNodes.push(node);
             }
@@ -46,7 +49,7 @@ class ModerateComputerPlayer extends Player {
             for (let i = 0; i < emptyNodes.length; i++) {
                 const node = emptyNodes.shift();
                 this._setAsOpponentNode(node);
-                bestScore = Math.min(bestScore, this._miniMax(emptyNodes, true));
+                bestScore = Math.min(bestScore, this._miniMax(depth + 1, emptyNodes, true));
                 node.setAsEmptyNode();
                 emptyNodes.push(node);
             }

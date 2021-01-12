@@ -31,9 +31,13 @@ class BasePage:
         return WebDriverWait(self.driver, TIMEOUT).until(EC.visibility_of_element_located((By.ID, id_)))
 
     def has_correct_title(self, title):
+        if title is None:
+            return self.driver.title == 'Web Games'
         return self.driver.title == f'Web Games - {title}'
 
     def has_correct_header(self, header):
+        if header is None:
+            return self.driver.find_element_by_id('navBarHeader').text == 'Web Games'
         return self.driver.find_element_by_id('currentGame').text == f'- {header}'
 
     def has_navigation_bar(self):
@@ -51,6 +55,10 @@ class BasePage:
     def can_select_games(self):
         element = self._get_navbar().find_element_by_id('gameSelection')
         return element.is_displayed() and element.is_enabled()
+
+    def select_game(self, game):
+        self._get_navbar().find_element_by_id('gameSelection').click()
+        self.wait_to_find_by_id(game).click()
 
     def game_is_over(self):
         return self.wait_to_find_by_id('gameOverMessage').is_displayed()

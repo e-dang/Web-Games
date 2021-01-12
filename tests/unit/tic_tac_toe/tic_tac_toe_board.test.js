@@ -1,5 +1,6 @@
 const {TicTacToeBoard, TICTACTOE_DIMENSIONS} = require('../../../src/tic_tac_toe/tic_tac_toe_board');
 const TicTacToeNode = require('../../../src/tic_tac_toe/tic_tac_toe_node');
+const {X, O, DRAW} = require('../../../src/tic_tac_toe/constants');
 
 jest.mock('../../../src/tic_tac_toe/tic_tac_toe_node');
 
@@ -89,5 +90,62 @@ describe('test TicTacToeBoard', () => {
         const retVal = board.getEmptyNodes();
 
         expect(retVal).toEqual([emptyNode]);
+    });
+
+    test.each([1, 2, 3, 4, 5, 6, 7, 8])(
+        'getWinner returns the return value of _decideWinner %d call if the return value is not null',
+        (numCalls) => {
+            const mockRetVal = jest.fn();
+            let count = 1;
+            board._decideWinner = jest.fn(() => {
+                if (count == numCalls) {
+                    return mockRetVal;
+                }
+                count++;
+            });
+
+            const retVal = board.getWinner();
+
+            expect(retVal).toBe(mockRetVal);
+        },
+    );
+
+    test('getWinner returns DRAW if _decideWinner always returns null and getEmptyNodes returns array of length == 0', () => {
+        board._decideWinner = jest.fn(() => null);
+        board.getEmptyNodes = jest.fn().mockReturnValue([]);
+
+        const retVal = board.getWinner();
+
+        expect(retVal).toBe(DRAW);
+    });
+
+    test('getWinner returns null if _decideWinner always returns null and getEmptyNodes returns array of length > 0', () => {
+        board._decideWinner = jest.fn(() => null);
+        board.getEmptyNodes = jest.fn().mockReturnValue([1]);
+
+        const retVal = board.getWinner();
+
+        expect(retVal).toBe(null);
+    });
+
+    test.each([
+        [X, 3],
+        [O, -3],
+        [null, 0],
+    ])('_decideWinner returns %s if _getSum returns %d', (expected, sum) => {
+        board._getSum = jest.fn().mockReturnValue(sum);
+
+        const retVal = board._decideWinner([]);
+
+        expect(retVal).toBe(expected);
+    });
+
+    test('_getSum returns the sum of the nodes values', () => {
+        const nodes = [new TicTacToeNode(), new TicTacToeNode(), new TicTacToeNode()];
+        nodes.forEach((node) => (node.value = 1));
+
+        const retVal = board._getSum(nodes);
+
+        expect(retVal).toBe(3);
     });
 });

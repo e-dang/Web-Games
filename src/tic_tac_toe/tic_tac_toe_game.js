@@ -2,6 +2,7 @@ const EasyComputerPlayer = require('./easy_comp_player');
 const HumanPlayer = require('./human_player');
 const {TicTacToeBoard} = require('./tic_tac_toe_board');
 const {X, O} = require('./constants');
+const ModerateComputerPlayer = require('./moderate_comp_player');
 
 class TicTacToeGame {
     constructor() {
@@ -63,7 +64,11 @@ class TicTacToeGame {
     }
 
     setDifficultyModerate(callback) {
-        this.compPlayer = new EasyComputerPlayer(this.board, () => this.getCurrentTurn(), this._getComputerSymbol());
+        this.compPlayer = new ModerateComputerPlayer(
+            this.board,
+            () => this.getCurrentTurn(),
+            this._getComputerSymbol(),
+        );
         callback();
     }
 
@@ -89,40 +94,20 @@ class TicTacToeGame {
     }
 
     _isGameComplete() {
-        for (let i = 0; i < this.board.dims; i++) {
-            if (this._decideWinner(this.board.getRow(i)) || this._decideWinner(this.board.getCol(i))) {
-                return true;
-            }
-        }
-
-        if (
-            this._decideWinner(this.board.getLeftToRightDiag()) ||
-            this._decideWinner(this.board.getRightToLeftDiag()) ||
-            this.board.getEmptyNodes().length == 0
-        ) {
-            return true;
-        }
-
-        return false;
-    }
-
-    _decideWinner(nodes) {
-        this._setWinner(this._getSum([...nodes]));
+        this._setWinner(this.board.getWinner());
         if (this.winner != null) {
             return true;
         }
         return false;
     }
 
-    _getSum(nodes) {
-        return nodes.reduce((accum, node) => (accum += node.value), 0);
-    }
-
-    _setWinner(sum) {
-        if (sum == 3) {
+    _setWinner(symbol) {
+        if (symbol == X) {
             this.winner = this._getXPlayer();
-        } else if (sum == -3) {
+        } else if (symbol == O) {
             this.winner = this._getOPlayer();
+        } else {
+            this.winner = symbol;
         }
     }
 

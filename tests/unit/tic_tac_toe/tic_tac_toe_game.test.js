@@ -3,9 +3,11 @@ const HumanPlayer = require('../../../src/tic_tac_toe/human_player');
 const {TicTacToeBoard} = require('../../../src/tic_tac_toe/tic_tac_toe_board');
 const TicTacToeGame = require('../../../src/tic_tac_toe/tic_tac_toe_game');
 const TicTacToeNode = require('../../../src/tic_tac_toe/tic_tac_toe_node');
-const {X, O} = require('../../../src/tic_tac_toe/constants');
+const {X, O, DRAW} = require('../../../src/tic_tac_toe/constants');
+const ModerateComputerPlayer = require('../../../src/tic_tac_toe/moderate_comp_player');
 
 jest.mock('../../../src/tic_tac_toe/easy_comp_player');
+jest.mock('../../../src/tic_tac_toe/moderate_comp_player');
 jest.mock('../../../src/tic_tac_toe/human_player');
 jest.mock('../../../src/tic_tac_toe/tic_tac_toe_board');
 jest.mock('../../../src/tic_tac_toe/tic_tac_toe_node');
@@ -155,79 +157,38 @@ describe('test TicTacToeGame', () => {
     });
 
     test.each([
-        ['_getXPlayer', 3],
-        ['_getOPlayer', -3],
-    ])('_setWinner sets winner property to the return value of %s if sum parameter is %d', (method, sum) => {
+        ['_getXPlayer', X],
+        ['_getOPlayer', O],
+    ])('_setWinner sets winner property to the return value of %s if symbol parameter is %s', (method, symbol) => {
         game.winner = null;
         const retVal = jest.mock();
         game[method] = jest.fn().mockReturnValueOnce(retVal);
 
-        game._setWinner(sum);
+        game._setWinner(symbol);
 
         expect(game.winner).toBe(retVal);
     });
 
-    test('_getSum returns the sum of the nodes values', () => {
-        const nodes = [new TicTacToeNode(), new TicTacToeNode(), new TicTacToeNode()];
-        nodes.forEach((node) => (node.value = 1));
+    test.each([DRAW, null])('_setWinner sets winner property to symbol parameter if it is DRAW or null', (symbol) => {
+        game.winner = 1;
 
-        const retVal = game._getSum(nodes);
+        game._setWinner(symbol);
 
-        expect(retVal).toBe(3);
+        expect(game.winner).toBe(symbol);
     });
 
-    test('decide winner returns true if winner is not null', () => {
+    test('_isGameComplete returns true if winner is not null', () => {
         game._setWinner = jest.fn();
-        game._getSum = jest.fn();
         game.winner = game.compPlayer;
-
-        const retVal = game._decideWinner([]);
-
-        expect(retVal).toBe(true);
-    });
-
-    test('decide winner returns false if winner is null', () => {
-        game._setWinner = jest.fn();
-        game._getSum = jest.fn();
-        game.winner = null;
-
-        const retVal = game._decideWinner([]);
-
-        expect(retVal).toBe(false);
-    });
-
-    test.each([1, 2, 3, 4, 5, 6, 7, 8])(
-        '_isGameComplete returns true if _decideWinner returns true on the %d call',
-        (numCalls) => {
-            let count = 1;
-            game.board.dims = 3;
-            game._decideWinner = jest.fn(() => {
-                if (count == numCalls) {
-                    return true;
-                }
-                count++;
-            });
-
-            const retVal = game._isGameComplete();
-
-            expect(retVal).toBe(true);
-        },
-    );
-
-    test('_isGameComplete returns true if _decideWinner always returns false and board.getEmptyNodes returns array of length == 0', () => {
-        game.board.dims = 3;
-        game._decideWinner = jest.fn(() => false);
-        game.board.getEmptyNodes.mockReturnValue([]);
 
         const retVal = game._isGameComplete();
 
         expect(retVal).toBe(true);
     });
 
-    test('_isGameComplete returns false if _decideWinner always returns false and board.getEmptyNodes returns array of length > 0', () => {
-        game.board.dims = 3;
-        game._decideWinner = jest.fn(() => false);
-        game.board.getEmptyNodes.mockReturnValue([1]);
+    test('_isGameComplete returns false if winner is null', () => {
+        game._setWinner = jest.fn();
+        game.winner = null;
 
         const retVal = game._isGameComplete();
 
@@ -236,7 +197,7 @@ describe('test TicTacToeGame', () => {
 
     test.each([
         ['setDifficultyEasy', EasyComputerPlayer],
-        ['setDifficultyModerate', EasyComputerPlayer],
+        ['setDifficultyModerate', ModerateComputerPlayer],
         ['setDifficultyHard', EasyComputerPlayer],
     ])('%s calls callback function and sets compPlayer to instance of %s', (method, klass) => {
         const fn = jest.fn();

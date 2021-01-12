@@ -9,20 +9,23 @@ class ModerateComputerPlayer extends Player {
     async makeMove() {
         let bestMove;
         let bestScore = -Infinity;
-        for (let node of this.board.getEmptyNodes()) {
+        const emptyNodes = this.board.getEmptyNodes();
+        for (let i = 0; i < emptyNodes.length; i++) {
+            const node = emptyNodes.shift();
             this._setAsMyNode(node);
-            const score = this.miniMax(false);
+            const score = this.miniMax(emptyNodes, false);
             if (score > bestScore) {
                 bestScore = score;
                 bestMove = node;
             }
             node.setAsEmptyNode();
+            emptyNodes.push(node);
         }
 
         this._setAsMyNode(bestMove);
     }
 
-    miniMax(isMaximizing) {
+    miniMax(emptyNodes, isMaximizing) {
         const winner = this.board.getWinner();
         if (winner != null) {
             return this.scores[winner];
@@ -31,17 +34,21 @@ class ModerateComputerPlayer extends Player {
         let bestScore;
         if (isMaximizing) {
             bestScore = -Infinity;
-            for (let node of this.board.getEmptyNodes()) {
+            for (let i = 0; i < emptyNodes.length; i++) {
+                const node = emptyNodes.shift();
                 this._setAsMyNode(node);
-                bestScore = Math.max(bestScore, this.miniMax(false));
+                bestScore = Math.max(bestScore, this.miniMax(emptyNodes, false));
                 node.setAsEmptyNode();
+                emptyNodes.push(node);
             }
         } else {
             bestScore = Infinity;
-            for (let node of this.board.getEmptyNodes()) {
+            for (let i = 0; i < emptyNodes.length; i++) {
+                const node = emptyNodes.shift();
                 this._setAsOpponentNode(node);
-                bestScore = Math.min(bestScore, this.miniMax(true));
+                bestScore = Math.min(bestScore, this.miniMax(emptyNodes, true));
                 node.setAsEmptyNode();
+                emptyNodes.push(node);
             }
         }
 

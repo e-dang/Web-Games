@@ -21,6 +21,7 @@ class SnakeGame {
         this.board = new Board(DIMENSIONS, SnakeGameNode);
         this.snake = null;
         this.keys = {};
+        this.highScore = 0;
 
         this.board.draw();
         this.addKeyDownEventListener();
@@ -46,6 +47,7 @@ class SnakeGame {
     async start(callback) {
         this.board.clear();
         this.snake = new Snake(this.board);
+        document.getElementById('currentScore').innerText = 0;
         this._placeFood(this.snake.getHead().row, this.board.dims - 6);
 
         await this._gameLoop();
@@ -65,6 +67,7 @@ class SnakeGame {
 
             if (i % (MOVE_TIME_STEP / TIME_STEP) === 0) {
                 if (this.board.getNode(row, col).isFoodNode()) {
+                    document.getElementById('currentScore').innerText = this.snake.getLength() - INITIAL_LENGTH + 1;
                     this._placeFood();
                 }
                 this.snake.move();
@@ -82,17 +85,20 @@ class SnakeGame {
 
     _handleFailure() {
         document.getElementById('gameOverTitle').innerText = 'Game Over!';
-        document.getElementById('gameOverMessage').innerText = `Your score is ${
-            this.snake.getLength() - INITIAL_LENGTH
-        }`;
-        $('#gameOverModal').modal();
+        this._handleGameOver();
     }
 
     _handleSuccess() {
         document.getElementById('gameOverTitle').innerText = 'Congratulations, You Won!';
-        document.getElementById('gameOverMessage').innerText = `Your score is ${
-            this.board.nodes.length - INITIAL_LENGTH
-        }`;
+        this._handleGameOver();
+    }
+
+    _handleGameOver() {
+        const score = this.snake.getLength() - INITIAL_LENGTH;
+        if (score > this.highScore) {
+            document.getElementById('highScore').innerText = score;
+        }
+        document.getElementById('gameOverMessage').innerText = `Your score is ${score}`;
         $('#gameOverModal').modal();
     }
 

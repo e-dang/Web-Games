@@ -219,4 +219,40 @@ describe('test TicTacToeGame', () => {
 
         expect(retVal).toBe(expected);
     });
+
+    test('_incrementWins increments humanWins if winner is humanPlayer', () => {
+        game.winner = game.humanPlayer;
+        const prev = 0;
+        game.humanWins = prev;
+
+        game._incrementWins();
+
+        expect(game.humanWins).toBe(prev + 1);
+    });
+
+    test('_incrementWins increments compWins if winner is compPlayer', () => {
+        game.winner = game.compPlayer;
+        const prev = 0;
+        game.compWins = prev;
+
+        game._incrementWins();
+
+        expect(game.compWins).toBe(prev + 1);
+    });
+
+    test('_incrementWins returns You Win! if humanPlayer is the winner', () => {
+        game.winner = game.humanPlayer;
+
+        const retVal = game._incrementWins();
+
+        expect(retVal).toBe('You Win!');
+    });
+
+    test('_incrementWins returns You Lost! if humanPlayer is the winner', () => {
+        game.winner = game.compPlayer;
+
+        const retVal = game._incrementWins();
+
+        expect(retVal).toBe('You Lost!');
+    });
 });

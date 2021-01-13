@@ -10,13 +10,16 @@
     <%- include('partials/navbar'); %>
 
     <div class="container-fluid h-75">
-        <%if (!locals.pageName) { %>
-        <div class="row align-items-center mt-5 mb-n5">
-            <div class="col text-center">
-                <h1>Welcome to Web Games!</h1>
-            </div>
+        <div class="row justify-content-center align-items-center mt-5 mb-n5">
+            <%if (!locals.pageName) { %>
+                    <div class="col text-center">
+                        <h1>Welcome to Web Games!</h1>
+                    </div>
+            <% } else { %>
+                <% var path=`partials/${pageName.toLowerCase().split(' ').join('')}_widgets`; %>
+                <%- include(path); %>
+            <% } %>
         </div>
-        <% } %>
         <div class="h-100 d-flex">
             <div class="row justify-content-center align-items-center flex-grow-1">
                 <%if (locals.pageName) { %>

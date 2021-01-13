@@ -85,3 +85,29 @@ class TestSnakeGame:
 
         # The user has the option to play again
         assert page.can_click_start()
+
+    def test_snake_game_keeps_track_of_current_and_high_score(self, url):
+        # The user goes to the webpage
+        self.driver.get(url)
+        page = SnakePage(self.driver)
+
+        # the user starts the game and sees that the current and high scores are 0
+        page.click_start()
+        assert page.current_score() == 0
+        assert page.high_score() == 0
+
+        # the snake then eats food and the user sees that the current score has incremented but the high score has not
+        page.wait_for_snake_to_eat_food()
+        current_score = page.current_score()
+        assert current_score > 0
+
+        # the snake then crashes into the wall and the user sees the high score is now equal to the current score
+        page.wait_for_snake_to_run_off_grid()
+        assert page.game_is_over()
+        assert page.high_score() == current_score
+
+        # the user then starts the game again and sees the current score go to 0, but the high score remains
+        page.clear_modal()
+        page.click_start()
+        assert page.current_score() == 0
+        assert page.high_score() == current_score

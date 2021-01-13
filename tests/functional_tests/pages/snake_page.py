@@ -76,6 +76,12 @@ class SnakePage(BasePage):
     def get_snake_length(self):
         return len(self._get_board().find_elements_by_class_name('snake'))
 
+    def current_score(self):
+        return int(self.driver.find_element_by_id('currentScore').get_attribute('innerText'))
+
+    def high_score(self):
+        return int(self.driver.find_element_by_id('highScore').get_attribute('innerText'))
+
     def _press_and_hold_key(self, key, timeout=TIME_STEP):
         command = '''
         const down = new Event('keydown');\n

@@ -6,14 +6,24 @@
 </head>
 
 <body>
-    <div>
-        <%- include('partials/navbar'); %>
-    </div>
+
+    <%- include('partials/navbar'); %>
 
     <div class="container-fluid h-75">
-        <div class="h-100 d-flex flex-column">
+        <%if (!locals.pageName) { %>
+        <div class="row align-items-center mt-5 mb-n5">
+            <div class="col text-center">
+                <h1>Welcome to Web Games!</h1>
+            </div>
+        </div>
+        <% } %>
+        <div class="h-100 d-flex">
             <div class="row justify-content-center align-items-center flex-grow-1">
-                <table id="gameBoardWrapper"></table>
+                <%if (locals.pageName) { %>
+                    <table id="gameBoardWrapper"></table>
+                <% } else { %>
+                    <%- include('partials/home_cards'); %>
+                <% } %>
             </div>
         </div>
     </div>
@@ -45,8 +55,8 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
 <%if (locals.pageName && locals.seed) { %>
     <script game-type="<%= pageName %>" seed="<%= seed %>" src="/public/dist/bundle.js"></script>
-    <% } else if (locals.pageName) { %>
-        <script game-type="<%= pageName %>" src="/public/dist/bundle.js"></script>
-        <% } %>
+<% } else if (locals.pageName) { %>
+    <script game-type="<%= pageName %>" src="/public/dist/bundle.js"></script>
+<% } %>
 
 </html>

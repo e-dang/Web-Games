@@ -1,17 +1,17 @@
 <%- include('separator'); %>
-    <%- include('reset_button'); %>
-        <li class="nav-item">
-            <button id="hintBtn" class="btn btn-success">Get Hint</button>
-        </li>
-        <li id="difficultySelection" class="nav-item dropdown">
-            <button id="currentDifficulty" class="btn btn-outline-success dropdown-toggle" type="button"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Select Difficulty...
-            </button>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <button id="easy" class="dropdown-item" type="button">Easy</button>
-                <button id="moderate" class="dropdown-item" type="button">Moderate</button>
-                <button id="hard" class="dropdown-item" type="button">Hard</button>
-                <button id="veryHard" class="dropdown-item" type="button">Very Hard</button>
-            </div>
-        </li>
+<%- include('reset_button'); %>
+<li class="nav-item">
+    <button id="hintBtn" class="btn btn-success">Get Hint</button>
+</li>
+<li id="difficultySelection" class="nav-item dropdown">
+    <button id="currentDifficulty" class="btn btn-outline-success dropdown-toggle" type="button"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Select Difficulty...
+    </button>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <button id="easy" class="dropdown-item" type="button">Easy</button>
+        <button id="moderate" class="dropdown-item" type="button">Moderate</button>
+        <button id="hard" class="dropdown-item" type="button">Hard</button>
+        <button id="veryHard" class="dropdown-item" type="button">Very Hard</button>
+    </div>
+</li>

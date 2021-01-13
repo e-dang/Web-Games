@@ -10,6 +10,11 @@
     --error-section3-node-color: hsla(0, 60%, 50%);
 }
 
+html,
+body {
+    height: 100%;
+}
+
 .node {
     border: 1px solid var(--node-border-color);
     width: 30px;

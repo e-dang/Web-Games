@@ -150,6 +150,7 @@ describe('test SudokuPage', () => {
                 const node = new SudokuGameNode();
                 node.row = i;
                 node.col = j;
+                node.idx = i * dims + j;
                 node.boxIdx = i % 3;
                 page.board.nodes.push(node);
             }

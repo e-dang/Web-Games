@@ -6,8 +6,8 @@
     --checker-on-color: var(--white);
     --error-node-color: red;
     --error-section1-node-color: hsl(0, 60%, 70%);
-    --error-section2-node-color: hsla(0, 60%, 55%);
-    --error-section3-node-color: hsla(0, 60%, 40%);
+    --error-section2-node-color: hsla(0, 60%, 60%);
+    --error-section3-node-color: hsla(0, 60%, 50%);
 }
 
 .node {
@@ -47,6 +47,7 @@
     border-radius: 0%;
     background-color: var(--light);
     color: black;
+    font-size: 150%;
 }
 
 td.sudoku-node > input {
@@ -56,6 +57,7 @@ td.sudoku-node > input {
     border: none;
     background: transparent;
     text-align: center;
+    color: var(--indigo);
 }
 
 .sudoku-node.right {
@@ -88,6 +90,16 @@ td.sudoku-node > input {
     border-radius: 0%;
     background-color: var(--empty-node-color);
     color: black;
+}
+
+.tic-tac-toe-node.X {
+    color: var(--red);
+    font-size: 400%;
+}
+
+.tic-tac-toe-node.O {
+    color: var(--purple);
+    font-size: 400%;
 }
 
 .tic-tac-toe-node.top {

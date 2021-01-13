@@ -25,6 +25,11 @@ class TestSudokuGame:
                 if (i, j) not in given_indices:
                     page.enter_number(i, j, board[i][j])
 
+    def get_node_in_box(self, board, idx, box_idx):
+        col = (box_idx % 3) * 3 + (idx % 3)
+        row = (box_idx // 3) * 3 + idx // 3
+        return board[row][col]
+
     def test_user_is_presented_with_correct_controls_and_options(self, url):
         # The user goes to the page
         self.driver.get(url)
@@ -136,18 +141,21 @@ class TestSudokuGame:
         page = SudokuPage(self.driver)
 
         # the user enters an invalid value into a node
-        row, col_1, value = 0, 1, '6'
+        row, col_1, value = 1, 1, '1'
         box_idx_1 = get_box_idx(row, col_1)
         page.enter_number(row, col_1, value)
 
         # The user then sees that error borders and background appear around the nodes with the same value and in the
         # same row, col, box
         board = page.get_board_as_array()
+        row_error = value in board[row]
+        col_error = value in [board[r][col_1] for r in range(len(board))]
+        box_error = value in [self.get_node_in_box(board, i, box_idx_1) for i in range(len(board))]
         for r in range(len(board)):
             for c in range(len(board[0])):
-                same_row = r == row
-                same_col = c == col_1
-                same_box = box_idx_1 == get_box_idx(r, c)
+                same_row = r == row and row_error
+                same_col = c == col_1 and col_error
+                same_box = box_idx_1 == get_box_idx(r, c) and box_error
                 num_errors = sum([same_row, same_col, same_box])
 
                 if (same_row or same_col or same_box) and board[r][c] == value:
@@ -165,17 +173,25 @@ class TestSudokuGame:
                     assert not page.node_has_error_section_background(r, c, i)
 
         # the user then tries to see if the error signals stack on top of each other by entering two invalid values
+        row, col_1, value = 0, 1, '6'
+        box_idx_1 = get_box_idx(row, col_1)
         col_2 = 3
         box_idx_2 = get_box_idx(row, col_2)
         page.enter_number(row, col_1, value)
         page.enter_number(row, col_2, value)
+
+        row_error = value in board[row]
+        col_error_1 = value in [board[r][col_1] for r in range(len(board))]
+        box_error_1 = value in [self.get_node_in_box(board, i, box_idx_1) for i in range(len(board))]
+        col_error_2 = value in [board[r][col_2] for r in range(len(board))]
+        box_error_2 = value in [self.get_node_in_box(board, i, box_idx_2) for i in range(len(board))]
         for r in range(len(board)):
             for c in range(len(board[0])):
-                same_row = r == row
-                same_col_1 = c == col_1
-                same_box_1 = box_idx_1 == get_box_idx(r, c)
-                same_col_2 = c == col_2
-                same_box_2 = box_idx_2 == get_box_idx(r, c)
+                same_row = r == row and row_error
+                same_col_1 = c == col_1 and col_error_1
+                same_box_1 = box_idx_1 == get_box_idx(r, c) and box_error_1
+                same_col_2 = c == col_2 and col_error_2
+                same_box_2 = box_idx_2 == get_box_idx(r, c) and box_error_2
                 num_errors = sum([same_row, same_col_1, same_col_2, same_box_1, same_box_2])
 
                 if (same_row or same_col_1 or same_box_1 or same_col_2 or same_box_2) and board[r][c] == value:

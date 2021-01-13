@@ -1,4 +1,4 @@
-<nav id="navBar" class="navbar navbar-expand-sm navbar-light bg-light">
+<nav id="navBar" class="navbar navbar-expand-sm navbar-dark bg-primary">
     <a id="navBarHeader" class="navbar-brand" href="/">Web Games
         <%if (locals.pageName) { %>
             <span id="currentGame">- <%= pageName %></span>
@@ -10,12 +10,12 @@
     </button>
 
     <div id="navbarSupportedContent" class="collapse navbar-collapse">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav mt-auto mb-auto">
             <li id="gameSelection" class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
+                <button class="dropdown-toggle btn btn-outline-success" type="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
                     Select Game...
-                </a>
+                </button>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a id="snake" class="dropdown-item" href="snake">Snake</a>
                     <a id="sudoku" class="dropdown-item" href="sudoku">Sudoku</a>

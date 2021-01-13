@@ -131,7 +131,7 @@ class SudokuBoard extends Board {
         }
     }
 
-    _initNode(node) {
+    _initNode(node, checker) {
         const borderIdxs = [2, 5];
 
         if (borderIdxs.includes(node.col)) {
@@ -142,7 +142,7 @@ class SudokuBoard extends Board {
             node.addBottomBorder();
         }
 
-        super._initNode(node);
+        super._initNode(node, checker);
     }
 }
 

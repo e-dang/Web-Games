@@ -61,25 +61,38 @@ class SudokuPage extends Page {
     }
 
     _handleUserValueError(userInputNode, borderNodes) {
+        let rowError = false;
+        let colError = false;
+        let boxError = false;
+        const boxIdx = this.board.calcBoxIdx(userInputNode.row, userInputNode.col);
         borderNodes.forEach((node) => {
             node.addErrorBorder();
+            if (node.idx != userInputNode.idx) {
+                if (node.row == userInputNode.row) {
+                    rowError = true;
+                } else if (node.col == userInputNode.col) {
+                    colError = true;
+                }
+
+                if (this.board.calcBoxIdx(node.row, node.col) == boxIdx) {
+                    boxError = true;
+                }
+            }
         });
 
         const errorSectionNodes = [];
         this.board.nodes.forEach((node) => {
-            if (node.row == userInputNode.row) {
+            if (rowError && node.row == userInputNode.row) {
                 node.addErrorSection();
                 errorSectionNodes.push(node);
             }
 
-            if (node.col == userInputNode.col) {
+            if (colError && node.col == userInputNode.col) {
                 node.addErrorSection();
                 errorSectionNodes.push(node);
             }
 
-            if (
-                this.board.calcBoxIdx(node.row, node.col) == this.board.calcBoxIdx(userInputNode.row, userInputNode.col)
-            ) {
+            if (boxError && this.board.calcBoxIdx(node.row, node.col) == boxIdx) {
                 node.addErrorSection();
                 errorSectionNodes.push(node);
             }

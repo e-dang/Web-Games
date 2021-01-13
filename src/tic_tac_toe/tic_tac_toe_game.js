@@ -11,7 +11,7 @@ class TicTacToeGame {
         this.winner = null;
         this.currentTurn = X;
         this.board = new TicTacToeBoard();
-        this.board.draw();
+        this.board.draw(false);
 
         this.humanPlayer = new HumanPlayer(this.board, () => this.getCurrentTurn(), X);
         this.compPlayer = new EasyComputerPlayer(this.board, this._getComputerSymbol());

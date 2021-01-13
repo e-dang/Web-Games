@@ -5,7 +5,7 @@ class Board {
         this.nodes = [];
     }
 
-    draw() {
+    draw(checker = true) {
         const board = document.createElement('tbody');
         board.id = 'gameBoard';
 
@@ -15,7 +15,7 @@ class Board {
             for (let j = 0; j < this.dims; j++) {
                 const idx = i * this.dims + j;
                 const node = new this.nodeType(i, j, idx, row);
-                this._initNode(node);
+                this._initNode(node, checker);
                 this.nodes.push(node);
             }
         }
@@ -41,8 +41,16 @@ class Board {
         });
     }
 
-    _initNode(node) {
+    _initNode(node, checker) {
         node.setAsDefaultNode();
+
+        if (checker) {
+            if (node.idx % 2) {
+                node.addCheckerOn();
+            } else {
+                node.addCheckerOff();
+            }
+        }
     }
 }
 

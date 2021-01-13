@@ -1,12 +1,18 @@
+@import 'bootstrap.css';
+
 :root {
-    --node-border-color: black;
-    --empty-node-color: white;
-    --snake-node-color: black;
-    --food-node-color: green;
+    --node-border-color: var(--dark);
+    --empty-node-color: hsl(211, 40%, 93%);
+    --checker-on-color: var(--white);
     --error-node-color: red;
-    --error-section1-node-color: rgba(255, 0, 0, 0.2);
-    --error-section2-node-color: rgba(255, 0, 0, 0.4);
-    --error-section3-node-color: rgba(255, 0, 0, 0.6);
+    --error-section1-node-color: hsl(0, 60%, 70%);
+    --error-section2-node-color: hsla(0, 60%, 60%);
+    --error-section3-node-color: hsla(0, 60%, 50%);
+}
+
+html,
+body {
+    height: 100%;
 }
 
 .node {
@@ -20,22 +26,33 @@
     background-color: var(--empty-node-color);
 }
 
+.node.checker-on {
+    background-color: var(--checker-on-color);
+}
+
+.node.checker-off {
+    background-color: var(--empty-node-color);
+}
+
 .snake-game-node {
     border-radius: 0%;
 }
 
 .snake-game-node.snake {
-    background-color: var(--snake-node-color);
+    background-color: var(--dark);
 }
 
 .snake-game-node.food {
-    background-color: var(--food-node-color);
+    background-color: var(--green);
 }
 
 .sudoku-node {
     width: 65px;
     height: 65px;
     border-radius: 0%;
+    background-color: var(--light);
+    color: black;
+    font-size: 150%;
 }
 
 td.sudoku-node > input {
@@ -45,6 +62,7 @@ td.sudoku-node > input {
     border: none;
     background: transparent;
     text-align: center;
+    color: var(--indigo);
 }
 
 .sudoku-node.right {
@@ -75,6 +93,18 @@ td.sudoku-node > input {
     width: 100px;
     height: 100px;
     border-radius: 0%;
+    background-color: var(--empty-node-color);
+    color: black;
+}
+
+.tic-tac-toe-node.X {
+    color: var(--red);
+    font-size: 400%;
+}
+
+.tic-tac-toe-node.O {
+    color: var(--purple);
+    font-size: 400%;
 }
 
 .tic-tac-toe-node.top {
@@ -91,4 +121,9 @@ td.sudoku-node > input {
 
 .tic-tac-toe-node.right {
     border-right: none;
+}
+
+.navbar-nav > li {
+    margin-left: 10px;
+    margin-right: 10px;
 }

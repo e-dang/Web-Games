@@ -148,4 +148,18 @@ describe('test TicTacToeBoard', () => {
 
         expect(retVal).toBe(3);
     });
+
+    test.each([
+        ['removeTopBorder', 'row', 0],
+        ['removeBottomBorder', 'row', TICTACTOE_DIMENSIONS - 1],
+        ['removeLeftBorder', 'col', 0],
+        ['removeRightBorder', 'col', TICTACTOE_DIMENSIONS - 1],
+    ])('_initNode calls %s on node parameter if node %s is %d', (method, prop, value) => {
+        const node = new TicTacToeNode();
+        node[prop] = value;
+
+        board._initNode(node, false);
+
+        expect(node[method]).toHaveBeenCalledTimes(1);
+    });
 });

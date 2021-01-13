@@ -106,4 +106,38 @@ describe('Test Node', () => {
 
         expect(node.setAsEmptyNode).toHaveBeenCalledTimes(1);
     });
+
+    test('_addExtraType adds type parameter to extraTypes property', () => {
+        node.extraTypes = [];
+        const type = 'random';
+
+        node._addExtraType(type);
+
+        expect(node.extraTypes).toContain(type);
+    });
+
+    test('_addExtraType adds type parameter to html elements class list', () => {
+        node.element.className = '';
+        const type = 'random';
+
+        node._addExtraType(type);
+
+        expect(node.element.classList.contains(type)).toBe(true);
+    });
+
+    test('addCheckerOn calls _addExtraType with "checker-on"', () => {
+        node._addExtraType = jest.fn();
+
+        node.addCheckerOn();
+
+        expect(node._addExtraType).toHaveBeenCalledWith('checker-on');
+    });
+
+    test('addCheckerOff calls _addExtraType with "checker-off"', () => {
+        node._addExtraType = jest.fn();
+
+        node.addCheckerOff();
+
+        expect(node._addExtraType).toHaveBeenCalledWith('checker-off');
+    });
 });

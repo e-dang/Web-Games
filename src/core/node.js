@@ -21,6 +21,14 @@ class Node {
         return this._isNodeOfType('empty');
     }
 
+    addCheckerOn() {
+        this._addExtraType('checker-on');
+    }
+
+    addCheckerOff() {
+        this._addExtraType('checker-off');
+    }
+
     _isNodeOfType(type) {
         return this.element.classList.contains(type);
     }
@@ -31,6 +39,11 @@ class Node {
         }
         this.element.className = '';
         this.element.classList.add('node', ...this.extraTypes, ...type);
+    }
+
+    _addExtraType(type) {
+        this.extraTypes.push(type);
+        this.element.classList.add(type);
     }
 }
 

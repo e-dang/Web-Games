@@ -277,7 +277,7 @@ describe('Test SudokuBoard', () => {
         const node = new SudokuGameNode();
         node[prop] = value;
 
-        board._initNode(node);
+        board._initNode(node, false);
 
         expect(node[method]).toHaveBeenCalledTimes(1);
     });

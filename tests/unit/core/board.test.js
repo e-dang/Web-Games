@@ -66,10 +66,11 @@ describe('Board', () => {
 
     test('draw calls _initNode with each node created', () => {
         board._initNode = jest.fn();
+        const checker = false;
 
-        board.draw();
+        board.draw(checker);
 
-        board.nodes.forEach((node, idx) => expect(board._initNode).toHaveBeenNthCalledWith(idx + 1, node));
+        board.nodes.forEach((node, idx) => expect(board._initNode).toHaveBeenNthCalledWith(idx + 1, node, checker));
     });
 
     test('getNode returns the node at the correct index', () => {
@@ -149,8 +150,26 @@ describe('Board', () => {
     test('_initNode calls setAsDefaultNode on node param', () => {
         const node = new SnakeGameNode();
 
-        board._initNode(node);
+        board._initNode(node, false);
 
         expect(node.setAsDefaultNode).toHaveBeenCalledTimes(1);
+    });
+
+    test('_initNode calls addCheckerOn on node param if node.idx is odd and checker param is true', () => {
+        const node = new SnakeGameNode();
+        node.idx = 1;
+
+        board._initNode(node, true);
+
+        expect(node.addCheckerOn).toHaveBeenCalledTimes(1);
+    });
+
+    test('_initNode calls addCheckerOff on node param if node.idx is even and checker param is true', () => {
+        const node = new SnakeGameNode();
+        node.idx = 2;
+
+        board._initNode(node, true);
+
+        expect(node.addCheckerOff).toHaveBeenCalledTimes(1);
     });
 });

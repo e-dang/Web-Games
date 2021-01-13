@@ -9,27 +9,6 @@ class TicTacToeBoard extends Board {
         super(TICTACTOE_DIMENSIONS, TicTacToeNode);
     }
 
-    draw() {
-        super.draw();
-        this.nodes.forEach((node) => {
-            if (node.row == 0) {
-                node.removeTopBorder();
-            }
-
-            if (node.row == TICTACTOE_DIMENSIONS - 1) {
-                node.removeBottomBorder();
-            }
-
-            if (node.col == 0) {
-                node.removeLeftBorder();
-            }
-
-            if (node.col == TICTACTOE_DIMENSIONS - 1) {
-                node.removeRightBorder();
-            }
-        });
-    }
-
     getEmptyNodes() {
         return this.nodes.filter((node) => node.isEmptyNode());
     }
@@ -105,6 +84,26 @@ class TicTacToeBoard extends Board {
 
     _getSum(nodes) {
         return nodes.reduce((accum, node) => (accum += node.value), 0);
+    }
+
+    _initNode(node, checker) {
+        if (node.row == 0) {
+            node.removeTopBorder();
+        }
+
+        if (node.row == TICTACTOE_DIMENSIONS - 1) {
+            node.removeBottomBorder();
+        }
+
+        if (node.col == 0) {
+            node.removeLeftBorder();
+        }
+
+        if (node.col == TICTACTOE_DIMENSIONS - 1) {
+            node.removeRightBorder();
+        }
+
+        super._initNode(node, checker);
     }
 }
 

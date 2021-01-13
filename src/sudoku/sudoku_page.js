@@ -14,6 +14,7 @@ class SudokuPage extends Page {
             veryHard: (callback) => this.board.setDifficultyVeryHard(callback),
         };
         this.errorMap = {};
+        this.interval = null;
 
         this.addEventHandlers();
         this.board.draw();
@@ -22,11 +23,17 @@ class SudokuPage extends Page {
 
     addEventHandlers() {
         super.addEventHandlers();
-        this.addClickHintButtonEventHandler();
+        this.addClickHintButtonEventHandler().addClickShowTimerEventHandler();
     }
 
     addClickHintButtonEventHandler() {
         document.getElementById('hintBtn').addEventListener('click', () => this._handleClickHintButton());
+
+        return this;
+    }
+
+    addClickShowTimerEventHandler() {
+        document.getElementById('showTimerBtn').addEventListener('click', () => this._handleClickShowTimer());
 
         return this;
     }
@@ -44,6 +51,7 @@ class SudokuPage extends Page {
     }
 
     _handleSudokuComplete() {
+        clearInterval(this.interval);
         document.getElementById('gameOverTitle').innerText = 'Congratulations, You Solved It!';
         document.getElementById(
             'gameOverMessage',
@@ -53,6 +61,7 @@ class SudokuPage extends Page {
 
     _handleClickResetButton() {
         this.board.reset();
+        this._startTimer();
         this.board.addNodeInputEventListeners('change', (node) => this._handleInputChangeEvent(node));
     }
 
@@ -111,6 +120,20 @@ class SudokuPage extends Page {
             errorSectionNodes.forEach((node) => node.removeErrorSection());
             delete this.errorMap[node.idx];
         }
+    }
+
+    _handleClickShowTimer() {
+        const element = document.getElementById('timer');
+        element.hidden = !element.hidden;
+    }
+
+    _startTimer() {
+        this.interval = setInterval(() => {
+            const elapsedTime = this.board.getElapsedTime();
+            const seconds = Math.floor(elapsedTime);
+            const milliseconds = Math.floor((elapsedTime % 1) * 10);
+            document.getElementById('elapsedTime').innerText = `${seconds}.${milliseconds}`;
+        }, 1);
     }
 }
 

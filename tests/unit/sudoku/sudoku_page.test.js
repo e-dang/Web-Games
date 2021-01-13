@@ -78,6 +78,7 @@ describe('test SudokuPage', () => {
 
     test('_handleClickResetButton calls reset on board property', () => {
         page.board = new SudokuBoard();
+        page._startTimer = jest.fn();
 
         page._handleClickResetButton();
 
@@ -199,5 +200,25 @@ describe('test SudokuPage', () => {
         page._removeErrorSignals(node);
 
         expect(node.idx in page.errorMap).toBe(false);
+    });
+
+    test('_handleClickShowTimer is called when showTimerBtn is clicked', () => {
+        page._handleClickShowTimer = jest.fn();
+
+        document.getElementById('showTimerBtn').click();
+
+        expect(page._handleClickShowTimer).toHaveBeenCalledTimes(1);
+    });
+
+    test.each([
+        [false, true],
+        [true, false],
+    ])('_handleClickShowTimer sets hidden from %s to %s on timer element', (from, to) => {
+        const timer = document.getElementById('timer');
+        timer.hidden = from;
+
+        page._handleClickShowTimer();
+
+        expect(timer.hidden).toBe(to);
     });
 });

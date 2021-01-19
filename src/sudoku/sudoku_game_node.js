@@ -65,6 +65,14 @@ class SudokuGameNode extends Node {
         return this.input.value;
     }
 
+    getValue() {
+        if (this.isGivenNode()) {
+            return this.trueValue;
+        }
+
+        return this.input.value;
+    }
+
     addInputEventListener(type, fn) {
         if (this.isInputNode()) {
             this.input.addEventListener(type, fn);
@@ -109,6 +117,13 @@ class SudokuGameNode extends Node {
             this.element.classList.remove('error-section3');
         }
         this.errorLevel--;
+    }
+
+    clearErrors() {
+        while (this.errorLevel > 0) {
+            this.removeErrorSection();
+        }
+        this.removeErrorBorder();
     }
 
     _handleInputEvent() {

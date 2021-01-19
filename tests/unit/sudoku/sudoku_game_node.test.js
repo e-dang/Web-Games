@@ -346,4 +346,45 @@ describe('Test SudokuGameNode', () => {
 
         expect(retVal).toBe(null);
     });
+
+    test('getValue returns trueValue property when node is a givenNode', () => {
+        node.isGivenNode = jest.fn().mockReturnValue(true);
+        const mockRetVal = jest.fn();
+        node.trueValue = mockRetVal;
+
+        const retVal = node.getValue();
+
+        expect(retVal).toBe(mockRetVal);
+    });
+
+    test('getValue returns input.value property when node is not a givenNode', () => {
+        node.isGivenNode = jest.fn().mockReturnValue(false);
+        const mockRetVal = jest.fn();
+        node.input = {value: mockRetVal};
+
+        const retVal = node.getValue();
+
+        expect(retVal).toBe(mockRetVal);
+    });
+
+    test('clearErrors calls removeErrorSection until errorLevel is 0', () => {
+        let times = 2;
+        node.errorLevel = times;
+        node.removeErrorSection = jest.fn(() => node.errorLevel--);
+
+        node.clearErrors();
+
+        expect(node.removeErrorSection).toHaveBeenCalledTimes(times);
+    });
+
+    test('clearErrors calls removeErrorBorder', () => {
+        let times = 1;
+        node.errorLevel = times;
+        node.removeErrorSection = jest.fn(() => node.errorLevel--);
+        node.removeErrorBorder = jest.fn();
+
+        node.clearErrors();
+
+        expect(node.removeErrorBorder).toHaveBeenCalledTimes(1);
+    });
 });

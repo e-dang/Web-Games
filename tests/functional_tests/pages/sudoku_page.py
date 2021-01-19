@@ -58,7 +58,7 @@ class SudokuPage(BasePage):
         self.driver.find_element_by_id('hintBtn').click()
 
     def node_has_error_border(self, row, col):
-        return 'error' in self._get_node(row, col).get_attribute('class')
+        return 'error' in self._get_node(row, col).get_attribute('class').split(' ')
 
     def node_has_error_section_background(self, row, col, level):
         return f'error-section{level}' in self._get_node(row, col).get_attribute('class')

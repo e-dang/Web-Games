@@ -141,6 +141,7 @@ describe('test SudokuSolver', () => {
             for (let j = 0; j < board.dims; j++) {
                 const node = new SudokuGameNode();
                 node.trueValue = boardArr[i][j];
+                node.getValue.mockReturnValue(boardArr[i][j]);
                 board.nodes.push(node);
             }
         }
@@ -182,6 +183,7 @@ describe('test SudokuSolver', () => {
             for (let j = 0; j < board.dims; j++) {
                 const node = new SudokuGameNode();
                 node.trueValue = boardArr[i][j];
+                node.getValue.mockReturnValue(boardArr[i][j]);
                 board.nodes.push(node);
             }
         }
@@ -213,6 +215,7 @@ describe('test SudokuSolver', () => {
             for (let j = 0; j < board.dims; j++) {
                 const node = new SudokuGameNode();
                 node.trueValue = boardArr[i][j];
+                node.getValue.mockReturnValue(boardArr[i][j]);
                 board.nodes.push(node);
             }
         }
@@ -239,6 +242,7 @@ describe('test SudokuSolver', () => {
             for (let j = 0; j < board.dims; j++) {
                 const node = new SudokuGameNode();
                 node.trueValue = boardArr[i][j];
+                node.getValue.mockReturnValue(boardArr[i][j]);
                 board.nodes.push(node);
             }
         }
@@ -265,6 +269,7 @@ describe('test SudokuSolver', () => {
             for (let j = 0; j < board.dims; j++) {
                 const node = new SudokuGameNode();
                 node.trueValue = boardArr[i][j];
+                node.getValue.mockReturnValue(boardArr[i][j]);
                 board.nodes.push(node);
             }
         }
@@ -302,6 +307,7 @@ describe('test SudokuSolver', () => {
                 node.row = i;
                 node.col = j;
                 node.trueValue = boardArr[i][j];
+                node.getValue.mockReturnValue(boardArr[i][j]);
                 board.nodes.push(node);
             }
         }
@@ -335,6 +341,7 @@ describe('test SudokuSolver', () => {
                 node.row = i;
                 node.col = j;
                 node.trueValue = boardArr[i][j];
+                node.getValue.mockReturnValue(boardArr[i][j]);
                 board.nodes.push(node);
             }
         }
@@ -368,6 +375,7 @@ describe('test SudokuSolver', () => {
                 node.row = i;
                 node.col = j;
                 node.trueValue = boardArr[i][j];
+                node.getValue.mockReturnValue(boardArr[i][j]);
                 board.nodes.push(node);
             }
         }
@@ -381,22 +389,22 @@ describe('test SudokuSolver', () => {
         }
     });
 
-    test('_getDuplicate returns the duplicate node specified by selector', () => {
+    test('_getDuplicate returns the duplicate nodes specified by selector', () => {
         const board = new SudokuBoard(3);
         board.nodes = [new SudokuGameNode(), new SudokuGameNode(), new SudokuGameNode()];
         board.nodes.forEach((node, idx) => (node.idx = idx));
-        board.nodes[0].trueValue = 1;
-        board.nodes[1].trueValue = 0;
-        board.nodes[2].trueValue = 1;
+        board.nodes[0].getValue.mockReturnValue(1);
+        board.nodes[1].getValue.mockReturnValue(0);
+        board.nodes[2].getValue.mockReturnValue(1);
 
         const retVal = solver._getDuplicate(
             (col) => board.getNode(0, col),
-            board.nodes[0].trueValue,
+            board.nodes[0].getValue(),
             board.dims,
             board.nodes[0],
         );
 
-        expect(retVal.idx).toBe(board.nodes[2].idx);
+        expect(retVal).toEqual([board.nodes[2]]);
     });
 
     test('getInvalidNodes returns invalid nodes', () => {
@@ -428,7 +436,7 @@ describe('test SudokuSolver', () => {
                 }
                 node.row = i;
                 node.col = j;
-                node.trueValue = boardArr[i][j];
+                node.getValue.mockReturnValue(boardArr[i][j]);
                 board.nodes.push(node);
             }
         }
@@ -471,7 +479,7 @@ describe('test SudokuSolver', () => {
                 }
                 node.row = i;
                 node.col = j;
-                node.trueValue = boardArr[i][j];
+                node.getValue.mockReturnValue(boardArr[i][j]);
                 board.nodes.push(node);
             }
         }
@@ -503,7 +511,7 @@ describe('test SudokuSolver', () => {
                 node.isInputNode.mockReturnValue(false);
                 node.row = i;
                 node.col = j;
-                node.trueValue = boardArr[i][j];
+                node.getValue.mockReturnValue(boardArr[i][j]);
                 board.nodes.push(node);
             }
         }
@@ -541,7 +549,7 @@ describe('test SudokuSolver', () => {
                 }
                 node.row = i;
                 node.col = j;
-                node.trueValue = boardArr[i][j];
+                node.getValue.mockReturnValue(boardArr[i][j]);
                 board.nodes.push(node);
             }
         }

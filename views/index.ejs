@@ -6,13 +6,29 @@
 </head>
 
 <body>
-    <div>
-        <%- include('partials/navbar'); %>
-    </div>
 
-    <div class="container">
-        <table id="gameBoardWrapper">
-        </table>
+    <%- include('partials/navbar'); %>
+
+    <div class="container-fluid h-75">
+        <div class="row justify-content-center align-items-center mt-5 mb-n5">
+            <%if (!locals.pageName) { %>
+                    <div class="col text-center">
+                        <h1>Welcome to Web Games!</h1>
+                    </div>
+            <% } else { %>
+                <% var path=`partials/${pageName.toLowerCase().split(' ').join('')}_widgets`; %>
+                <%- include(path); %>
+            <% } %>
+        </div>
+        <div class="h-100 d-flex">
+            <div class="row justify-content-center align-items-center flex-grow-1">
+                <%if (locals.pageName) { %>
+                    <table id="gameBoardWrapper"></table>
+                <% } else { %>
+                    <%- include('partials/home_cards'); %>
+                <% } %>
+            </div>
+        </div>
     </div>
 
     <div class="modal fade" id="gameOverModal" tabindex="-1" aria-labelledby="gameOverTitle" aria-hidden="true">
@@ -40,6 +56,10 @@
     integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
     crossorigin="anonymous"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
-<script game-type="<%= pageName %>" seed="<%= seed %>" src="/public/dist/bundle.js"></script>
+<%if (locals.pageName && locals.seed) { %>
+    <script game-type="<%= pageName %>" seed="<%= seed %>" src="/public/dist/bundle.js"></script>
+<% } else if (locals.pageName) { %>
+    <script game-type="<%= pageName %>" src="/public/dist/bundle.js"></script>
+<% } %>
 
 </html>

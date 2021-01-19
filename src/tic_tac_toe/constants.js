@@ -1,5 +1,5 @@
-const X = 'x';
-const O = 'o';
+const X = 'X';
+const O = 'O';
 const DRAW = 'draw';
 
 module.exports = {

@@ -27,68 +27,62 @@ class SudokuSolver {
         return retVal;
     }
 
-    isNodeInvalid(board, node) {
-        if (node.isGivenNode()) {
+    isNodeInvalid(board, invalidNode) {
+        if (invalidNode.isGivenNode()) {
             return false;
         }
 
         const [rowBitMap, colBitMap, boxBitMap] = this._getBitMaps(board);
-        const value = node.getInputValue();
-        const boxIdx = board.calcBoxIdx(node.row, node.col);
+        const [inputRowBitMap, inputColBitMap, inputBoxBitMap] = this._getBitMaps(
+            board,
+            (node) => node.isGivenNode() || node.idx == invalidNode.idx,
+        );
+        const value = invalidNode.getInputValue();
+        const boxIdx = board.calcBoxIdx(invalidNode.row, invalidNode.col);
         return (
             value &&
-            (!this._getBit(rowBitMap[node.row], value - 1) ||
-                !this._getBit(colBitMap[node.col], value - 1) ||
-                !this._getBit(boxBitMap[boxIdx], value - 1))
+            (!this._getBit(rowBitMap[invalidNode.row], value - 1) ||
+                !this._getBit(colBitMap[invalidNode.col], value - 1) ||
+                !this._getBit(boxBitMap[boxIdx], value - 1) ||
+                !this._getBit(inputRowBitMap[invalidNode.row], value - 1) ||
+                !this._getBit(inputColBitMap[invalidNode.col], value - 1) ||
+                !this._getBit(inputBoxBitMap[boxIdx], value - 1))
         );
     }
 
     getInvalidNodes(board) {
-        const [rowBitMap, colBitMap, boxBitMap] = this._getBitMaps(board);
         const invalidNodes = [];
-
         for (let row = 0; row < board.dims; row++) {
             for (let col = 0; col < board.dims; col++) {
                 const node = board.getNode(row, col);
-                if (node.isGivenNode()) {
+                if (node.isGivenNode() || node.getInputValue() == '') {
                     continue;
                 }
 
                 const boxIdx = board.calcBoxIdx(row, col);
                 const value = node.getInputValue();
-                const rowTaken = !this._getBit(rowBitMap[row], value - 1);
-                const colTaken = !this._getBit(colBitMap[col], value - 1);
-                const boxTaken = !this._getBit(boxBitMap[boxIdx], value - 1);
-                if (!value && !rowTaken && !colTaken && !boxTaken) {
-                    continue;
-                }
-
-                invalidNodes.push(node);
-                if (rowTaken) {
-                    invalidNodes.push(this._getDuplicate((col) => board.getNode(row, col), value, board.dims, node));
-                }
-
-                if (colTaken) {
-                    invalidNodes.push(this._getDuplicate((row) => board.getNode(row, col), value, board.dims, node));
-                }
-
-                if (boxTaken) {
-                    invalidNodes.push(
-                        this._getDuplicate((i) => board.getNodeInBox(i, boxIdx), value, board.dims, node),
-                    );
+                const rowDups = this._getDuplicate((col) => board.getNode(row, col), value, board.dims, node);
+                const colDups = this._getDuplicate((row) => board.getNode(row, col), value, board.dims, node);
+                const boxDups = this._getDuplicate((i) => board.getNodeInBox(i, boxIdx), value, board.dims, node);
+                if (rowDups.length || colDups.length || boxDups.length) {
+                    invalidNodes.push(node, ...rowDups, ...colDups, ...boxDups);
                 }
             }
         }
-        return invalidNodes;
+
+        return [...new Set(invalidNodes)];
     }
 
     _getDuplicate(selector, value, dims, origNode) {
+        const dups = [];
         for (let i = 0; i < dims; i++) {
             const node = selector(i);
-            if (node.trueValue == value && node.idx != origNode.idx) {
-                return node;
+            if (node.getValue() == value && node.idx != origNode.idx) {
+                dups.push(node);
             }
         }
+
+        return dups;
     }
 
     _hasMoreThanOneSolution(board) {
@@ -105,7 +99,7 @@ class SudokuSolver {
         return !generator.next().done;
     }
 
-    _getBitMaps(board) {
+    _getBitMaps(board, isNull = (node) => this._isNullNode(node)) {
         const rowBitMap = [];
         const colBitMap = [];
         const boxBitMap = [];
@@ -119,14 +113,14 @@ class SudokuSolver {
         for (let row = 0; row < board.dims; row++) {
             for (let col = 0; col < board.dims; col++) {
                 const node = board.getNode(row, col);
-                if (this._isNullNode(node)) {
+                if (isNull(node)) {
                     continue;
                 }
 
                 const boxIdx = board.calcBoxIdx(row, col);
-                rowBitMap[row] = this._clearBit(rowBitMap[row], node.trueValue - 1);
-                colBitMap[col] = this._clearBit(colBitMap[col], node.trueValue - 1);
-                boxBitMap[boxIdx] = this._clearBit(boxBitMap[boxIdx], node.trueValue - 1);
+                rowBitMap[row] = this._clearBit(rowBitMap[row], node.getValue() - 1);
+                colBitMap[col] = this._clearBit(colBitMap[col], node.getValue() - 1);
+                boxBitMap[boxIdx] = this._clearBit(boxBitMap[boxIdx], node.getValue() - 1);
             }
         }
 

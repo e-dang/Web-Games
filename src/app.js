@@ -5,8 +5,12 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use('/public', express.static('public'));
 
+app.get('/', (req, res) => {
+    res.render('index', {seed: ''});
+});
+
 app.get('/snake', (req, res) => {
-    res.render('index', {pageName: 'Snake', seed: ''});
+    res.render('index', {pageName: 'Snake'});
 });
 
 app.get('/sudoku/:seed?', (req, res) => {
@@ -14,7 +18,7 @@ app.get('/sudoku/:seed?', (req, res) => {
 });
 
 app.get('/tic-tac-toe', (req, res) => {
-    res.render('index', {pageName: 'Tic Tac Toe', seed: ''});
+    res.render('index', {pageName: 'Tic Tac Toe'});
 });
 
 module.exports = app;

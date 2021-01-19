@@ -2,7 +2,7 @@ const Node = require('../core/node');
 
 class SnakeGameNode extends Node {
     constructor(row, col, idx, boardRow) {
-        super(row, col, idx, boardRow, 'square');
+        super(row, col, idx, boardRow, 'snake-game-node');
     }
 
     setAsSnakeNode() {

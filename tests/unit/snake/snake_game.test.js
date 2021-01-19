@@ -287,6 +287,8 @@ describe('Test SnakeGame', () => {
 
     test('_handleSuccess displays gameOverModal', async (done) => {
         game.board.nodes = [];
+        game.snake = new Snake();
+        game.snake.getLength.mockReturnValue(3);
         $('#gameOverModal').on('shown.bs.modal', (event) => {
             expect(event.target).toHaveClass('show');
             done();

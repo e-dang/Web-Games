@@ -13,7 +13,7 @@ class SudokuPage extends Page {
             hard: (callback) => this.board.setDifficultyHard(callback),
             veryHard: (callback) => this.board.setDifficultyVeryHard(callback),
         };
-        this.errorMap = {};
+        this.interval = null;
 
         this.addEventHandlers();
         this.board.draw();
@@ -22,7 +22,7 @@ class SudokuPage extends Page {
 
     addEventHandlers() {
         super.addEventHandlers();
-        this.addClickHintButtonEventHandler();
+        this.addClickHintButtonEventHandler().addClickShowTimerEventHandler();
     }
 
     addClickHintButtonEventHandler() {
@@ -31,19 +31,23 @@ class SudokuPage extends Page {
         return this;
     }
 
-    _handleInputChangeEvent(node) {
-        this._removeErrorSignals(node);
+    addClickShowTimerEventHandler() {
+        document.getElementById('showTimerBtn').addEventListener('click', () => this._handleClickShowTimer());
 
-        if (node.userValueIsCorrect()) {
-            if (this.board.isComplete()) {
-                this._handleSudokuComplete();
-            }
-        } else if (this.board.isNodeInvalid(node)) {
-            this._handleUserValueError(node, this.board.getInvalidNodes());
+        return this;
+    }
+
+    _handleInputChangeEvent(node) {
+        this._removeErrorSignals();
+        this._handleUserValueError(this.board.getInvalidNodes());
+
+        if (node.userValueIsCorrect() && this.board.isComplete()) {
+            this._handleSudokuComplete();
         }
     }
 
     _handleSudokuComplete() {
+        clearInterval(this.interval);
         document.getElementById('gameOverTitle').innerText = 'Congratulations, You Solved It!';
         document.getElementById(
             'gameOverMessage',
@@ -53,6 +57,7 @@ class SudokuPage extends Page {
 
     _handleClickResetButton() {
         this.board.reset();
+        this._startTimer();
         this.board.addNodeInputEventListeners('change', (node) => this._handleInputChangeEvent(node));
     }
 
@@ -60,44 +65,77 @@ class SudokuPage extends Page {
         this._handleInputChangeEvent(this.board.getHint());
     }
 
-    _handleUserValueError(userInputNode, borderNodes) {
-        borderNodes.forEach((node) => {
+    _handleUserValueError(nodes) {
+        nodes.forEach((node) => {
             node.addErrorBorder();
         });
 
-        const errorSectionNodes = [];
-        this.board.nodes.forEach((node) => {
-            if (node.row == userInputNode.row) {
-                node.addErrorSection();
-                errorSectionNodes.push(node);
-            }
-
-            if (node.col == userInputNode.col) {
-                node.addErrorSection();
-                errorSectionNodes.push(node);
-            }
-
-            if (
-                this.board.calcBoxIdx(node.row, node.col) == this.board.calcBoxIdx(userInputNode.row, userInputNode.col)
-            ) {
-                node.addErrorSection();
-                errorSectionNodes.push(node);
-            }
-        });
-
-        this.errorMap[userInputNode.idx] = {
-            borderNodes,
-            errorSectionNodes,
-        };
+        const {errorRowCounts, errorColCounts, errorBoxCounts} = this._getErrorCounts(nodes);
+        this._addErrorSections(errorRowCounts, errorColCounts, errorBoxCounts);
     }
 
-    _removeErrorSignals(node) {
-        if (node.idx in this.errorMap) {
-            const {borderNodes, errorSectionNodes} = this.errorMap[node.idx];
-            borderNodes.forEach((node) => node.removeErrorBorder());
-            errorSectionNodes.forEach((node) => node.removeErrorSection());
-            delete this.errorMap[node.idx];
+    _getErrorCounts(nodes) {
+        const errorRowCounts = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0};
+        const errorColCounts = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0};
+        const errorBoxCounts = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0};
+        for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+                const node1 = nodes[i];
+                const node2 = nodes[j];
+
+                if (node1.getValue() == node2.getValue()) {
+                    if (node1.row == node2.row) {
+                        errorRowCounts[node1.row]++;
+                    }
+
+                    if (node1.col == node2.col) {
+                        errorColCounts[node1.col]++;
+                    }
+
+                    const boxIdx1 = this.board.calcBoxIdx(node1.row, node1.col);
+                    const boxIdx2 = this.board.calcBoxIdx(node2.row, node2.col);
+                    if (boxIdx1 == boxIdx2) {
+                        errorBoxCounts[boxIdx1]++;
+                    }
+                }
+            }
         }
+
+        return {errorRowCounts, errorColCounts, errorBoxCounts};
+    }
+
+    _addErrorSections(errorRowCounts, errorColCounts, errorBoxCounts) {
+        this.board.nodes.forEach((node) => {
+            for (let i = 0; i < errorRowCounts[node.row]; i++) {
+                node.addErrorSection();
+            }
+
+            for (let i = 0; i < errorColCounts[node.col]; i++) {
+                node.addErrorSection();
+            }
+
+            for (let i = 0; i < errorBoxCounts[this.board.calcBoxIdx(node.row, node.col)]; i++) {
+                node.addErrorSection();
+            }
+        });
+    }
+
+    _removeErrorSignals() {
+        this.board.nodes.forEach((node) => node.clearErrors());
+    }
+
+    _handleClickShowTimer() {
+        const element = document.getElementById('timer');
+        element.hidden = !element.hidden;
+    }
+
+    _startTimer() {
+        this.interval = setInterval(() => {
+            const elapsedTime = this.board.getElapsedTime();
+            const seconds = Math.floor(elapsedTime);
+            const milliseconds = Math.floor((elapsedTime % 1) * 10);
+            document.getElementById('elapsedTime').innerText = `${seconds}.${milliseconds}`;
+        }, 1);
     }
 }
 

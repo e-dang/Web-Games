@@ -31,6 +31,7 @@ describe('test SudokuPage', () => {
     test('_handleInputChangeEvent calls _handleSudokuComplete when node.userValueIsCorrect and board.isComplete returns true', () => {
         const node = new SudokuGameNode();
         page._removeErrorSignals = jest.fn();
+        page._handleUserValueError = jest.fn();
         node.userValueIsCorrect.mockReturnValueOnce(true);
         page.board.isComplete.mockReturnValueOnce(true);
         page._handleSudokuComplete = jest.fn();
@@ -40,7 +41,7 @@ describe('test SudokuPage', () => {
         expect(page._handleSudokuComplete).toHaveBeenCalledTimes(1);
     });
 
-    test('_handleInputChangeEvent calls _handleUserValueError with event node and return value of board.getInvalidNodes when user value is not correct and node is invalid', () => {
+    test('_handleInputChangeEvent calls _handleUserValueError return value of board.getInvalidNodes', () => {
         const node = new SudokuGameNode();
         const retVal = [node];
         node.userValueIsCorrect.mockReturnValueOnce(false);
@@ -51,10 +52,10 @@ describe('test SudokuPage', () => {
 
         page._handleInputChangeEvent(node);
 
-        expect(page._handleUserValueError).toHaveBeenCalledWith(node, retVal);
+        expect(page._handleUserValueError).toHaveBeenCalledWith(retVal);
     });
 
-    test('_handleInputChangeEvent calls _removeErrorSignals with event node', () => {
+    test('_handleInputChangeEvent calls _removeErrorSignals', () => {
         const node = new SudokuGameNode();
         const retVal = [];
         node.userValueIsCorrect.mockReturnValueOnce(false);
@@ -64,7 +65,7 @@ describe('test SudokuPage', () => {
 
         page._handleInputChangeEvent(node);
 
-        expect(page._removeErrorSignals).toHaveBeenCalledWith(node);
+        expect(page._removeErrorSignals).toHaveBeenCalledTimes(1);
     });
 
     test('_handleSudokuComplete displays gameOverModal', async (done) => {
@@ -78,6 +79,7 @@ describe('test SudokuPage', () => {
 
     test('_handleClickResetButton calls reset on board property', () => {
         page.board = new SudokuBoard();
+        page._startTimer = jest.fn();
 
         page._handleClickResetButton();
 
@@ -134,16 +136,37 @@ describe('test SudokuPage', () => {
 
     test('_handleUserValueError calls addErrorBorder on each node in nodes parameter', () => {
         const nodes = [new SudokuGameNode(), new SudokuGameNode(), new SudokuGameNode()];
+        const errorRowCounts = jest.fn();
+        const errorColCounts = jest.fn();
+        const errorBoxCounts = jest.fn();
+        page._getErrorCounts = jest.fn().mockReturnValue({errorRowCounts, errorColCounts, errorBoxCounts});
+        page._addErrorSections = jest.fn();
         page.board.nodes = nodes;
 
-        page._handleUserValueError(nodes[0], nodes);
+        page._handleUserValueError(nodes);
 
         nodes.forEach((node) => expect(node.addErrorBorder).toHaveBeenCalledTimes(1));
     });
 
-    test('_handleUserValueError calls addErrorSection on each node in nodes parameter that shares a row, col, or box with userInputNode', () => {
+    test('_handleUserValueError calls _addErrorSections with return values of _getErrorCounts', () => {
+        const nodes = [new SudokuGameNode(), new SudokuGameNode(), new SudokuGameNode()];
+        const errorRowCounts = jest.fn();
+        const errorColCounts = jest.fn();
+        const errorBoxCounts = jest.fn();
+        page._getErrorCounts = jest.fn().mockReturnValue({errorRowCounts, errorColCounts, errorBoxCounts});
+        page._addErrorSections = jest.fn();
+
+        page._handleUserValueError(nodes);
+
+        expect(page._addErrorSections).toHaveBeenCalledWith(errorRowCounts, errorColCounts, errorBoxCounts);
+    });
+
+    test('_addErrorSections calls addErrorSection on nodes as many times as their are counts for the nodes row, col, and box', () => {
         const dims = 9;
-        page.board.calcBoxIdx.mockReturnValue((node) => node.boxIdx);
+        const errorRowCounts = {0: 1, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0};
+        const errorColCounts = {0: 0, 1: 1, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0};
+        const errorBoxCounts = {0: 0, 1: 0, 2: 1, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0};
+        page.board.calcBoxIdx = jest.fn((row, col) => row % 3);
         page.board.nodes = [];
         for (let i = 0; i < dims; i++) {
             for (let j = 0; j < dims; j++) {
@@ -154,49 +177,70 @@ describe('test SudokuPage', () => {
                 page.board.nodes.push(node);
             }
         }
-        const userInputNode = page.board.nodes[0];
 
-        page._handleUserValueError(userInputNode, page.board.nodes);
+        page._addErrorSections(errorRowCounts, errorColCounts, errorBoxCounts);
 
         page.board.nodes.forEach((node) => {
-            if (node.col == userInputNode.col || node.row == userInputNode.row || node.boxIdx == userInputNode.boxIdx) {
-                expect(node.addErrorSection).toHaveBeenCalled();
+            let count = 0;
+            if (node.row == 0) {
+                count++;
             }
+            if (node.col == 1) {
+                count++;
+            }
+            if (node.boxIdx == 2) {
+                count++;
+            }
+            expect(node.addErrorSection).toHaveBeenCalledTimes(count);
         });
     });
 
-    test('_removeErrorSignals calls removeErrorBorder and removeErrorSection on each node mapped to node.idx', () => {
-        const node = new SudokuGameNode();
-        node.idx = 1;
-        const borderNodes = [new SudokuGameNode(), new SudokuGameNode(), new SudokuGameNode()];
-        const errorSectionNodes = [new SudokuGameNode(), new SudokuGameNode(), new SudokuGameNode()];
-        page.errorMap[node.idx] = {
-            borderNodes,
-            errorSectionNodes,
-        };
+    test('_getErrorCounts increments a count for each combo of nodes that share the same row, col, or box', () => {
+        const expectedErrorRowCounts = {0: 1, 1: 1, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0};
+        const expectedErrorColCounts = {0: 1, 1: 1, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0};
+        const expectedErrorBoxCounts = {0: 1, 1: 1, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0};
+        page.board.calcBoxIdx = jest.fn((row, col) => row % 3);
+        const nodes = [new SudokuGameNode(), new SudokuGameNode(), new SudokuGameNode(), new SudokuGameNode()];
+        for (let i = 0; i < nodes.length; i++) {
+            nodes[i].row = i % 2;
+            nodes[i].col = i % 2;
+            nodes[i].boxIdx = i % 2;
+        }
 
-        page._removeErrorSignals(node);
+        const {errorRowCounts, errorColCounts, errorBoxCounts} = page._getErrorCounts(nodes);
 
-        borderNodes.forEach((node) => {
-            expect(node.removeErrorBorder).toHaveBeenCalledTimes(1);
-        });
-        errorSectionNodes.forEach((node) => {
-            expect(node.removeErrorSection).toHaveBeenCalledTimes(1);
+        expect(errorRowCounts).toEqual(expectedErrorRowCounts);
+        expect(errorColCounts).toEqual(expectedErrorColCounts);
+        expect(errorBoxCounts).toEqual(expectedErrorBoxCounts);
+    });
+
+    test('_removeErrorSignals calls clearErrors on each node in board', () => {
+        page.board.nodes = [new SudokuGameNode(), new SudokuGameNode(), new SudokuGameNode()];
+
+        page._removeErrorSignals();
+
+        page.board.nodes.forEach((node) => {
+            expect(node.clearErrors).toHaveBeenCalledTimes(1);
         });
     });
 
-    test('_removeErrorSignals node.idx entry from errorMap', () => {
-        const node = new SudokuGameNode();
-        node.idx = 1;
-        const borderNodes = [];
-        const errorSectionNodes = [];
-        page.errorMap[node.idx] = {
-            borderNodes,
-            errorSectionNodes,
-        };
+    test('_handleClickShowTimer is called when showTimerBtn is clicked', () => {
+        page._handleClickShowTimer = jest.fn();
 
-        page._removeErrorSignals(node);
+        document.getElementById('showTimerBtn').click();
 
-        expect(node.idx in page.errorMap).toBe(false);
+        expect(page._handleClickShowTimer).toHaveBeenCalledTimes(1);
+    });
+
+    test.each([
+        [false, true],
+        [true, false],
+    ])('_handleClickShowTimer sets hidden from %s to %s on timer element', (from, to) => {
+        const timer = document.getElementById('timer');
+        timer.hidden = from;
+
+        page._handleClickShowTimer();
+
+        expect(timer.hidden).toBe(to);
     });
 });

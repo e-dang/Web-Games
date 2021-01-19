@@ -25,15 +25,11 @@ describe('Test SudokuGameNode', () => {
         node = new SudokuGameNode(row, col, idx, boardRow);
 
         Object.setPrototypeOf(SudokuGameNode, orig);
-        expect(mock).toHaveBeenLastCalledWith(row, col, idx, boardRow, 'square');
+        expect(mock).toHaveBeenLastCalledWith(row, col, idx, boardRow, 'sudoku-node');
     });
 
     test('constructor defines trueValue property', () => {
         expect(node.trueValue).toBeDefined();
-    });
-
-    test('constructor sets border property to empty array', () => {
-        expect(node.borders).toEqual([]);
     });
 
     test('constructor sets errorLevel to a number', () => {
@@ -243,12 +239,12 @@ describe('Test SudokuGameNode', () => {
         expect(node._handleInputEvent).toHaveBeenCalledTimes(1);
     });
 
-    test('addRightBorder adds "right" to border list', () => {
-        node.borders = [];
+    test('addRightBorder adds "right" to extraTypes list', () => {
+        node.extraTypes = [];
 
         node.addRightBorder();
 
-        expect(node.borders).toContain('right');
+        expect(node.extraTypes).toContain('right');
     });
 
     test('addRightBorder adds "right" to classList', () => {
@@ -259,12 +255,12 @@ describe('Test SudokuGameNode', () => {
         expect(node.element.classList.contains('right')).toBe(true);
     });
 
-    test('addBottomBorder adds "bottom" to border list', () => {
-        node.borders = [];
+    test('addBottomBorder adds "bottom" to extraTypes list', () => {
+        node.extraTypes = [];
 
         node.addBottomBorder();
 
-        expect(node.borders).toContain('bottom');
+        expect(node.extraTypes).toContain('bottom');
     });
 
     test('addBottomBorder adds "bottom" to classList', () => {
@@ -302,15 +298,6 @@ describe('Test SudokuGameNode', () => {
         node.addErrorSection();
 
         expect(node.errorLevel).toBe(orig + 1);
-    });
-
-    test('_setAsNodeType adds border classes to node classList', () => {
-        node.element.className = '';
-        node.borders.push('right');
-
-        node._setAsNodeType('stuff');
-
-        expect(node.element.classList.contains('right')).toBe(true);
     });
 
     test('removeErrorBorder removes "error" from classList', () => {
@@ -358,5 +345,46 @@ describe('Test SudokuGameNode', () => {
         const retVal = node.getInputValue();
 
         expect(retVal).toBe(null);
+    });
+
+    test('getValue returns trueValue property when node is a givenNode', () => {
+        node.isGivenNode = jest.fn().mockReturnValue(true);
+        const mockRetVal = jest.fn();
+        node.trueValue = mockRetVal;
+
+        const retVal = node.getValue();
+
+        expect(retVal).toBe(mockRetVal);
+    });
+
+    test('getValue returns input.value property when node is not a givenNode', () => {
+        node.isGivenNode = jest.fn().mockReturnValue(false);
+        const mockRetVal = jest.fn();
+        node.input = {value: mockRetVal};
+
+        const retVal = node.getValue();
+
+        expect(retVal).toBe(mockRetVal);
+    });
+
+    test('clearErrors calls removeErrorSection until errorLevel is 0', () => {
+        let times = 2;
+        node.errorLevel = times;
+        node.removeErrorSection = jest.fn(() => node.errorLevel--);
+
+        node.clearErrors();
+
+        expect(node.removeErrorSection).toHaveBeenCalledTimes(times);
+    });
+
+    test('clearErrors calls removeErrorBorder', () => {
+        let times = 1;
+        node.errorLevel = times;
+        node.removeErrorSection = jest.fn(() => node.errorLevel--);
+        node.removeErrorBorder = jest.fn();
+
+        node.clearErrors();
+
+        expect(node.removeErrorBorder).toHaveBeenCalledTimes(1);
     });
 });

@@ -2,7 +2,7 @@ const Node = require('../core/node');
 const {X, O} = require('./constants');
 class TicTacToeNode extends Node {
     constructor(row, col, idx, boardRow) {
-        super(row, col, idx, boardRow, 'square');
+        super(row, col, idx, boardRow, 'tic-tac-toe-node');
         this.value = 0;
     }
 
@@ -22,6 +22,26 @@ class TicTacToeNode extends Node {
         this._setAsNodeType(O);
         this.element.innerText = O;
         this.value = -1;
+    }
+
+    removeTopBorder() {
+        this.extraTypes.push('top');
+        this.element.classList.add('top');
+    }
+
+    removeBottomBorder() {
+        this.extraTypes.push('bottom');
+        this.element.classList.add('bottom');
+    }
+
+    removeRightBorder() {
+        this.extraTypes.push('right');
+        this.element.classList.add('right');
+    }
+
+    removeLeftBorder() {
+        this.extraTypes.push('left');
+        this.element.classList.add('left');
     }
 
     addClickEventListener(fn) {

@@ -25,7 +25,7 @@ describe('test TicTacToeNode', () => {
         node = new TicTacToeNode(row, col, idx, boardRow);
 
         Object.setPrototypeOf(TicTacToeNode, orig);
-        expect(mock).toHaveBeenLastCalledWith(row, col, idx, boardRow, 'square');
+        expect(mock).toHaveBeenLastCalledWith(row, col, idx, boardRow, 'tic-tac-toe-node');
     });
 
     test('constructor sets value property to a number', () => {

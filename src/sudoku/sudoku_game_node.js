@@ -2,9 +2,8 @@ const Node = require('../core/node');
 
 class SudokuGameNode extends Node {
     constructor(row, col, idx, boardRow) {
-        super(row, col, idx, boardRow, 'square');
+        super(row, col, idx, boardRow, 'sudoku-node');
         this.trueValue = null;
-        this.borders = [];
         this.errorLevel = 0;
     }
 
@@ -66,6 +65,14 @@ class SudokuGameNode extends Node {
         return this.input.value;
     }
 
+    getValue() {
+        if (this.isGivenNode()) {
+            return this.trueValue;
+        }
+
+        return this.input.value;
+    }
+
     addInputEventListener(type, fn) {
         if (this.isInputNode()) {
             this.input.addEventListener(type, fn);
@@ -73,12 +80,12 @@ class SudokuGameNode extends Node {
     }
 
     addRightBorder() {
-        this.borders.push('right');
+        this.extraTypes.push('right');
         this.element.classList.add('right');
     }
 
     addBottomBorder() {
-        this.borders.push('bottom');
+        this.extraTypes.push('bottom');
         this.element.classList.add('bottom');
     }
 
@@ -112,15 +119,18 @@ class SudokuGameNode extends Node {
         this.errorLevel--;
     }
 
+    clearErrors() {
+        while (this.errorLevel > 0) {
+            this.removeErrorSection();
+        }
+        this.removeErrorBorder();
+    }
+
     _handleInputEvent() {
         const value = parseInt(this.input.value);
         if (isNaN(value) || value === 0) {
             this.input.value = '';
         }
-    }
-
-    _setAsNodeType(type) {
-        super._setAsNodeType([type, ...this.borders]);
     }
 }
 

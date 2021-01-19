@@ -17,7 +17,7 @@ describe('Test SnakeGameNode', () => {
         node = new SnakeGameNode(row, col, idx, boardRow);
     });
 
-    test('constructor calls Node constructor with parameters and shape == square', () => {
+    test('constructor calls Node constructor with parameters and correct node type', () => {
         const orig = Object.getPrototypeOf(SnakeGameNode);
         const mock = jest.fn();
         Object.setPrototypeOf(SnakeGameNode, mock);
@@ -25,7 +25,7 @@ describe('Test SnakeGameNode', () => {
         node = new SnakeGameNode(row, col, idx, boardRow);
 
         Object.setPrototypeOf(SnakeGameNode, orig);
-        expect(mock).toHaveBeenLastCalledWith(row, col, idx, boardRow, 'square');
+        expect(mock).toHaveBeenLastCalledWith(row, col, idx, boardRow, 'snake-game-node');
     });
 
     test('setAsSnakeNode calls _setAsNodeType with "snake"', () => {

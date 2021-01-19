@@ -1,6 +1,6 @@
 import pytest
 
-from .pages.tictactoe_page import TicTacToePage
+from .pages.tictactoe_page import TicTacToePage, X, O
 
 
 @pytest.mark.usefixtures('driver_init')
@@ -44,11 +44,11 @@ class TestTicTacToe:
         ('hard'),
     ])
     @pytest.mark.parametrize('url, symbol', [
-        (None, 'x'),
-        (None, 'o')
+        (None, X),
+        (None, O)
     ],
         indirect=['url'],
-        ids=['x', 'o'])
+        ids=[X, O])
     def test_user_can_play_tic_tac_toe(self, url, symbol, difficulty):
         # The user goes to the webpage
         self.driver.get(url)
@@ -64,7 +64,7 @@ class TestTicTacToe:
         assert page.get_node_symbol(row, col) == symbol
 
         # the user also sees a node containing the opposite symbol from the computer making a move
-        opposite_symbol = 'x' if symbol == 'o' else 'o'
+        opposite_symbol = X if symbol == O else O
         has_node_with_opp_symbol = False
         for row in range(page.num_rows):
             for col in range(page.num_cols):

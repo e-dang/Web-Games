@@ -25,6 +25,52 @@ class TestSudokuGame:
                 if (i, j) not in given_indices:
                     page.enter_number(i, j, board[i][j])
 
+    def assert_there_is_correct_error_shading_from_invalid_nodes(self, page, nodes, board):
+        box_idxs = []
+        row_errors = []
+        col_errors = []
+        box_errors = []
+        for row, col, value in nodes:
+            box_idx = get_box_idx(row, col)
+            box_idxs.append(box_idx)
+            row_errors.append(value in board[row])
+            col_errors.append(value in [board[r][col] for r in range(len(board))])
+            box_errors.append(value in [self.get_node_in_box(board, i, box_idx) for i in range(len(board))])
+            board[row][col] = value
+
+        for r in range(len(board)):
+            for c in range(len(board[0])):
+                same_row = []
+                same_col = []
+                same_box = []
+                for i, (row, col, value) in enumerate(nodes):
+                    same_row.append(row_errors[i] and r == row)
+                    same_col.append(col_errors[i] and c == col)
+                    same_box.append(box_errors[i] and get_box_idx(r, c) == box_idxs[i])
+                    if (r == row or c == col or get_box_idx(r, c) == box_idxs[i]) and board[r][c] == value:
+                        assert page.node_has_error_border(r, c)
+
+                num_errors = sum([*same_row, *same_col, *same_box])
+
+                for i in range(1, min(num_errors + 1, 4)):
+                    assert page.node_has_error_section_background(r, c, i)
+
+        # restore board to original state
+        for row, col, value in nodes:
+            board[row][col] = ''
+
+    def assert_there_is_no_error_shading(self, page, board):
+        for r in range(len(board)):
+            for c in range(len(board[0])):
+                assert not page.node_has_error_border(r, c)
+                for i in range(1, 4):
+                    assert not page.node_has_error_section_background(r, c, i)
+
+    def get_node_in_box(self, board, idx, box_idx):
+        col = (box_idx % 3) * 3 + (idx % 3)
+        row = (box_idx // 3) * 3 + idx // 3
+        return board[row][col]
+
     def test_user_is_presented_with_correct_controls_and_options(self, url):
         # The user goes to the page
         self.driver.get(url)
@@ -130,68 +176,47 @@ class TestSudokuGame:
         self.solve_board(page)
         assert page.game_is_over()
 
-    def test_invalid_nodes_get_error_highlighted(self, url):
+    def test_error_indicators_are_correctly_displayed(self, url):
         # The user goes to the page
         self.driver.get(f'{url}/1')  # url parameter is rng seed
         page = SudokuPage(self.driver)
 
-        # the user enters an invalid value into a node
-        row, col_1, value = 0, 1, '6'
-        box_idx_1 = get_box_idx(row, col_1)
-        page.enter_number(row, col_1, value)
-
-        # The user then sees that error borders and background appear around the nodes with the same value and in the
-        # same row, col, box
+        # the user enters a value into a node that is not invalid, but is incorrect
         board = page.get_board_as_array()
-        for r in range(len(board)):
-            for c in range(len(board[0])):
-                same_row = r == row
-                same_col = c == col_1
-                same_box = box_idx_1 == get_box_idx(r, c)
-                num_errors = sum([same_row, same_col, same_box])
+        incorrect_node = (5, 5, '4')  # nodes are tuples of (row, col, value)
+        page.enter_number(incorrect_node[0], incorrect_node[1], incorrect_node[2])
+        self.assert_there_is_no_error_shading(page, board)
+        board[incorrect_node[0]][incorrect_node[1]] = incorrect_node[2]
 
-                if (same_row or same_col or same_box) and board[r][c] == value:
-                    assert page.node_has_error_border(r, c)
+        # the user then enters a value that is invalid because of the column and sees the error shading only appear in
+        # the column of the invalid node and error borders only on the two duplicate nodes
+        invalid_node_1 = (7, 2, '9')
+        page.enter_number(invalid_node_1[0], invalid_node_1[1], invalid_node_1[2])
+        self.assert_there_is_correct_error_shading_from_invalid_nodes(page, [invalid_node_1], board)
 
-                for i in range(1, num_errors + 1):
-                    assert page.node_has_error_section_background(r, c, i)
+        # the user then enters another invalid node with a different value than the first, but in the same row
+        invalid_node_2 = (7, 5, '4')
+        page.enter_number(invalid_node_2[0], invalid_node_2[1], invalid_node_2[2])
+        self.assert_there_is_correct_error_shading_from_invalid_nodes(page, [invalid_node_1, invalid_node_2], board)
 
-        # The user then clears the selection and sees the error borders removed
-        page.enter_number(row, col_1, '')
-        for r in range(len(board)):
-            for c in range(len(board[0])):
-                assert not page.node_has_error_border(r, c)
-                for i in range(1, 4):
-                    assert not page.node_has_error_section_background(r, c, i)
+        # The user then continues to enter a correct node, but that node is invalid due to his previous placement of
+        # nodes and thus it is highlighted
+        invalid_node_3 = (3, 5, '4')
+        page.enter_number(invalid_node_3[0], invalid_node_3[1], invalid_node_3[2])
+        self.assert_there_is_correct_error_shading_from_invalid_nodes(
+            page, [invalid_node_1, invalid_node_2, invalid_node_3], board)
 
-        # the user then tries to see if the error signals stack on top of each other by entering two invalid values
-        col_2 = 3
-        box_idx_2 = get_box_idx(row, col_2)
-        page.enter_number(row, col_1, value)
-        page.enter_number(row, col_2, value)
-        for r in range(len(board)):
-            for c in range(len(board[0])):
-                same_row = r == row
-                same_col_1 = c == col_1
-                same_box_1 = box_idx_1 == get_box_idx(r, c)
-                same_col_2 = c == col_2
-                same_box_2 = box_idx_2 == get_box_idx(r, c)
-                num_errors = sum([same_row, same_col_1, same_col_2, same_box_1, same_box_2])
+        # the user then removes an invalid node and the correct error borders are updated
+        page.enter_number(invalid_node_1[0], invalid_node_1[1], '')
+        self.assert_there_is_correct_error_shading_from_invalid_nodes(page, [invalid_node_2, invalid_node_3], board)
 
-                if (same_row or same_col_1 or same_box_1 or same_col_2 or same_box_2) and board[r][c] == value:
-                    assert page.node_has_error_border(r, c)
+        # the user then removes another invalid node and the correct error borders are updated
+        page.enter_number(invalid_node_2[0], invalid_node_2[1], '')
+        self.assert_there_is_correct_error_shading_from_invalid_nodes(page, [invalid_node_3], board)
 
-                for i in range(1, min(num_errors + 1, 4)):
-                    assert page.node_has_error_section_background(r, c, i)
-
-        # The user then clears the selection and sees the error borders removed
-        page.enter_number(row, col_1, '')
-        page.enter_number(row, col_2, '')
-        for r in range(len(board)):
-            for c in range(len(board[0])):
-                assert not page.node_has_error_border(r, c)
-                for i in range(1, 4):
-                    assert not page.node_has_error_section_background(r, c, i)
+        # the user then removes the incorrect node and all errors disappear
+        page.enter_number(incorrect_node[0], incorrect_node[1], '')
+        self.assert_there_is_no_error_shading(page, board)
 
 
 class SudokuSolver:

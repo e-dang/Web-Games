@@ -16,6 +16,11 @@ class TicTacToePage extends Page {
         this._setDefaultDifficulty();
     }
 
+    addSelectSymbolEventHandler() {
+        document.getElementById(X).addEventListener('click', (event) => this._handleChangeSymbol(event));
+        document.getElementById(O).addEventListener('click', (event) => this._handleChangeSymbol(event));
+    }
+
     addEventHandlers() {
         super.addEventHandlers();
         this.addSelectSymbolEventHandler();
@@ -23,11 +28,6 @@ class TicTacToePage extends Page {
 
     _handleClickResetButton() {
         this.game.reset();
-    }
-
-    addSelectSymbolEventHandler() {
-        document.getElementById(X).addEventListener('click', (event) => this._handleChangeSymbol(event));
-        document.getElementById(O).addEventListener('click', (event) => this._handleChangeSymbol(event));
     }
 
     _handleChangeSymbol(event) {

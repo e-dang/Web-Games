@@ -10,8 +10,10 @@ class TicTacToeGame {
         this.currentLoop = null;
         this.winner = null;
         this.currentTurn = X;
+        this.humanWins = 0;
+        this.compWins = 0;
         this.board = new TicTacToeBoard();
-        this.board.draw();
+        this.board.draw(false);
 
         this.humanPlayer = new HumanPlayer(this.board, () => this.getCurrentTurn(), X);
         this.compPlayer = new EasyComputerPlayer(this.board, this._getComputerSymbol());
@@ -87,7 +89,12 @@ class TicTacToeGame {
     }
 
     _handleGameOver() {
-        console.log('game over');
+        const message = this._incrementWins();
+        document.getElementById('humanWins').innerText = this.humanWins;
+        document.getElementById('compWins').innerText = this.compWins;
+        document.getElementById('gameOverTitle').innerText = 'Game Over';
+        document.getElementById('gameOverMessage').innerText = message;
+        $('#gameOverModal').modal();
     }
 
     _isGameComplete() {
@@ -114,6 +121,19 @@ class TicTacToeGame {
 
     _getOPlayer() {
         return this.humanPlayer.isOPlayer() ? this.humanPlayer : this.compPlayer;
+    }
+
+    _incrementWins() {
+        let message;
+        if (this.winner == this.humanPlayer) {
+            message = 'You Win!';
+            this.humanWins++;
+        } else {
+            message = 'You Lost!';
+            this.compWins++;
+        }
+
+        return message;
     }
 }
 

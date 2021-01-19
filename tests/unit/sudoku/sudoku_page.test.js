@@ -214,31 +214,6 @@ describe('test SudokuPage', () => {
         expect(errorBoxCounts).toEqual(expectedErrorBoxCounts);
     });
 
-    // test('_handleUserValueError calls addErrorSection on each node in nodes parameter that shares a row, col, or box with userInputNode', () => {
-    //     const dims = 9;
-    //     page.board.calcBoxIdx.mockReturnValue((node) => node.boxIdx);
-    //     page.board.nodes = [];
-    //     for (let i = 0; i < dims; i++) {
-    //         for (let j = 0; j < dims; j++) {
-    //             const node = new SudokuGameNode();
-    //             node.row = i;
-    //             node.col = j;
-    //             node.idx = i * dims + j;
-    //             node.boxIdx = i % 3;
-    //             page.board.nodes.push(node);
-    //         }
-    //     }
-    //     const userInputNode = page.board.nodes[0];
-
-    //     page._handleUserValueError(userInputNode, page.board.nodes);
-
-    //     page.board.nodes.forEach((node) => {
-    //         if (node.col == userInputNode.col || node.row == userInputNode.row || node.boxIdx == userInputNode.boxIdx) {
-    //             expect(node.addErrorSection).toHaveBeenCalled();
-    //         }
-    //     });
-    // });
-
     test('_removeErrorSignals calls clearErrors on each node in board', () => {
         page.board.nodes = [new SudokuGameNode(), new SudokuGameNode(), new SudokuGameNode()];
 

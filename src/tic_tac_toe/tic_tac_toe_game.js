@@ -128,9 +128,11 @@ class TicTacToeGame {
         if (this.winner == this.humanPlayer) {
             message = 'You Win!';
             this.humanWins++;
-        } else {
+        } else if (this.winner == this.compPlayer) {
             message = 'You Lost!';
             this.compWins++;
+        } else {
+            message = "It's a draw!";
         }
 
         return message;

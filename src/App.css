@@ -1,1 +1,129 @@
+@import 'index.css';
 
+:root {
+  --node-border-color: var(--dark);
+  --empty-node-color: hsl(211, 40%, 93%);
+  --checker-on-color: var(--white);
+  --error-node-color: red;
+  --error-section1-node-color: hsl(0, 60%, 70%);
+  --error-section2-node-color: hsla(0, 60%, 60%);
+  --error-section3-node-color: hsla(0, 60%, 50%);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.node {
+  border: 1px solid var(--node-border-color);
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
+.node.empty {
+  background-color: var(--empty-node-color);
+}
+
+.node.checker-on {
+  background-color: var(--checker-on-color);
+}
+
+.node.checker-off {
+  background-color: var(--empty-node-color);
+}
+
+.snake-game-node {
+  border-radius: 0%;
+}
+
+.snake-game-node.snake {
+  background-color: var(--dark);
+}
+
+.snake-game-node.food {
+  background-color: var(--green);
+}
+
+.sudoku-node {
+  width: 65px;
+  height: 65px;
+  border-radius: 0%;
+  background-color: var(--light);
+  color: black;
+  font-size: 150%;
+}
+
+td.sudoku-node > input {
+  display: table-cell;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  text-align: center;
+  color: var(--indigo);
+}
+
+.sudoku-node.right {
+  border-right: 3px solid var(--node-border-color);
+}
+
+.sudoku-node.bottom {
+  border-bottom: 3px solid var(--node-border-color);
+}
+
+.sudoku-node.error {
+  border: 4px solid var(--error-node-color);
+}
+
+.sudoku-node.error-section1 {
+  background-color: var(--error-section1-node-color);
+}
+
+.sudoku-node.error-section2 {
+  background-color: var(--error-section2-node-color);
+}
+
+.sudoku-node.error-section3 {
+  background-color: var(--error-section3-node-color);
+}
+
+.tic-tac-toe-node {
+  width: 100px;
+  height: 100px;
+  border-radius: 0%;
+  background-color: var(--empty-node-color);
+  color: black;
+}
+
+.tic-tac-toe-node.X {
+  color: var(--red);
+  font-size: 400%;
+}
+
+.tic-tac-toe-node.O {
+  color: var(--purple);
+  font-size: 400%;
+}
+
+.tic-tac-toe-node.top {
+  border-top: none;
+}
+
+.tic-tac-toe-node.bottom {
+  border-bottom: none;
+}
+
+.tic-tac-toe-node.left {
+  border-left: none;
+}
+
+.tic-tac-toe-node.right {
+  border-right: none;
+}
+
+.navbar-nav > li {
+  margin-left: 10px;
+  margin-right: 10px;
+}

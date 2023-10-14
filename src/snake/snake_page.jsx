@@ -2,14 +2,17 @@ import {useEffect, useRef} from 'react';
 import {SnakeGame} from './snake_game';
 
 export function SnakePage() {
-  const game = useRef(new SnakeGame());
+  const game = useRef(null);
 
   useEffect(() => {
-    game.current.init();
+    if (game.current === null) {
+      game.current = new SnakeGame();
+      game.current.init();
+    }
   }, []);
 
   return (
-    <div className="row flex-row">
+    <div className="row flex-row pt-5">
       <div className="row justify-content-around w-100">
         <div className="d-flex flex-column text-center">
           <h2>Current Score</h2>
@@ -24,7 +27,7 @@ export function SnakePage() {
         </div>
       </div>
 
-      <div className="row justify-content-center w-100">
+      <div className="row justify-content-center w-100 pt-5">
         <table id="gameBoardWrapper" />
       </div>
 

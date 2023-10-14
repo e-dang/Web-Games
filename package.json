@@ -1,14 +1,12 @@
 {
   "name": "web-games",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "",
-  "main": "src/server.js",
+  "type": "module",
   "scripts": {
-    "start": "node src/server",
-    "dev": "nodemon src/server",
-    "test": "jest",
-    "build-dev": "webpack --entry ./src/main.js --output-filename=bundle.js --output-path=public/dist --mode=development",
-    "build": "webpack --entry ./src/main.js --output-filename=bundle.js --output-path=public/dist --mode=production"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "repository": {
     "type": "git",
@@ -21,18 +19,14 @@
   },
   "homepage": "https://github.com/e-dang/Web-Games#readme",
   "dependencies": {
-    "ejs": "^3.1.5",
-    "express": "^4.17.1"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.6",
-    "bootstrap": "^4.5.3",
-    "jest": "^26.6.3",
-    "jquery": "^3.5.1",
-    "nodemon": "^2.0.6",
-    "supertest": "^6.0.1",
-    "webpack": "^5.11.0",
-    "webpack-cli": "^4.3.0"
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react": "^4.0.3",
+    "vite": "^4.4.5"
   },
   "jest": {
     "setupFilesAfterEnv": [

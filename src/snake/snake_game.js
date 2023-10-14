@@ -2,6 +2,7 @@ import {Board} from '../core/board';
 import {SnakeGameNode} from './snake_game_node';
 import {Snake, INITIAL_LENGTH} from './snake';
 import utils from '../utils/utils';
+import {openModal} from '../utils/modal';
 
 export const DIMENSIONS = 17;
 export const TIME_STEP = 20;
@@ -22,7 +23,9 @@ export class SnakeGame {
     this.snake = null;
     this.keys = {};
     this.highScore = 0;
+  }
 
+  init() {
     this.board.draw();
     this.addKeyDownEventListener();
     this.addKeyUpEventListener();
@@ -99,7 +102,7 @@ export class SnakeGame {
       document.getElementById('highScore').innerText = score;
     }
     document.getElementById('gameOverMessage').innerText = `Your score is ${score}`;
-    $('#gameOverModal').modal();
+    openModal('gameOverModal');
   }
 
   _isInvalidSpace(row, col) {

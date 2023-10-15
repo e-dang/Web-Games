@@ -1,9 +1,3 @@
-const X = 'X';
-const O = 'O';
-const DRAW = 'draw';
-
-module.exports = {
-    X,
-    O,
-    DRAW,
-};
+export const X = 'X';
+export const O = 'O';
+export const DRAW = 'draw';

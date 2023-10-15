@@ -1,110 +1,108 @@
-const Board = require('../core/board');
-const TicTacToeNode = require('./tic_tac_toe_node');
-const {X, O, DRAW} = require('./constants');
+import {Board} from '../core/board';
+import {TicTacToeNode} from './tic_tac_toe_node';
+import {X, O, DRAW} from './constants';
 
-TICTACTOE_DIMENSIONS = 3;
+const TICTACTOE_DIMENSIONS = 3;
 
-class TicTacToeBoard extends Board {
-    constructor() {
-        super(TICTACTOE_DIMENSIONS, TicTacToeNode);
+export class TicTacToeBoard extends Board {
+  constructor() {
+    super(TICTACTOE_DIMENSIONS, TicTacToeNode);
+  }
+
+  getEmptyNodes() {
+    return this.nodes.filter((node) => node.isEmptyNode());
+  }
+
+  addNodeClickEventListeners(fn) {
+    this.nodes.forEach((node) => node.addClickEventListener(fn));
+  }
+
+  *getRow(row) {
+    for (let i = 0; i < this.dims; i++) {
+      yield this.getNode(row, i);
+    }
+  }
+
+  *getCol(col) {
+    for (let i = 0; i < this.dims; i++) {
+      yield this.getNode(i, col);
+    }
+  }
+
+  *getLeftToRightDiag() {
+    for (let i = 0; i < this.dims; i++) {
+      yield this.getNode(i, i);
+    }
+  }
+
+  *getRightToLeftDiag() {
+    for (let i = 0; i < this.dims; i++) {
+      yield this.getNode(i, this.dims - i - 1);
+    }
+  }
+
+  getWinner() {
+    let winner;
+    for (let i = 0; i < this.dims; i++) {
+      winner = this._decideWinner(this.getRow(i));
+      if (winner) {
+        return winner;
+      }
+
+      winner = this._decideWinner(this.getCol(i));
+      if (winner) {
+        return winner;
+      }
     }
 
-    getEmptyNodes() {
-        return this.nodes.filter((node) => node.isEmptyNode());
+    winner = this._decideWinner(this.getLeftToRightDiag());
+    if (winner) {
+      return winner;
     }
 
-    addNodeClickEventListeners(fn) {
-        this.nodes.forEach((node) => node.addClickEventListener(fn));
+    winner = this._decideWinner(this.getRightToLeftDiag());
+    if (winner) {
+      return winner;
     }
 
-    *getRow(row) {
-        for (let i = 0; i < this.dims; i++) {
-            yield this.getNode(row, i);
-        }
+    if (this.getEmptyNodes().length == 0) {
+      return DRAW;
     }
 
-    *getCol(col) {
-        for (let i = 0; i < this.dims; i++) {
-            yield this.getNode(i, col);
-        }
+    return null;
+  }
+
+  _decideWinner(nodes) {
+    const sum = this._getSum([...nodes]);
+    if (sum == 3) {
+      return X;
+    } else if (sum == -3) {
+      return O;
+    }
+    return null;
+  }
+
+  _getSum(nodes) {
+    return nodes.reduce((accum, node) => (accum += node.value), 0);
+  }
+
+  _initNode(node, checker) {
+    if (node.row == 0) {
+      node.removeTopBorder();
     }
 
-    *getLeftToRightDiag() {
-        for (let i = 0; i < this.dims; i++) {
-            yield this.getNode(i, i);
-        }
+    if (node.row == TICTACTOE_DIMENSIONS - 1) {
+      node.removeBottomBorder();
     }
 
-    *getRightToLeftDiag() {
-        for (let i = 0; i < this.dims; i++) {
-            yield this.getNode(i, this.dims - i - 1);
-        }
+    if (node.col == 0) {
+      node.removeLeftBorder();
     }
 
-    getWinner() {
-        let winner;
-        for (let i = 0; i < this.dims; i++) {
-            winner = this._decideWinner(this.getRow(i));
-            if (winner) {
-                return winner;
-            }
-
-            winner = this._decideWinner(this.getCol(i));
-            if (winner) {
-                return winner;
-            }
-        }
-
-        winner = this._decideWinner(this.getLeftToRightDiag());
-        if (winner) {
-            return winner;
-        }
-
-        winner = this._decideWinner(this.getRightToLeftDiag());
-        if (winner) {
-            return winner;
-        }
-
-        if (this.getEmptyNodes().length == 0) {
-            return DRAW;
-        }
-
-        return null;
+    if (node.col == TICTACTOE_DIMENSIONS - 1) {
+      node.removeRightBorder();
     }
 
-    _decideWinner(nodes) {
-        const sum = this._getSum([...nodes]);
-        if (sum == 3) {
-            return X;
-        } else if (sum == -3) {
-            return O;
-        }
-        return null;
-    }
-
-    _getSum(nodes) {
-        return nodes.reduce((accum, node) => (accum += node.value), 0);
-    }
-
-    _initNode(node, checker) {
-        if (node.row == 0) {
-            node.removeTopBorder();
-        }
-
-        if (node.row == TICTACTOE_DIMENSIONS - 1) {
-            node.removeBottomBorder();
-        }
-
-        if (node.col == 0) {
-            node.removeLeftBorder();
-        }
-
-        if (node.col == TICTACTOE_DIMENSIONS - 1) {
-            node.removeRightBorder();
-        }
-
-        super._initNode(node, checker);
-    }
+    super._initNode(node, checker);
+  }
 }
-
-module.exports = {TicTacToeBoard, TICTACTOE_DIMENSIONS};

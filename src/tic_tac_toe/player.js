@@ -1,40 +1,38 @@
-const {X, O} = require('./constants');
+import {X, O} from './constants';
 
-class Player {
-    constructor(board, symbol) {
-        this.board = board;
-        this._setSymbol(symbol);
-    }
+export class Player {
+  constructor(board, symbol) {
+    this.board = board;
+    this._setSymbol(symbol);
+  }
 
-    useXSymbol() {
-        this._setSymbol(X);
-    }
+  useXSymbol() {
+    this._setSymbol(X);
+  }
 
-    useOSymbol() {
-        this._setSymbol(O);
-    }
+  useOSymbol() {
+    this._setSymbol(O);
+  }
 
-    isXPlayer() {
-        return this.symbol == X;
-    }
+  isXPlayer() {
+    return this.symbol == X;
+  }
 
-    isOPlayer() {
-        return this.symbol == O;
-    }
+  isOPlayer() {
+    return this.symbol == O;
+  }
 
-    _setAsMyNode(node) {
-        if (this.symbol == X) {
-            node.setAsXNode();
-        } else {
-            node.setAsONode();
-        }
+  _setAsMyNode(node) {
+    if (this.symbol == X) {
+      node.setAsXNode();
+    } else {
+      node.setAsONode();
     }
+  }
 
-    _setSymbol(symbol) {
-        if (symbol == X || symbol == O) {
-            this.symbol = symbol;
-        }
+  _setSymbol(symbol) {
+    if (symbol == X || symbol == O) {
+      this.symbol = symbol;
     }
+  }
 }
-
-module.exports = Player;

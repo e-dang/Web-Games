@@ -1,14 +1,12 @@
-const Player = require('./player');
-const utils = require('../utils/utils');
+import {Player} from './player';
+import utils from '../utils/utils';
 
-class EasyComputerPlayer extends Player {
-    constructor(board, symbol) {
-        super(board, symbol);
-    }
+export class EasyComputerPlayer extends Player {
+  constructor(board, symbol) {
+    super(board, symbol);
+  }
 
-    async makeMove() {
-        this._setAsMyNode(utils.selectRandom(this.board.getEmptyNodes()));
-    }
+  async makeMove() {
+    this._setAsMyNode(utils.selectRandom(this.board.getEmptyNodes()));
+  }
 }
-
-module.exports = EasyComputerPlayer;

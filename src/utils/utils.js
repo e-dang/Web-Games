@@ -32,16 +32,9 @@ export function millisecondsToSeconds(time) {
   return time / 1000;
 }
 
-export function setSeed(seed) {
-  if (seed) {
-    Math.seedrandom(seed);
-  }
-}
-
 export default {
   sleep,
   selectRandom,
   shuffle,
   millisecondsToSeconds,
-  setSeed,
 };

@@ -15,7 +15,7 @@ function App() {
   return (
     <>
       <nav id="navBar" className="navbar navbar-expand-sm navbar-dark bg-primary">
-        <a id="navBarHeader" className="navbar-brand" href="/">
+        <a id="navBarHeader" className="navbar-brand" href="https://e-dang.github.io/Web-Games/">
           Web Games
           {currentGame ? (
             <span id="currentGame">
@@ -245,7 +245,7 @@ function Content({currentGame, setCurrentGame}) {
       <div className="row justify-content-center w-100 align-items-center pt-5">
         <div className="col mx-2">
           <div className="card justify-content-center">
-            <img className="card-img-top" src="/images/snake.png" alt="Card image cap" />
+            <img className="card-img-top" src="/Web-Games/images/snake.png" alt="Card image cap" />
             <div className="card-body text-center bg-primary">
               <h5 className="card-title">Snake</h5>
               <button className="btn btn-success" onClick={() => setCurrentGame(SNAKE)}>
@@ -256,7 +256,7 @@ function Content({currentGame, setCurrentGame}) {
         </div>
         <div className="col mx-2">
           <div className="card">
-            <img className="card-img-top" src="/images/sudoku.png" alt="Card image cap" />
+            <img className="card-img-top" src="/Web-Games/images/sudoku.png" alt="Card image cap" />
             <div className="card-body text-center bg-primary">
               <h5 className="card-title">Sudoku</h5>
               <button className="btn btn-success" onClick={() => setCurrentGame(SUDOKU)}>
@@ -267,7 +267,7 @@ function Content({currentGame, setCurrentGame}) {
         </div>
         <div className="col mx-2">
           <div className="card">
-            <img className="card-img-top" src="/images/tic_tac_toe.png" alt="Card image cap" />
+            <img className="card-img-top" src="/Web-Games/images/tic_tac_toe.png" alt="Card image cap" />
             <div className="card-body text-center bg-primary">
               <h5 className="card-title">Tic Tac Toe</h5>
               <button className="btn btn-success" onClick={() => setCurrentGame(TIC_TAC_TOE)}>

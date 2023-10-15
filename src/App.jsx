@@ -2,6 +2,7 @@ import {useState} from 'react';
 import './App.css';
 import {SnakePage} from './snake/snake_page';
 import {closeModal} from './utils/modal';
+import {SudokuPageReact} from './sudoku/SudokuPageReact';
 
 const SNAKE = 'Snake';
 const SUDOKU = 'Sudoku';
@@ -58,6 +59,8 @@ function App() {
                 </div>
               </div>
             </li>
+
+            <GameButtons curreGame={currentGame} />
           </ul>
         </div>
       </nav>
@@ -92,9 +95,75 @@ function App() {
   );
 }
 
+function GameButtons({curreGame}) {
+  if (curreGame === SUDOKU) {
+    return (
+      <>
+        <li className="nav-item">
+          <div className="nav-link">|</div>
+        </li>
+
+        <li className="nav-item">
+          <button id="resetBtn" className="btn btn-success">
+            Reset
+          </button>
+        </li>
+
+        <li className="nav-item">
+          <button id="hintBtn" className="btn btn-success">
+            Get Hint
+          </button>
+        </li>
+
+        <li id="difficultySelection" className="nav-item dropdown">
+          <button
+            id="currentDifficulty"
+            className="btn btn-outline-success dropdown-toggle"
+            type="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Select Difficulty...
+          </button>
+
+          <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+            <button id="easy" className="dropdown-item" type="button">
+              Easy
+            </button>
+            <button id="moderate" className="dropdown-item" type="button">
+              Moderate
+            </button>
+            <button id="hard" className="dropdown-item" type="button">
+              Hard
+            </button>
+            <button id="veryHard" className="dropdown-item" type="button">
+              Very Hard
+            </button>
+          </div>
+        </li>
+
+        <li>
+          <div className="btn-group-toggle" data-toggle="buttons">
+            <label className="btn btn-secondary active">
+              <input id="showTimerBtn" type="checkbox" autoComplete="off" /> Show Timer
+            </label>
+          </div>
+        </li>
+      </>
+    );
+  }
+
+  return null;
+}
+
 function Content({currentGame, setCurrentGame}) {
   if (currentGame === SNAKE) {
     return <SnakePage />;
+  }
+
+  if (currentGame === SUDOKU) {
+    return <SudokuPageReact />;
   }
 
   return (

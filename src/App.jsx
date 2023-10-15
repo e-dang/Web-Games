@@ -105,7 +105,7 @@ function GameButtons({currentGame}) {
         </li>
 
         <li className="nav-item">
-          <button id="startBtn" className="btn btn-success">
+          <button id="startBtn" className="btn btn-success" key="start">
             Start!
           </button>
         </li>
@@ -121,7 +121,7 @@ function GameButtons({currentGame}) {
         </li>
 
         <li className="nav-item">
-          <button id="resetBtn" className="btn btn-success">
+          <button id="resetBtn" className="btn btn-success" key="resetSudoku">
             Reset
           </button>
         </li>
@@ -179,7 +179,7 @@ function GameButtons({currentGame}) {
         </li>
 
         <li className="nav-item">
-          <button id="resetBtn" className="btn btn-success">
+          <button id="resetBtn" className="btn btn-success" key="resetTicTacToe">
             Reset
           </button>
         </li>

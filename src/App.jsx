@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import './App.css';
-import {SnakePage} from './snake/snake_page';
+import {SnakePageReact} from './snake/SnakePageReact';
 import {closeModal} from './utils/modal';
 import {SudokuPageReact} from './sudoku/SudokuPageReact';
 
@@ -60,7 +60,7 @@ function App() {
               </div>
             </li>
 
-            <GameButtons curreGame={currentGame} />
+            <GameButtons currentGame={currentGame} />
           </ul>
         </div>
       </nav>
@@ -95,8 +95,24 @@ function App() {
   );
 }
 
-function GameButtons({curreGame}) {
-  if (curreGame === SUDOKU) {
+function GameButtons({currentGame}) {
+  if (currentGame === SNAKE) {
+    return (
+      <>
+        <li className="nav-item">
+          <div className="nav-link">|</div>
+        </li>
+
+        <li className="nav-item">
+          <button id="startBtn" className="btn btn-success">
+            Start!
+          </button>
+        </li>
+      </>
+    );
+  }
+
+  if (currentGame === SUDOKU) {
     return (
       <>
         <li className="nav-item">
@@ -159,7 +175,7 @@ function GameButtons({curreGame}) {
 
 function Content({currentGame, setCurrentGame}) {
   if (currentGame === SNAKE) {
-    return <SnakePage />;
+    return <SnakePageReact />;
   }
 
   if (currentGame === SUDOKU) {

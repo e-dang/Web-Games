@@ -23,9 +23,7 @@ export class SnakeGame {
     this.snake = null;
     this.keys = {};
     this.highScore = 0;
-  }
 
-  init() {
     this.board.draw();
     this.addKeyDownEventListener();
     this.addKeyUpEventListener();

@@ -1,13 +1,12 @@
 import {useEffect, useRef} from 'react';
-import {SnakeGame} from './snake_game';
+import {SnakePage} from './snake_page';
 
-export function SnakePage() {
+export function SnakePageReact() {
   const game = useRef(null);
 
   useEffect(() => {
     if (game.current === null) {
-      game.current = new SnakeGame();
-      game.current.init();
+      game.current = new SnakePage();
     }
   }, []);
 
@@ -21,26 +20,12 @@ export function SnakePage() {
 
         <div className="d-flex flex-column text-center">
           <h2>High Score</h2>
-          <h2 id="highScore" className="fs-1">
-            0
-          </h2>
+          <h2 id="highScore">0</h2>
         </div>
       </div>
 
       <div className="row justify-content-center w-100 pt-5">
         <table id="gameBoardWrapper" />
-      </div>
-
-      <div className="row justify-content-center w-100">
-        <button
-          className="startBtn"
-          onClick={(event) => {
-            event.target.disabled = true;
-            game.current.start(() => (event.target.disabled = false));
-          }}
-        >
-          Start
-        </button>
       </div>
     </div>
   );

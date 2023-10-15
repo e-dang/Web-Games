@@ -1,12 +1,12 @@
 import {useEffect, useRef} from 'react';
-import {SudokuPage as SudokuPageOld} from './sudoku_page';
+import {SudokuPage} from './sudoku_page';
 
 export function SudokuPageReact() {
   const game = useRef(null);
 
   useEffect(() => {
     if (game.current === null) {
-      game.current = new SudokuPageOld();
+      game.current = new SudokuPage();
     }
   }, []);
 

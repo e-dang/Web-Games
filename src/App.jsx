@@ -3,6 +3,7 @@ import './App.css';
 import {SnakePageReact} from './snake/SnakePageReact';
 import {closeModal} from './utils/modal';
 import {SudokuPageReact} from './sudoku/SudokuPageReact';
+import {TicTacToeReact} from './tic_tac_toe/TicTacToeReact';
 
 const SNAKE = 'Snake';
 const SUDOKU = 'Sudoku';
@@ -170,6 +171,55 @@ function GameButtons({currentGame}) {
     );
   }
 
+  if (currentGame === TIC_TAC_TOE) {
+    return (
+      <>
+        <li className="nav-item">
+          <div className="nav-link">|</div>
+        </li>
+
+        <li className="nav-item">
+          <button id="resetBtn" className="btn btn-success">
+            Reset
+          </button>
+        </li>
+        <li id="difficultySelection" className="nav-item dropdown">
+          <button
+            id="currentDifficulty"
+            className="btn btn-outline-success dropdown-toggle"
+            type="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Select Difficulty...
+          </button>
+          <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+            <button id="easy" className="dropdown-item" type="button">
+              Easy
+            </button>
+            <button id="moderate" className="dropdown-item" type="button">
+              Moderate
+            </button>
+            <button id="hard" className="dropdown-item" type="button">
+              Hard
+            </button>
+          </div>
+        </li>
+        <li>
+          <div className="btn-group btn-group-toggle" data-toggle="buttons">
+            <label id="x-label" className="btn btn-secondary active">
+              <input type="radio" name="options" id="X" autoComplete="off" defaultChecked /> X
+            </label>
+            <label id="o-label" className="btn btn-secondary">
+              <input type="radio" name="options" id="O" autoComplete="off" /> O
+            </label>
+          </div>
+        </li>
+      </>
+    );
+  }
+
   return null;
 }
 
@@ -180,6 +230,10 @@ function Content({currentGame, setCurrentGame}) {
 
   if (currentGame === SUDOKU) {
     return <SudokuPageReact />;
+  }
+
+  if (currentGame === TIC_TAC_TOE) {
+    return <TicTacToeReact />;
   }
 
   return (

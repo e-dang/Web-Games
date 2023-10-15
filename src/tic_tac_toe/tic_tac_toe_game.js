@@ -4,6 +4,7 @@ import {TicTacToeBoard} from './tic_tac_toe_board';
 import {X, O} from './constants';
 import {ModerateComputerPlayer} from './moderate_comp_player';
 import {HardComputerPlayer} from './hard_comp_player';
+import {openModal} from '../utils/modal';
 
 export class TicTacToeGame {
   constructor() {
@@ -94,7 +95,7 @@ export class TicTacToeGame {
     document.getElementById('compWins').innerText = this.compWins;
     document.getElementById('gameOverTitle').innerText = 'Game Over';
     document.getElementById('gameOverMessage').innerText = message;
-    $('#gameOverModal').modal();
+    openModal('gameOverModal');
   }
 
   _isGameComplete() {

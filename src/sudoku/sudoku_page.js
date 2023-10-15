@@ -38,6 +38,10 @@ export class SudokuPage extends Page {
     return this;
   }
 
+  cleanUp() {
+    clearInterval(this.interval);
+  }
+
   _handleInputChangeEvent(node) {
     this._removeErrorSignals();
     this._handleUserValueError(this.board.getInvalidNodes());
@@ -57,6 +61,7 @@ export class SudokuPage extends Page {
   }
 
   _handleClickResetButton() {
+    clearInterval(this.interval);
     this.board.reset();
     this._startTimer();
     this.board.addNodeInputEventListeners('change', (node) => this._handleInputChangeEvent(node));

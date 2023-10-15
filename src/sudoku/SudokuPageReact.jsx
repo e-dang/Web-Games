@@ -8,6 +8,11 @@ export function SudokuPageReact() {
     if (game.current === null) {
       game.current = new SudokuPage();
     }
+
+    return () => {
+      game.current.cleanUp();
+      delete game.current;
+    };
   }, []);
 
   return (
